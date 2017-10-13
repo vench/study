@@ -16,7 +16,7 @@
 
 #define VAR_MAX(A, B) (A > B ? A : B)
 
-#define EXCHANGE(X, Y) X = X + Y; Y = X - Y; X = X - Y;
+#define EXCHANGE(X, Y) {int temp = X;  X = Y; Y = X;}
 
 
 #if defined _DEBUG 
@@ -26,18 +26,30 @@
 #endif
 
 
+#ifdef _UNICODE
+typedef wchar_t TCHAR;
+#define _T(A) L##A
+#else
+typedef char TCHAR;
+#define _T(A) A
+#endif
+
+ 
+
+ 
+
 int main()
 {
 // ********************************************************
 	//Задание 1. Побитовая арифметика (and, or, xor, not), сдвиги.
 	//1.1
 	{
-	int y;//Задайте значение y, например, с помощью потока ввода
+	short int y;//Задайте значение y, например, с помощью потока ввода
         std::cout << "Задайте значение y:";
         std::cin >> y;
         
         if(y) {
-            int i = 32;
+            int i = sizeof(y) * 8;
             while(i -- > 0) {
                 std::cout << ((y & (1 << i)) > 0 ? 1 : 0);
             }
@@ -82,13 +94,16 @@ int main()
 		//стало:  0000 0000 0000 0000 0000 1111 1111 1111
 		//Реализовать задачу посредством одного цикла!
                  
-                std::cin >> y;
+                std::cin >> y; //FIXME
                 
                 if(y) {
-                    for(int i = 0; i < 16; i ++) {
-                        y >>= 1;
+                    int buf = 0, n = 0;
+                    for(int i = 0; i < 32; i ++) {
+                        if((y & (1 << i)) > 0) {
+                            buf |= (1 << n ++);
+                        }
                     }
-                    std::cout << y << "\n";
+                    std::cout << buf << "\n";
                 }
 
 	}
@@ -197,7 +212,7 @@ int main()
 	k = VAR_MAX(j, i+3);
         std::cout << k << "\n";//13
 	k = VAR_MAX(i--, j++); // постфиксные операторы
-        std::cout << k << "\n";//13
+        std::cout << k << "\n";//13 i= j=
         
         
 	//2.2.3 определите макрос EXCHANGE(X, Y)  для перестановки
@@ -241,7 +256,7 @@ int iNN;
 */
         int iNN;
         
-#define NNN
+//#define NNN
 #define MMM
         
 #if defined NNN && defined MMM
@@ -313,8 +328,9 @@ int iNN;
 
          //TODO 
 
-
-
+         TCHAR q = _T('П');
+         std::cout << "q: " << q << "\n";
+         
 
 
 // ********************************************************
@@ -366,10 +382,10 @@ int iNN;
 	stop
 */
      
-     char *pCharTest = "Some test...";
+     const char *pCharTest = "Some test...";
      char vCharTest = pCharTest[5];
      std::cout << vCharTest << "\n";
-   //  pCharTest[5] = 'A';//Segmentation fault;
+     //*pCharTest = 'A';//Segmentation fault;
      
      std::cout << "pCharTest: " << pCharTest << "\n";
      
@@ -449,7 +465,7 @@ int iNN;
         //cc = 01110111
         
 	cc = ++*(pucObject5);//разименовываем текущее значение по указателю и увеличивем его на 1 (до присвоения в cc)
-        //cc = 1111001
+        //cc = 1111001 
         
 	cc = *(++pucObject5); //сместил указатель на 1 шаг и разименовывает его
         //01100110
@@ -507,16 +523,18 @@ int iNN;
         int varTest = 999, varTest2 = 1000;
         int  *const pTest = &varTest;
         std::cout << *pTest << "\n"; //значение по адресу
-        *(const_cast<int*>(pTest)) = varTest2;
+        *(pTest) = varTest2;
 	
 /*	stop	 
 */
 
 		//Задание 8б. Указываемое значение является константой.
         const int varTestC = 999, varTestC2 = 1000;
-        int *const pTest2 = const_cast<int*>(&varTestC);
-        std::cout << *pTest2 << "\n"; //значение по адресу
-        *(const_cast<int*>(pTest2)) = static_cast<int>(varTestC2);
+        int const * constpTest2 = &varTestC;
+        
+        std::cout << *constpTest2 << "\n"; //значение по адресу
+        constpTest2++;
+    //    *(const_cast<int*>(pTest2)) = static_cast<int>(varTestC2);
 	stop
 /**/
 
@@ -524,8 +542,9 @@ int iNN;
 		//являются константами. 
         const int *const pTest3 =  &varTestC;
         std::cout << *pTest3 << "\n"; //значение по адресу
-        
-        (*(const_cast<int*>(pTest3))) ++;
+       // pTest3++;
+       // pTest3 = 5;
+        //(*(const_cast<int*>(pTest3))) = 7;
         std::cout << "varTestC:" << *pTest3 << "\n";
 /*
 	stop
@@ -571,7 +590,7 @@ int iNN;
 	stop
 */
 
-
+       
 
 	return 0;
 }//end main
