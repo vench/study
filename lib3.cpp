@@ -8,6 +8,7 @@
 
 #include <iostream> 
 #include <cstdlib>
+#include <cstring>
 
 #define	  stop 
 
@@ -147,23 +148,69 @@ int main()
         std::cout << "sum: " << sum << "\n";
         
         
-        for(int i = 0; i < N; i ++) {
-            delete[] pDAr[i];
-        }
-        delete[] pDAr;
+        
 
 
 	//Задание2а. В сформированном массиве отсортируйте каждую строку по
 	//убыванию значений. Используйте сортировку "выбором"
-
+        for(int i = 0; i < N; i ++) {
+            std::cout <<   i << ": "; 
+             for(int j = 0; j < M; j ++) {
+                std::cout << pDAr[i][j] << ","; 
+             } 
+             std::cout <<   "\n"; 
+         }
+        
+        for(int i = 0; i < N; i ++) {
+            int *pAr = pDAr[i];
+            
+            for(int j = 0; j < M; j ++) {
+                int min = j;
+                
+                for (int n = j + 1; n < M; n++) {
+                    if (pAr[n] < pAr[min])  {
+                        min = n;
+                    }
+                }
+                
+                int dummy = pAr[j];
+                pAr[j] = pAr[min];
+                pAr[min] = dummy;
+            }
+        }
+        for(int i = 0; i < N; i ++) {
+             std::cout <<   i << ": "; 
+             for(int j = 0; j < M; j ++) {
+                std::cout << pDAr[i][j] << ","; 
+             } 
+             std::cout <<   "\n"; 
+         }
+        
+        
+ 
 
 	//Задание2б. Объявите одномерный массив размерностью N.
 	//Сформируйте значение i-ого элемента одномерного массива  
 	//равным среднему значению элементов i-ой строки
 	//двухмерного массива
-
+        double arAVG[N];
+        for(int i = 0; i < N; i ++) {
+            int sum = 0;
+             for(int j = 0; j < M; j ++) {
+                sum += pDAr[i][j]; 
+             } 
+            arAVG[i] = (1.0 * sum / M);
+            //std::cout << arAVG[i] << "\n";
+         } 
+        
+        
+        
 
 	//Подсказка - не забудьте освободить память!
+        for(int i = 0; i < N; i ++) {
+            delete[] pDAr[i];
+        }
+        delete[] pDAr;
 
 
 
@@ -173,7 +220,48 @@ int main()
 	//Задание 3. а) Напишите фрагмент кода, который вводит NN целых чисел с помощью
 	//потока ввода в объявленный Вами встроенный одномерный массив, каждый раз
 	//упорядочивая полученное значение по возрастанию
-	
+	 
+        int inInt, count = 0;
+        int const inIntArLen = 1024;
+        int inIntAr[inIntArLen]; 
+        /*while(count < inIntArLen && (std::cin >> inInt)) {
+            std::cout << "input: " << inInt << "\n";
+            
+            bool isset = false;
+            for (int j = 0; j < count; j ++) {
+                if(inIntAr[j] == inInt) {
+                    isset = true;
+                    break;
+                }
+            }
+            
+            if(isset) {
+                std::cout << "Value already exists...\n";
+                continue;
+            }
+            
+            inIntAr[count ++] = inInt; 
+            for(int j = 0; j < count; j ++) {
+                int min = j;
+                
+                for (int n = j + 1; n < count; n++) {
+                    if (inIntAr[n] < inIntAr[min])  {
+                        min = n;
+                    }
+                }
+                
+                int dummy = inIntAr[j];
+                inIntAr[j] = inIntAr[min];
+                inIntAr[min] = dummy;
+            }
+            
+            std::cout << "\nList: ";
+            for(int j = 0; j < count; j ++) {
+                std::cout << inIntAr[j] << ",";
+            }
+            std::cout << "\n";
+        } */
+        
 
 
 	//б) Простой поиск.
@@ -183,7 +271,7 @@ int main()
 
 
 	 
-/*
+
 	///////////////////////////////////////////////////////////////////////////
 	//Задание 4.С помощью данной заготовки напишите программу,
 	//которая:
@@ -203,48 +291,88 @@ int main()
 	
 	//Определите необходимые значения как константы
  //STOP_STRING  -  "*"	//признак "прекратить ввод"
+        const char STOP_STRING = '*';
  //M  -  80	//максимальный размер одной строки
+        const int M2 = 80;
  //N  -  10	//максимальное количество строк в массиве
-	
+	const int N2 = 10;
 
 
 	//Объявите двухмерный массив с именем cBuffer типа char и
+        
 	// размерностью N*M
+        char cBuffer[N2][M2];
 
 
 	//Объявите массив (с именем cPointers) указателей на строки
 	//размерностью N
+         char* cPointers[N2];
 
 
 	//Цикл ввода строк:
 	//а) выведите приглашение для ввода
+        std::cout << "Давайте введем данные:\n";
 
 	//б) пока не введена строка STOP_STRING или не заполнен весь массив
 
 	{
+            int c = 0;
+            char w;
+            int i = -1;
+            while((std::cin >> w) && w != STOP_STRING && c ++ < N2 * M2) {
+                
+               // std::cout << "Вы ввели: " << *w << "\n" ;
+                int j = c % M2;
+                if(j == 0) {
+                    i ++;
+                }
+                cBuffer[i][j] = w ; 
+                
+                //std::cout << i << ":" << j << "\n";
+            }
 		//ввод строки в массив cBuffer:
 								
 		//если введена строка - признак окончания, то выйти из цикла
 
 		//Присвойте элементу массива cPointers с индексом nIndex
 		//указатель на строку с номером nIndex в массиве cBuffer
-
+            for(int i = 0; i < N2; i ++) {
+                cPointers[i] = &cBuffer[i][0];
+                std::cout << "N:" << i << ": " << cPointers[i] << "\n";
+            }
 
 	}
 
 
 	//Выдать диагностику о том, что прием строк завершен.
 
-
+        std::cout << "Ввод завершен\n";
+        std::cout << "Начинаем сортировку\n";
 
 	//Теперь сортируем строки:
-
+ /**/////////
+        for (int i = 0; i < N2; i++) {
+            for (int j = i +1; j < N2; j++)  { 
+                if(strcmp(cPointers[i], cPointers[j]) > 0) {
+                    char *ptemp = cPointers[j];
+                    cPointers[j] = cPointers[i];
+                    cPointers[i] = ptemp;
+                }    
+            } 
+        }
+        
+        //
+            
+        for(int i = 0; i < N2; i ++) { 
+            std::cout << "N: "  << i << ": "  << cPointers[i] << "\n";
+         }
+    
 	//Цикл сортировки строк по методу "всплывающего пузырька" в
 	//порядке возрастания. На каждой итерации - промежуточная печать 
 	//отсортированных строк
 
 
-*/
+/**/
 /*
 	//Задание 5. Реализуйте задание №4, используя не встроенные,
 	//а динамические массивы (массив?). Так как строки могут быть разной длины,
