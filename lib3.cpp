@@ -315,10 +315,10 @@ int main()
 
 	//б) пока не введена строка STOP_STRING или не заполнен весь массив
 
-	{
+	{ /*
             int c = 0;
             char w;
-            int i = -1;
+            int i = 0;
             while((std::cin >> w) && w != STOP_STRING && c ++ < N2 * M2) {
                 
                // std::cout << "Вы ввели: " << *w << "\n" ;
@@ -339,7 +339,7 @@ int main()
             for(int i = 0; i < N2; i ++) {
                 cPointers[i] = &cBuffer[i][0];
                 std::cout << "N:" << i << ": " << cPointers[i] << "\n";
-            }
+            } */
 
 	}
 
@@ -350,7 +350,7 @@ int main()
         std::cout << "Начинаем сортировку\n";
 
 	//Теперь сортируем строки:
- /**/////////
+ /*     ////////
         for (int i = 0; i < N2; i++) {
             for (int j = i +1; j < N2; j++)  { 
                 if(strcmp(cPointers[i], cPointers[j]) > 0) {
@@ -359,13 +359,17 @@ int main()
                     cPointers[i] = ptemp;
                 }    
             } 
-        }
+            
+            for(int n = 0; n < N2; n ++) { 
+                std::cout << "N: "  << n << ": "  << cPointers[n] << "\n";
+            }
+        } 
         
         //
             
         for(int i = 0; i < N2; i ++) { 
             std::cout << "N: "  << i << ": "  << cPointers[i] << "\n";
-         }
+         }*/
     
 	//Цикл сортировки строк по методу "всплывающего пузырька" в
 	//порядке возрастания. На каждой итерации - промежуточная печать 
@@ -373,7 +377,7 @@ int main()
 
 
 /**/
-/*
+
 	//Задание 5. Реализуйте задание №4, используя не встроенные,
 	//а динамические массивы (массив?). Так как строки могут быть разной длины,
 	//эффективным решением было бы отводить под каждую строку ровно столько байтов,
@@ -382,14 +386,44 @@ int main()
 	// сформируйте с помощью потока ввода
 	int nStringNumber;
 
-
-	
+        std::cout << "Введите длинну строки: \n";
+	std::cin >> nStringNumber;
+        
+        if(nStringNumber) {
+            char **pcBuffer = new char*[nStringNumber];
+            
+            std::cout << "ввод данных: \n";
+            //Цикл ввода строк:
+            char w;
+            int c = 0;
+            int i = -1;
+            while((std::cin >> w) && w != STOP_STRING && c < N2 * nStringNumber) {
+               int j = c % nStringNumber;
+               if(j == 0) { 
+                    i ++; 
+                    pcBuffer[i] = new char[nStringNumber];
+                }
+                pcBuffer[i][j] = w;   
+                c ++;
+            }
+           
+            
+            
+            
+            //free
+            for(int j = 0; j < i; j ++) {
+                std::cout <<  pcBuffer[j] << "\n";
+                delete[] pcBuffer[j];
+            }
+            
+            delete[] pcBuffer;
+        }
 
   
 	
 
   
-	//Цикл ввода строк:
+	
 
   
 
@@ -406,7 +440,7 @@ int main()
 
 
 
-*/
+/**/
 
 /*
 	//Задание 6. Объявление и использование указателей на многомерные
