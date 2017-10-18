@@ -396,22 +396,37 @@ int main()
             //Цикл ввода строк:
             char w;
             int c = 0;
-            int i = -1;
+            int row = -1;
             while((std::cin >> w) && w != STOP_STRING && c < N2 * nStringNumber) {
                int j = c % nStringNumber;
                if(j == 0) { 
-                    i ++; 
-                    pcBuffer[i] = new char[nStringNumber];
+                    row ++; 
+                    pcBuffer[row] = new char[nStringNumber];
                 }
-                pcBuffer[i][j] = w;   
+                pcBuffer[row][j] = w;   
                 c ++;
             }
+            row ++;
            
-            
+            //Теперь сортируем строки:
+             ////////
+            for (int i = 0; i < row; i++) {
+              for (int j = i +1; j < row; j++)  { 
+                  if(strcmp(pcBuffer[i], pcBuffer[j]) > 0) {
+                      char *ptemp = pcBuffer[j];
+                      pcBuffer[j] = pcBuffer[i];
+                      pcBuffer[i] = ptemp;
+                  }    
+              } 
+
+              for(int n = 0; n < row; n ++) { 
+                  std::cout << "N: "  << n << ": "  << pcBuffer[n] << "\n";
+              }
+            } 
             
             
             //free
-            for(int j = 0; j < i; j ++) {
+            for(int j = 0; j < row; j ++) {
                 std::cout <<  pcBuffer[j] << "\n";
                 delete[] pcBuffer[j];
             }
@@ -442,24 +457,48 @@ int main()
 
 /**/
 
-/*
+
 	//Задание 6. Объявление и использование указателей на многомерные
 	// массивы. Проинициализируйте трехмерный массив
 	//double dArray[4][3][3] так, как показано на рисунке и напишите фрагмент
 	//кода, который меняет местами значения элементов четных
 	//и нечетных слоев:
 	//	было:			     |--------|		
-	//  				   / |4  4  4 |		
+            //  				   / |4  4  4 |		
 	//					 |--------|	4 |	
 	//				   / |3  3  3 |	4 |	
-	//    			 |---------|3 |   |
-    //			   / | 2  2  2 |3 | /
+            //    			 |---------|3 |   |
+        //			   / | 2  2  2 |3 | /
 	//			  |---------|2 |__|
 	//			  | 1  1  1 |2 | /
 	//			  | 1  1  1 |__| 
 	//			  | 1  1  1 | /
 	//			  |_________|
 
+        double dArray[4][3][3] = {
+            {
+                {1,1,1},
+                {1,1,1},
+                {1,1,1}        
+            },
+            {
+                {2,2,2},
+                {2,2,2},
+                {2,2,2}
+            },
+            {
+                {3,3,3},
+                {3,3,3},
+                {3,3,3}
+            },
+            {
+                {4,4,4},
+                {4,4,4},
+                {4,4,4}        
+            }
+        };
+        
+        
 	//	стало:			     |--------|		
 	//  				   / |3  3  3 |		
 	//					 |--------|	3 |	
@@ -472,17 +511,26 @@ int main()
 	//			  | 2  2  2 | /
 	//			  |_________|
 
-	for(int i=0; i<...; ...)
+	for(int i=0; i < 3; i += 2)
 	{
 	//Замечание: НЕ НУЖНО МОДИФИЦИРОВАТЬ ВЫРАЖЕНИЯ СПРАВА ОТ ЗНАКА РАВЕНСТВА!!!
-		... =  dArray[i];
-		... =  dArray[i+1];
+		//... =  dArray[i];
+		//... =  dArray[i+1];
 		//переставляем местами элементы i-того и i+1-ого слоев
-
+            //double **t1 = new double*[3];
+           // double t1 [3][3];
+         //   t1  =  dArray[i];
+            for(int x = 0; x < 3; x ++) {
+                for(int y = 0; y < 3; y ++) {
+                    double tmp = dArray[i + 1][x][y];
+                    dArray[i + 1][x][y] = dArray[i][x][y];
+                    dArray[i][x][y] = tmp;
+                }
+            }
 
 	}
-	*/
-/*
+/*	*/
+
 	///////////////////////////////////////////////////////////////////////////
 	//Задание 7а. Объявите двухмерный встроенный массив элементов типа char.
 	//Сформируйте значения элементов массива с помощью генератора случайных 
@@ -493,17 +541,73 @@ int main()
 	//было - '*' '_' '_' '*' '*' '_' '*' '_' '*' '_'
 	//стало: '*' '*' '*' '*' '*' '_' '_' '_' '_' '_'
 	//и распечатайте массив по строкам - "постройте распределение"
-		
+        
+        const int R1 = 5,  C1 = 8;
+        char arChars[R1][C1];
+        
+        for(int i = 0; i < R1; i ++) {
+            for(int j = 0; j < C1; j ++) {
+               arChars[i][j] = (rand() & 0x1) > 0 ? '*' : '_';
+            }
+        }
+        
+        //show
+        for(int i = 0; i < R1; i ++) {            
+            for(int j = 0; j < C1; j ++) {
+               std::cout << arChars[i][j];
+            }
+            std::cout << "\n";
+        }
+        for(int i = 0; i < R1; i ++) {            
+            for(int j = 0; j < C1; j ++) {
+                for(int n = j + 1; n < C1; n ++) { 
+                            
+                    if(arChars[i][j] != arChars[i][n] && arChars[i][j] == '*') {
+                        char ptemp = arChars[i][j];
+                        arChars[i][j] = arChars[i][n];
+                        arChars[i][n] = ptemp;
+                    } 
+                }
+            } 
+        }
+        //show
+        for(int i = 0; i < R1; i ++) {            
+            for(int j = 0; j < C1; j ++) {
+               std::cout << arChars[i][j];
+            }
+            std::cout << "\n";
+        }
+        
+        
+        
    
 
-*/
+/**/
 
 
 	// 7б. Модифицируйте предыдущее задание следующим способом:
 	//После заполнения массива с помощью генератора случайных чисел
 	//"сдвиньте" звездочки по столбцам вниз и распечатайте полученное
 	//"распределение"
-
+        for(int i = 0; i < R1; i ++) {            
+            for(int j = 0; j < C1; j ++) {
+                for(int n = j + 1; n < C1; n ++) { 
+                            
+                    if(arChars[i][j] != arChars[i][n] && arChars[i][j] == '_') {
+                        char ptemp = arChars[i][j];
+                        arChars[i][j] = arChars[i][n];
+                        arChars[i][n] = ptemp;
+                    } 
+                }
+            } 
+        }
+        //show
+        for(int i = 0; i < R1; i ++) {            
+            for(int j = 0; j < C1; j ++) {
+               std::cout << arChars[i][j];
+            }
+            std::cout << "\n";
+        }
 
 	return 0;
 }
