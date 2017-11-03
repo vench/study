@@ -24,8 +24,10 @@ int main()
 	//Задание 1. Объявите трехмерный массив и сформируйте указанные
 	//значения элементов следующим образом:
 	//а) проинициализируйте массив при объявлении
-	//б) объявите неинициализированный массив и присвойте значения элементам
-        int ar[3][3][3] = {
+    
+    
+	//б) объявите неинициализированный массив и присвойте значения элементам //FIXME
+     /*   int ar[3][3][3]; /* = {
                 {
                     {1, 1, 1},
                     {1, 1, 1},
@@ -43,9 +45,21 @@ int main()
                 }
         };
         
+        int arSize = 3 * 3 * 3;
+        
+        for (int n0 = 0; n0 < 3; n0 ++) {
+            for (int n1 = 0; n1 < 3; n1 ++) {
+                for (int n2 = 0; n2 < 3; n2 ++) {
+                    ar[n0][n1][n2] = (n0 + 1); 
+                }
+            } 
+        }
+        
         int *par = &ar[0][0][0];
+        
+        
         int sum = 0;
-        for(int n = 0; n < 27; n ++) {
+        for(int n = 0; n < arSize; n ++) {
             sum += *par;             
             par ++;
         }
@@ -97,13 +111,14 @@ int main()
            {'a', 'b', 'c', 'd'},
            {'x', 'y', 'z',}
        };
+       arChar[0][0] = 'z';
        
        //массив указателей на тип char
-        char * pArChar[] = {
+        const char * pArChar[] = {
            "abcd",
            "xyz"
        };
-/**/
+
 
 
 ///////////////////////////////////////////////////////////////
@@ -126,7 +141,7 @@ int main()
 	
 	//srand(time(0));
         unsigned const int MAX = 100;
-        unsigned  int N =rand() % MAX, M = rand() % MAX; 
+        unsigned  int N = 1+ rand() % MAX, M = 1+ rand() % MAX; 
      
         std::cout << "Make array: N: " << N << ", M: " << M << "\n";
         int **pDAr = new int*[N];
@@ -193,7 +208,7 @@ int main()
 	//Сформируйте значение i-ого элемента одномерного массива  
 	//равным среднему значению элементов i-ой строки
 	//двухмерного массива
-        double arAVG[N];
+        double *arAVG = new double[N];
         for(int i = 0; i < N; i ++) {
             int sum = 0;
              for(int j = 0; j < M; j ++) {
@@ -202,7 +217,7 @@ int main()
             arAVG[i] = (1.0 * sum / M);
             //std::cout << arAVG[i] << "\n";
          } 
-        
+        delete [] arAVG;
         
         
 
@@ -224,7 +239,7 @@ int main()
         int inInt, count = 0;
         int const inIntArLen = 1024;
         int inIntAr[inIntArLen]; 
-        /*while(count < inIntArLen && (std::cin >> inInt)) {
+        while(count < inIntArLen && (std::cin >> inInt)) {
             std::cout << "input: " << inInt << "\n";
             
             bool isset = false;
@@ -260,7 +275,7 @@ int main()
                 std::cout << inIntAr[j] << ",";
             }
             std::cout << "\n";
-        } */
+        } 
         
 
 
@@ -315,12 +330,12 @@ int main()
 
 	//б) пока не введена строка STOP_STRING или не заполнен весь массив
 
-	{ /*
+	{ 
             int c = 0;
             char w;
             int i = 0;
             while((std::cin >> w) && w != STOP_STRING && c ++ < N2 * M2) {
-                
+                //cin.getline(buff, M); //
                // std::cout << "Вы ввели: " << *w << "\n" ;
                 int j = c % M2;
                 if(j == 0) {
@@ -339,7 +354,7 @@ int main()
             for(int i = 0; i < N2; i ++) {
                 cPointers[i] = &cBuffer[i][0];
                 std::cout << "N:" << i << ": " << cPointers[i] << "\n";
-            } */
+            } 
 
 	}
 
@@ -350,7 +365,7 @@ int main()
         std::cout << "Начинаем сортировку\n";
 
 	//Теперь сортируем строки:
- /*     ////////
+      ////////
         for (int i = 0; i < N2; i++) {
             for (int j = i +1; j < N2; j++)  { 
                 if(strcmp(cPointers[i], cPointers[j]) > 0) {
@@ -369,14 +384,14 @@ int main()
             
         for(int i = 0; i < N2; i ++) { 
             std::cout << "N: "  << i << ": "  << cPointers[i] << "\n";
-         }*/
+         }
     
 	//Цикл сортировки строк по методу "всплывающего пузырька" в
 	//порядке возрастания. На каждой итерации - промежуточная печать 
 	//отсортированных строк
 
 
-/**/
+*/
 
 	//Задание 5. Реализуйте задание №4, используя не встроенные,
 	//а динамические массивы (массив?). Так как строки могут быть разной длины,
@@ -388,25 +403,40 @@ int main()
 
         std::cout << "Введите длинну строки: \n";
 	std::cin >> nStringNumber;
-        
+        std::cin.ignore();
         if(nStringNumber) {
             char **pcBuffer = new char*[nStringNumber];
+          
             
             std::cout << "ввод данных: \n";
             //Цикл ввода строк:
-            char w;
-            int c = 0;
-            int row = -1;
-            while((std::cin >> w) && w != STOP_STRING && c < N2 * nStringNumber) {
-               int j = c % nStringNumber;
-               if(j == 0) { 
-                    row ++; 
-                    pcBuffer[row] = new char[nStringNumber];
+            
+            int row = 0; 
+            char localBuf2[1024];
+            while(row  < nStringNumber) { 
+                
+                std::cin.getline (localBuf2, 1024);
+                  
+                int size = strlen(localBuf2);
+                
+                for(int m = 0; m < size; m ++){
+                    if(localBuf2[m] ==  '*') {
+                        size = 0;
+                        break;
+                    }
                 }
-                pcBuffer[row][j] = w;   
-                c ++;
+                if(size <= 0) {
+                    break;
+                }
+                
+                
+                pcBuffer[row] = new char[size + 1];
+                for(int m = 0; m <= size; m ++){
+                    pcBuffer[row][m] = localBuf2[m];
+                }
+                row ++;
             }
-            row ++;
+            
            
             //Теперь сортируем строки:
              ////////
@@ -514,19 +544,26 @@ int main()
 	for(int i=0; i < 3; i += 2)
 	{
 	//Замечание: НЕ НУЖНО МОДИФИЦИРОВАТЬ ВЫРАЖЕНИЯ СПРАВА ОТ ЗНАКА РАВЕНСТВА!!!
-		//... =  dArray[i];
-		//... =  dArray[i+1];
+		double (*p1)[3] =  dArray[i];
+		double (*p2)[3] =  dArray[i+1];//FIMXE
+                //... =  dArray[i+1];
 		//переставляем местами элементы i-того и i+1-ого слоев
             //double **t1 = new double*[3];
            // double t1 [3][3];
          //   t1  =  dArray[i];
-            for(int x = 0; x < 3; x ++) {
+           /* for(int x = 0; x < 3; x ++) {
                 for(int y = 0; y < 3; y ++) {
                     double tmp = dArray[i + 1][x][y];
                     dArray[i + 1][x][y] = dArray[i][x][y];
                     dArray[i][x][y] = tmp;
                 }
-            }
+            }*/
+                
+                for(int j = 0; j < 9; j ++) {
+                    double tmp = *p1[j];
+                    *p1[j] = *p2[j];
+                    *p2[j] = tmp;                    
+                }             
 
 	}
 /*	*/
@@ -558,7 +595,7 @@ int main()
             }
             std::cout << "\n";
         }
-        for(int i = 0; i < R1; i ++) {            
+        for(int i = 0; i < R1; i ++) { //int *p = arChars[i];            
             for(int j = 0; j < C1; j ++) {
                 for(int n = j + 1; n < C1; n ++) { 
                             
