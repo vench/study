@@ -1,0 +1,2 @@
+# study
+lab 6
