@@ -23,6 +23,13 @@ using namespace std;
 int main(int argc, char** argv) {
 
     
+    for(int i = 0; i < argc; i ++) {
+        
+        if(strcmp(argv[i], "test") == 0) {
+            return runTest(); 
+        }
+    }
+    
     printf("Enter matсh expression[max len 255]: \n"); 
     
     char s[255]; 

@@ -351,3 +351,32 @@ int intPow(int i, unsigned int p) {
     }
     return n;
 }
+
+
+
+
+int runTest(){
+    printf("Run Test\n-------------------\n");
+    
+    const int len = 5;
+    STest* list = new STest[len]{
+        {"1+2", 3},
+        {"1+3", 4},
+        {"2+2*2", 6},
+        {"(2+2)*2", 8},
+        {"3 + 4 * 2 / (3 - 1) ^ 2", 5}
+    };
+    
+    for(int i = 0; i < len; i++) {
+        const char* pe = makePolishEntry(list[i].expr); 
+        printf("Polish Entry: %s\n", pe); 
+        int r = evaluatePolishEntry(pe);
+        printf("Evaluate: %d\n", r);
+        printf("Result: %s\n\n", (list[i].result == r ? "Ok" : "Fail"));
+        
+    }
+    
+    delete[] list;
+    
+    return 0;
+}

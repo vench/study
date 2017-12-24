@@ -30,6 +30,12 @@ struct StackX{
 	int m_i;	//индекс первого свободного элемента в стеке
 };
 
+struct STest {
+    const char *expr;
+    int result;
+};
+
+
 Stack* InitStack();// инициализация стека
 bool push(Stack*s, const char c);// поместить новый элемент на верхушку стека
 const char  pop(Stack*s);// извлечь элемент с верхушки стека
@@ -54,11 +60,15 @@ bool isIntDelimiter(char c);//это разрыв чисел
 
 int charToInt(char c); //символ в число
 
-char intToChar(int i); 
+char intToChar(int i); //
 
-int intPow(int i, unsigned int p);
+int intPow(int i, unsigned int p);//
 
-int getOperatorPriority(const char o);
+int getOperatorPriority(const char o);//
+int runTest();
+
+
+
 
 #endif /* PARSE_H */
 
