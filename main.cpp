@@ -26,15 +26,13 @@ int main(int argc, char** argv) {
     printf("Enter matсh expression[max len 255]: \n"); 
     
     char s[255]; 
-    fgets(s, 255, stdin);  
-   /* s[0] = '1';
-    s[1] = '+';
-    s[2] = '2'; */
-    const char* pe1 = makePolishEntry(&s[0]);
-    
-    printf("Polish Entry: %s\n", pe1); 
-    int r = evaluatePolishEntry(pe1);
-    printf("Evaluate: %d\n", r);
+    while(true) {
+        fgets(s, 255, stdin);   
+        const char* pe = makePolishEntry(&s[0]); 
+        printf("Polish Entry: %s\n", pe); 
+        int r = evaluatePolishEntry(pe);
+        printf("Evaluate: %d\n", r);
+    } 
     
     return 0;
 }
