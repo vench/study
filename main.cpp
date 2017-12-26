@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   main.cpp
  * Author: vench
@@ -12,7 +6,7 @@
  */
 
 #include <cstdlib>
-#include <stdio.h>
+#include <stdio.h> 
 #include "parse.h"
 
 using namespace std;
@@ -20,21 +14,23 @@ using namespace std;
 /*
  * 
  */
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv) { 
     
-    for(int i = 0; i < argc; i ++) {
-        
+    for(int i = 0; i < argc; i ++) { 
         if(strcmp(argv[i], "test") == 0) {
             return runTest(); 
         }
-    }
+    } 
     
-    printf("Enter matсh expression[max len 255]: \n"); 
+    const int len = 255;
+    char s[len];
     
-    char s[255]; 
-    while(true) {
-        fgets(s, 255, stdin);   
+    printf("Enter matсh expression[max len %d]: \n", len); 
+      
+       
+    while(true) { 
+        
+        fgets(s, len, stdin);   
         const char* pe = makePolishEntry(&s[0]); 
         printf("Polish Entry: %s\n", pe); 
         int r = evaluatePolishEntry(pe);

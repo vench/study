@@ -83,7 +83,9 @@ bool push(Stack*s, const char c) {
  */
 const char  pop(Stack*s){
     if(!StackEmpty(s)) {
-        return s->m_ar[ --  s->m_i ];
+        const char c = s->m_ar[ --  s->m_i ];
+        s->m_ar[ s->m_i ] = 0;
+        return c;
     }
     return '\0';
 }         
@@ -353,22 +355,30 @@ int intPow(int i, unsigned int p) {
 }
 
 
+void clear(Stack*s) {
+    while(pop(s) != '\0');
+}
 
-
+/**
+ * 
+ * @return 
+ */
 int runTest(){
     printf("Run Test\n-------------------\n");
     
-    const int len = 5;
+    const int len = 6;
     STest* list = new STest[len]{
         {"1+2", 3},
         {"1+3", 4},
         {"2+2*2", 6},
         {"(2+2)*2", 8},
-        {"3 + 4 * 2 / (3 - 1) ^ 2", 5}
+        {"3 + 4 * 2 / (3 - 1) ^ 2", 5},
+        {"999 + 1000 - 9", 1990}
     };
     
     for(int i = 0; i < len; i++) {
         const char* pe = makePolishEntry(list[i].expr); 
+        printf("Expression: %s\n", list[i].expr);
         printf("Polish Entry: %s\n", pe); 
         int r = evaluatePolishEntry(pe);
         printf("Evaluate: %d\n", r);

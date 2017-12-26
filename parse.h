@@ -37,6 +37,7 @@ struct STest {
 
 
 Stack* InitStack();// инициализация стека
+void clear(Stack*s);// инициализация стека 
 bool push(Stack*s, const char c);// поместить новый элемент на верхушку стека
 const char  pop(Stack*s);// извлечь элемент с верхушки стека
 bool StackEmpty(Stack*s);// проверка – пуст ли стек
