@@ -1,128 +1,77 @@
-#
-#  There exist several targets which are by default empty and which can be 
-#  used for execution of your targets. These targets are usually executed 
-#  before and after some main targets. They are: 
-#
-#     .build-pre:              called before 'build' target
-#     .build-post:             called after 'build' target
-#     .clean-pre:              called before 'clean' target
-#     .clean-post:             called after 'clean' target
-#     .clobber-pre:            called before 'clobber' target
-#     .clobber-post:           called after 'clobber' target
-#     .all-pre:                called before 'all' target
-#     .all-post:               called after 'all' target
-#     .help-pre:               called before 'help' target
-#     .help-post:              called after 'help' target
-#
-#  Targets beginning with '.' are not intended to be called on their own.
-#
-#  Main targets can be executed directly, and they are:
-#  
-#     build                    build a specific configuration
-#     clean                    remove built files from a configuration
-#     clobber                  remove all built files
-#     all                      build all configurations
-#     help                     print help mesage
-#  
-#  Targets .build-impl, .clean-impl, .clobber-impl, .all-impl, and
-#  .help-impl are implemented in nbproject/makefile-impl.mk.
-#
-#  Available make variables:
-#
-#     CND_BASEDIR                base directory for relative paths
-#     CND_DISTDIR                default top distribution directory (build artifacts)
-#     CND_BUILDDIR               default top build directory (object files, ...)
-#     CONF                       name of current configuration
-#     CND_PLATFORM_${CONF}       platform name (current configuration)
-#     CND_ARTIFACT_DIR_${CONF}   directory of build artifact (current configuration)
-#     CND_ARTIFACT_NAME_${CONF}  name of build artifact (current configuration)
-#     CND_ARTIFACT_PATH_${CONF}  path to build artifact (current configuration)
-#     CND_PACKAGE_DIR_${CONF}    directory of package (current configuration)
-#     CND_PACKAGE_NAME_${CONF}   name of package (current configuration)
-#     CND_PACKAGE_PATH_${CONF}   path to package (current configuration)
-#
-# NOCDDL
+## -*- Makefile -*-
+##
+## Пользователь: vench
+## Время: 02.04.2018 9:30:22
+## Makefile created by Oracle Developer Studio.
+##
+## Этот файл создан автоматически.
+##
 
 
-# Environment 
-MKDIR=mkdir
-CP=cp
-CCADMIN=CCadmin
+#### Определения компиляторов и средств, используемые совместно всеми целями сборки #####
+CCC = g++
+CXX = g++
+BASICOPTS = -g
+CCFLAGS = $(BASICOPTS)
+CXXFLAGS = $(BASICOPTS)
+CCADMIN = 
 
 
-# build
-build: .build-post
-
-.build-pre:
-# Add your pre 'build' code here...
-
-.build-post: .build-impl
-# Add your post 'build' code here...
+# Определите целевые каталоги.
+TARGETDIR_main.cpp=build
 
 
-# clean
-clean: .clean-post
+all: $(TARGETDIR_main.cpp)/main.cpp
 
-.clean-pre:
-# Add your pre 'clean' code here...
-
-.clean-post: .clean-impl
-# Add your post 'clean' code here...
-
-
-# clobber
-clobber: .clobber-post
-
-.clobber-pre:
-# Add your pre 'clobber' code here...
-
-.clobber-post: .clobber-impl
-# Add your post 'clobber' code here...
+## Цель: main.cpp
+OBJS_main.cpp =  \
+	$(TARGETDIR_main.cpp)/myRect.o \
+	$(TARGETDIR_main.cpp)/myString.o \
+	$(TARGETDIR_main.cpp)/main.o
+USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
+DEPLIBS_main.cpp =  
+LDLIBS_main.cpp = $(USERLIBS_main.cpp)
 
 
-# all
-all: .all-post
-
-.all-pre:
-# Add your pre 'all' code here...
-
-.all-post: .all-impl
-# Add your post 'all' code here...
+# Ссылка или архив
+$(TARGETDIR_main.cpp)/main.cpp: $(TARGETDIR_main.cpp) $(OBJS_main.cpp) $(DEPLIBS_main.cpp)
+	$(LINK.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ $(OBJS_main.cpp) $(LDLIBS_main.cpp)
 
 
-# build tests
-build-tests: .build-tests-post
+# Скомпилировать исходные файлы .o
+$(TARGETDIR_main.cpp)/myRect.o: $(TARGETDIR_main.cpp) myRect.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myRect.cpp
 
-.build-tests-pre:
-# Add your pre 'build-tests' code here...
+$(TARGETDIR_main.cpp)/myString.o: $(TARGETDIR_main.cpp) myString.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myString.cpp
 
-.build-tests-post: .build-tests-impl
-# Add your post 'build-tests' code here...
-
-
-# run tests
-test: .test-post
-
-.test-pre: build-tests
-# Add your pre 'test' code here...
-
-.test-post: .test-impl
-# Add your post 'test' code here...
-
-
-# help
-help: .help-post
-
-.help-pre:
-# Add your pre 'help' code here...
-
-.help-post: .help-impl
-# Add your post 'help' code here...
+$(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ main.cpp
 
 
 
-# include project implementation makefile
-include nbproject/Makefile-impl.mk
+#### При выполнении команды "Очистить цель" будут удалены все созданные файлы ####
+.clean-impl:
+	
+	
+.build-pos:
+	
+clean:
+	rm -f \
+		$(TARGETDIR_main.cpp)/main.cpp \
+		$(TARGETDIR_main.cpp)/myRect.o \
+		$(TARGETDIR_main.cpp)/myString.o \
+		$(TARGETDIR_main.cpp)/main.o
+	$(CCADMIN)
+	rm -f -r $(TARGETDIR_main.cpp)
 
-# include project make variables
-include nbproject/Makefile-variables.mk
+
+# Создать целевой каталог (при необходимости)
+$(TARGETDIR_main.cpp):
+	mkdir -p $(TARGETDIR_main.cpp)
+
+
+# Включить проверку зависимостей
+.KEEP_STATE:
+.KEEP_STATE_FILE:.make.state.GNU-amd64-Linux
+
