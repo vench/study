@@ -10,18 +10,32 @@ class Rect {
         public:
             Rect();
         
+            Rect(const  Rect &r);
+        
             Rect(int m_left, int m_right, int m_top, int m_bottom);
             
-            void initialize(int m_left, int m_right, int m_top, int m_bottom);
+            ~Rect();
             
-            void normalize();
+           
+             
             
-            void InflateRect(int size);
-            
-            void InflateRect(int sizeHor, int sizeVert);
+            void InflateRect(int sizeHor = 1, int sizeVert =  1);
             
             void InflateRect(int m_left, int m_right, int m_top, int m_bottom);
             
             void View();
+            
+            void SetAll(int m_left, int m_right, int m_top, int m_bottom);
 
+            void GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom);
+         
+        private:
+            void initialize(int m_left, int m_right, int m_top, int m_bottom);
+            
+            void normalize();
 };
+
+
+
+Rect BoundingRect(Rect, Rect);
+Rect BoundingRect2(Rect &a, Rect &b);
