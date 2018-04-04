@@ -11,7 +11,7 @@
 #### Определения компиляторов и средств, используемые совместно всеми целями сборки #####
 CCC = g++
 CXX = g++
-BASICOPTS = -g
+BASICOPTS = -g -std=c++11 
 CCFLAGS = $(BASICOPTS)
 CXXFLAGS = $(BASICOPTS)
 CCADMIN = 
