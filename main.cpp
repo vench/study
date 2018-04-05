@@ -1,6 +1,7 @@
 #include <iostream>
 #include "myRect.h"
 #include "myString.h" 
+#include "Bochka.h"
 
 #define stop 
 
@@ -336,16 +337,23 @@ main.cpp:115:25: error: within this context
 	//Требуется определить номер итерации, на которой концентрация спирта в
 	//первой бочке станет меньше 50%.
 
-	//Bochka spirt(...);
-	//Bochka water(...);
+        const unsigned int W = 30;
+        const unsigned int W_CAP = 1;
+	Bochka spirt(W, 0.96, 0.04);
+	Bochka water(W, 0.0, 1.0);
 	//...
-	//	while(концентрация спирта в бочке spirt > 50%)
-	//	{
-	//		spirt.Pereliv(water); //или spirt.Pereliv(water, объем_кружки);
-	//		water.Pereliv(spirt); // аналогично
-	//		...
-
-	//	}
+        int n = 0;
+	while(spirt.getAlcohol() > 0.5)
+	{
+			spirt.Pereliv(water, W_CAP); //или spirt.Pereliv(water, объем_кружки);
+			water.Pereliv(spirt, W_CAP); // аналогично
+			//...
+                        n ++;  
+                        
+                        std::cout << "a: " << spirt.getAlcohol() << ", w: "  << spirt.getWater() << "\n";
+	}
+        
+        std::cout << "Count: " << n << "\n";
     
     return 0;
 

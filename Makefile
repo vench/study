@@ -27,6 +27,7 @@ all: $(TARGETDIR_main.cpp)/main.cpp
 OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/myRect.o \
 	$(TARGETDIR_main.cpp)/myString.o \
+	$(TARGETDIR_main.cpp)/Bochka.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
 DEPLIBS_main.cpp =  
@@ -41,6 +42,9 @@ $(TARGETDIR_main.cpp)/main.cpp: $(TARGETDIR_main.cpp) $(OBJS_main.cpp) $(DEPLIBS
 # Скомпилировать исходные файлы .o
 $(TARGETDIR_main.cpp)/myRect.o: $(TARGETDIR_main.cpp) myRect.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myRect.cpp
+	
+$(TARGETDIR_main.cpp)/Bochka.o: $(TARGETDIR_main.cpp) Bochka.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Bochka.cpp
 
 $(TARGETDIR_main.cpp)/myString.o: $(TARGETDIR_main.cpp) myString.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myString.cpp
@@ -61,6 +65,7 @@ clean:
 		$(TARGETDIR_main.cpp)/main.cpp \
 		$(TARGETDIR_main.cpp)/myRect.o \
 		$(TARGETDIR_main.cpp)/myString.o \
+		$(TARGETDIR_main.cpp)/Bochka.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)
