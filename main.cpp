@@ -4,6 +4,10 @@
 #include "Bochka.h"
 
 #define stop 
+//Boundingrect concat - string
+//method create  
+//move copy string
+
 
 using namespace std;
 
@@ -205,9 +209,9 @@ main.cpp:115:25: error: within this context
 				Rect r4(*pR); //Вызов конструктора (копирование)
 				Rect r5(i,i,i,i); //Вызов конструктора 
                                 
-                                //вызов деструкторов r4, r5
+                                //вызов деструкторов r4, r5 !
 			}
-                        //вызов деструкторов r3, r2
+                        //вызов деструкторов r3, r2 !
                         
 		}
 		delete pR; //Явно удаляем динамический объект, 
@@ -282,7 +286,7 @@ main.cpp:115:25: error: within this context
 	// типа MyString. Например:
 	//Как задать размерность? N=3
         const int N = 3;            
-	MyString arstr[N] = {"Str 1", "Str 2", "Str 3"};
+	MyString arstr[N] = {MyString("Str 1"), MyString("Str 2"), MyString("Str 3")};
           
 	//Проверка - печать строк-членов класса
         for (int i = 0; i < N; i ++) {
@@ -293,7 +297,7 @@ main.cpp:115:25: error: within this context
 	//Увеличьте размер массива, не изменяя список инициализаторов:
 	//N=5???
         const int N1 = 5;            
-	MyString arstr1[N1] = {"Str 1", "Str 2", "Str 3"};
+	MyString arstr1[N1] = {MyString("Str 1"), MyString("Str 2"), MyString("Str 3")};
           
 	//Проверка - печать строк-членов класса
         for (int i = 0; i < N1; i ++) {
@@ -315,12 +319,17 @@ main.cpp:115:25: error: within this context
 	{
 	//Объявите и проинициализируйте массив arPtr из трех 
 	//указателей на объекты типа MyString.
-            const int N = 3;
-            MyString *arPtr = new MyString[N]{"abc", "nlp", "xyz"};
+            const int N = 3; 
+            
+            MyString **arPtr = new MyString*[N]{ 
+                new MyString("abc"), 
+                new MyString("nlp"), 
+                new MyString("xyz") };
+            //сделать массив указателей
 	
 	//Печать строк-членов класса
             for (int i = 0; i < N; i ++) {
-                std::cout << arPtr[i].GetString() << "\n";
+                std::cout << arPtr[i]->GetString() << "\n";
             }
 
             delete[] arPtr; 
@@ -337,7 +346,7 @@ main.cpp:115:25: error: within this context
 	//Требуется определить номер итерации, на которой концентрация спирта в
 	//первой бочке станет меньше 50%.
 
-        const unsigned int W = 30;
+        const unsigned int W = 100;
         const unsigned int W_CAP = 1;
 	Bochka spirt(W, 0.96, 0.04);
 	Bochka water(W, 0.0, 1.0);

@@ -48,6 +48,7 @@ const char* MyString::GetString() {
 
 //
 void MyString::SetNewString(const char *c) {
+     delete[] this->m_pStr;
     this->copyValue(c);
 };
 

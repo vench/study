@@ -87,7 +87,7 @@ void Rect::SetAll(int m_left, int m_right, int m_top, int m_bottom) {
  * @param m_top
  * @param m_bottom
  */
-void Rect::GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) {
+void Rect::GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) const {
    m_left = this->m_left; 
    m_right = this->m_right; 
    m_top = this->m_top; 
@@ -97,18 +97,27 @@ void Rect::GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) {
 
 
 Rect BoundingRect(Rect a, Rect b) { 
-    return BoundingRect2(a, b);
-};
-
-Rect BoundingRect2(Rect &a, Rect &b) {
- int left1, right1, top1, bottom1,left2, right2, top2, bottom2;
+    int left1, right1, top1, bottom1,left2, right2, top2, bottom2;
     a.GetAll(left1, right1, top1, bottom1);
     b.GetAll(left2, right2, top2, bottom2);
     
-    Rect r( left1 < left2 ? left1 : left2, 
+    return Rect( left1 < left2 ? left1 : left2, 
             right1 > right2 ? right1 : right2, 
             top1 < top2 ? top1 : top2,  
             bottom1 > bottom2 ? bottom1 : bottom2
             );
-    return r;  
+    
+};
+
+Rect BoundingRect2(const Rect &a, const Rect &b) {
+ int left1, right1, top1, bottom1,left2, right2, top2, bottom2;
+    a.GetAll(left1, right1, top1, bottom1);
+    b.GetAll(left2, right2, top2, bottom2);
+    
+    return Rect ( left1 < left2 ? left1 : left2, 
+            right1 > right2 ? right1 : right2, 
+            top1 < top2 ? top1 : top2,  
+            bottom1 > bottom2 ? bottom1 : bottom2
+            );
+        
 };

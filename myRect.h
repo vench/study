@@ -27,7 +27,10 @@ class Rect {
             
             void SetAll(int m_left, int m_right, int m_top, int m_bottom);
 
-            void GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom);
+
+            void GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) const;
+            
+            //todo Rect BoundingRect(Rect, Rect);
          
         private:
             void initialize(int m_left, int m_right, int m_top, int m_bottom);
@@ -38,4 +41,4 @@ class Rect {
 
 
 Rect BoundingRect(Rect, Rect);
-Rect BoundingRect2(Rect &a, Rect &b);
+Rect BoundingRect2(const Rect &a, const Rect &b);
