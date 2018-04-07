@@ -5,8 +5,7 @@
 
 #define stop 
 //Boundingrect concat - string
-//method create  
-//move copy string
+//method create   
 
 
 using namespace std;
@@ -176,6 +175,12 @@ main.cpp:115:25: error: within this context
             Rect r1(1,2,3,4), r2(5,60,7,80),r3;
             r3= BoundingRect(r1, r2);
             r3.View();
+            
+            std::cout << "Rect::BoundingRect();\n";
+            Rect r4 = r3.BoundingRect(r1, r2);
+            r4.View();
+            std::cout << "BoundingRect::end; \n";
+            
 	stop
 	
 	//Задание 4а. Передача объектов по ссылке.

@@ -12,6 +12,7 @@ class MyString
         MyString();
     
         MyString(const  MyString &s);
+        MyString(MyString &&s);
     
         explicit MyString(const char *c);    
     

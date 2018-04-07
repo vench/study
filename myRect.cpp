@@ -22,6 +22,20 @@ Rect::~Rect() {
     //TODO
 }; 
 
+//
+Rect Rect::BoundingRect(const Rect &a, const Rect &b) {
+   int left1, right1, top1, bottom1,left2, right2, top2, bottom2;
+    a.GetAll(left1, right1, top1, bottom1);
+    b.GetAll(left2, right2, top2, bottom2);  
+    
+    return Rect( left1 < left2 ? left1 : left2, 
+            right1 > right2 ? right1 : right2, 
+            top1 < top2 ? top1 : top2,  
+            bottom1 > bottom2 ? bottom1 : bottom2
+            );     
+}
+
+//
 void Rect::initialize(int m_left, int m_right, int m_top, int m_bottom) {
     this->m_left = m_left;
     this->m_right = m_right;
@@ -95,7 +109,7 @@ void Rect::GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) const {
 };
 
 
-
+//
 Rect BoundingRect(Rect a, Rect b) { 
     int left1, right1, top1, bottom1,left2, right2, top2, bottom2;
     a.GetAll(left1, right1, top1, bottom1);
@@ -109,6 +123,7 @@ Rect BoundingRect(Rect a, Rect b) {
     
 };
 
+//
 Rect BoundingRect2(const Rect &a, const Rect &b) {
  int left1, right1, top1, bottom1,left2, right2, top2, bottom2;
     a.GetAll(left1, right1, top1, bottom1);

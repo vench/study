@@ -22,6 +22,12 @@ MyString::MyString() {
      this->copyValue(c); 
  };
 
+MyString::MyString(MyString &&s) {
+     //std::cout << "Move;\n";   
+     this-> m_pStr = s.m_pStr; 
+     s.m_pStr = nullptr; 
+}
+
 //
 void MyString::copyValue(const char *c) {
     int size = 1; 
@@ -84,5 +90,5 @@ MyString  CreateString(size_t number, ...) {
     }
     
     va_end(argList); 
-    return MyString(str);
+    return std::move(MyString(str));//почему то не работает по умолчанию
 };
