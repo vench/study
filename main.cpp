@@ -198,7 +198,7 @@ main.cpp:115:25: error: within this context
 	//конструкторе (конструкторах) и деструкторе. Определите: когда для
 	//каждого из объектов вызывается конструктор, а когда - деструктор?
 	{
-		Rect r1; //Вызов конструктора
+		Rect r1(0,1,2,3); //Вызов конструктора
 		Rect*	pR = new Rect(1,2,1,2);	 //Вызов конструктора 
 		{
 			Rect r2(r1);//Вызов конструктора (копирование)
@@ -208,13 +208,14 @@ main.cpp:115:25: error: within this context
 				static Rect r3 (i,i,i,i) ; //вызов конструктора только при первой итерации
 				Rect r4(*pR); //Вызов конструктора (копирование)
 				Rect r5(i,i,i,i); //Вызов конструктора 
-                                
-                                //вызов деструкторов r4, r5 !
-			}
-                        //вызов деструкторов r3, r2 !
-                        
+                               
+                               
+			} 
+                        //вызов деструкторов r4, r5 (после закрытия цикла) 
+                         // r3 объект будет уничтожен по закрытию программы
 		}
-		delete pR; //Явно удаляем динамический объект, 
+                //вызов деструкторо r2 
+	 	delete pR; //Явно удаляем динамический объект, 
                 //вызывается перед очисткой памяти деструктор
                 
                 
@@ -271,12 +272,12 @@ main.cpp:115:25: error: within this context
 	//в котором строка будет конкатенацией параметров
                 
                 {
-                    const char *a ="The", *b = " first", *c = " string!";
-                    MyString *s = CreateString(3, a, b, c);
-                    std::cout << s->GetString() << "\n";
+                    const char *a ="*** The", *b = " first", *c = " string!";
+                    MyString s = CreateString(3, a, b, c);
+                    std::cout << s.GetString() << "\n";
                     
                 }
-
+              //  exit(0);
 /**/
 
 
@@ -359,7 +360,7 @@ main.cpp:115:25: error: within this context
 			//...
                         n ++;  
                         
-                        std::cout << "a: " << spirt.getAlcohol() << ", w: "  << spirt.getWater() << "\n";
+                     //   std::cout << "a: " << spirt.getAlcohol() << ", w: "  << spirt.getWater() << "\n";
 	}
         
         std::cout << "Count: " << n << "\n";

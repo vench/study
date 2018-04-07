@@ -2,6 +2,7 @@
 #include "myString.h" 
 #include <cstdarg> 
 #include <cstring> 
+#include <iostream>
 
 
 using namespace std;
@@ -59,16 +60,29 @@ void MyString::ConcatString(const char *c){
 
 
 //
-MyString * CreateString(size_t number, ...) {
-    MyString *s = new MyString("");
+MyString  CreateString(size_t number, ...) {
+     
     va_list argList;
     va_start(argList, number);
     
+    int size = 0;
     for(size_t i = 1; i <= number; i ++) {
         const char* c = va_arg(argList, const char*);
-        s->ConcatString(c);
+        size += std::strlen(c);
+    }
+    va_end(argList);
+    va_start(argList, number);
+    
+    char* str = new char[size]; 
+    for(size_t i = 1; i <= number; i ++) {
+        const char* c = va_arg(argList, const char*);
+        if(i == 1){
+            std::strcpy(str, c);
+        } else {
+            std::strcat(str, c);
+        }          
     }
     
     va_end(argList); 
-    return s;
+    return MyString(str);
 };

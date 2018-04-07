@@ -26,4 +26,4 @@ class MyString
 };
 
 
-MyString * CreateString(size_t number, ...);
+MyString CreateString(size_t number, ...);

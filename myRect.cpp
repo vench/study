@@ -20,7 +20,7 @@ Rect::Rect(const  Rect &r) {
 Rect::~Rect() {
     //std::cout << "From desctructor ~Rect();\n";
     //TODO
-};
+}; 
 
 void Rect::initialize(int m_left, int m_right, int m_top, int m_bottom) {
     this->m_left = m_left;
