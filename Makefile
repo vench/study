@@ -28,6 +28,8 @@ OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/myRect.o \
 	$(TARGETDIR_main.cpp)/myString.o \
 	$(TARGETDIR_main.cpp)/Bochka.o \
+	$(TARGETDIR_main.cpp)/Shape.o \
+	$(TARGETDIR_main.cpp)/Circle.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
 DEPLIBS_main.cpp =  
@@ -45,6 +47,12 @@ $(TARGETDIR_main.cpp)/myRect.o: $(TARGETDIR_main.cpp) myRect.cpp
 	
 $(TARGETDIR_main.cpp)/Bochka.o: $(TARGETDIR_main.cpp) Bochka.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Bochka.cpp
+
+$(TARGETDIR_main.cpp)/Circle.o: $(TARGETDIR_main.cpp) Circle.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Circle.cpp
+	
+$(TARGETDIR_main.cpp)/Shape.o: $(TARGETDIR_main.cpp) Shape.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Shape.cpp
 
 $(TARGETDIR_main.cpp)/myString.o: $(TARGETDIR_main.cpp) myString.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myString.cpp
@@ -66,6 +74,8 @@ clean:
 		$(TARGETDIR_main.cpp)/myRect.o \
 		$(TARGETDIR_main.cpp)/myString.o \
 		$(TARGETDIR_main.cpp)/Bochka.o \
+		$(TARGETDIR_main.cpp)/Shape.o \
+		$(TARGETDIR_main.cpp)/Circle.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)
