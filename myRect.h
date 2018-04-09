@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include "Shape.h"
 
-class Rect {
+class Rect  : public Shape {
 	int m_left, m_right, m_top, m_bottom;
         
        
@@ -13,6 +14,7 @@ class Rect {
             Rect(const  Rect &r);
         
             Rect(int m_left, int m_right, int m_top, int m_bottom);
+            Rect(int m_left, int m_right, int m_top, int m_bottom, Shape::COLOR color);
             
             ~Rect();
             

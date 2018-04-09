@@ -2,23 +2,33 @@
 
 
 
-
+//
 Rect::Rect(){
     initialize(0,0,0,0);
 };
 
+//
 Rect::Rect(int m_left, int m_right, int m_top, int m_bottom){
     initialize( m_left, m_right, m_top, m_bottom);
 };
 
+//
+Rect::Rect(int m_left, int m_right, int m_top, int m_bottom, Shape::COLOR color) : 
+    Shape(color) {
+   // std::cout << "From constr Rect();\n";
+    initialize( m_left, m_right, m_top, m_bottom);
+};
+
+//
 Rect::Rect(const  Rect &r) {
     std::cout << "From Rect::Rect copy\n" ;
     
     initialize( r.m_left, r.m_right, r.m_top, r.m_bottom);
 };
 
+//
 Rect::~Rect() {
-    //std::cout << "From desctructor ~Rect();\n";
+   // std::cout << "From desctructor ~Rect();\n";
     //TODO
 }; 
 

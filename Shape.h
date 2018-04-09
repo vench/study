@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 class Shape {
     
     
@@ -14,6 +16,7 @@ private:
 public:
     
     Shape();
+    Shape(Shape::COLOR c);
     Shape(const Shape& orig);
     virtual ~Shape();
     
