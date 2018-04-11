@@ -19,7 +19,7 @@ class Rect  : public Shape {
             ~Rect();
             
            
-             
+            void Inflate(int);  
             
             void InflateRect(int sizeHor = 1, int sizeVert =  1);
             
@@ -34,6 +34,9 @@ class Rect  : public Shape {
             
             Rect BoundingRect(const Rect&, const Rect&);
          
+            void WhereAmI();
+            
+            
         private:
             void initialize(int m_left, int m_right, int m_top, int m_bottom);
             

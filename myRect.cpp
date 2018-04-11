@@ -19,6 +19,12 @@ Rect::Rect(int m_left, int m_right, int m_top, int m_bottom, Shape::COLOR color)
     initialize( m_left, m_right, m_top, m_bottom);
 };
 
+
+void Rect::Inflate(int size) {
+     InflateRect(size, size);
+     std::cout << "Circle implementation Inflate!\n" ;
+}
+
 //
 Rect::Rect(const  Rect &r) {
     std::cout << "From Rect::Rect copy\n" ;
@@ -28,7 +34,7 @@ Rect::Rect(const  Rect &r) {
 
 //
 Rect::~Rect() {
-   // std::cout << "From desctructor ~Rect();\n";
+    std::cout << "Now I am in Rect's destructor!\n";
     //TODO
 }; 
 
@@ -116,6 +122,11 @@ void Rect::GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) const {
    m_right = this->m_right; 
    m_top = this->m_top; 
    m_bottom = this->m_bottom; 
+};
+
+//
+void Rect::WhereAmI() {
+    std::cout << "Now I am in class Rect\n";
 };
 
 
