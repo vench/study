@@ -30,6 +30,10 @@ OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/Bochka.o \
 	$(TARGETDIR_main.cpp)/Shape.o \
 	$(TARGETDIR_main.cpp)/Circle.o \
+	$(TARGETDIR_main.cpp)/Bin.o \
+	$(TARGETDIR_main.cpp)/Oct.o \
+	$(TARGETDIR_main.cpp)/Hex.o \
+	$(TARGETDIR_main.cpp)/Bytes.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
 DEPLIBS_main.cpp =  
@@ -57,6 +61,19 @@ $(TARGETDIR_main.cpp)/Shape.o: $(TARGETDIR_main.cpp) Shape.cpp
 $(TARGETDIR_main.cpp)/myString.o: $(TARGETDIR_main.cpp) myString.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myString.cpp
 
+$(TARGETDIR_main.cpp)/Bin.o: $(TARGETDIR_main.cpp) Bin.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Bin.cpp
+	
+$(TARGETDIR_main.cpp)/Oct.o: $(TARGETDIR_main.cpp) Oct.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Oct.cpp
+	
+$(TARGETDIR_main.cpp)/Hex.o: $(TARGETDIR_main.cpp) Hex.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Hex.cpp
+	
+$(TARGETDIR_main.cpp)/Bytes.o: $(TARGETDIR_main.cpp) Bytes.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Bytes.cpp
+
+
 $(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ main.cpp
 
@@ -76,6 +93,10 @@ clean:
 		$(TARGETDIR_main.cpp)/Bochka.o \
 		$(TARGETDIR_main.cpp)/Shape.o \
 		$(TARGETDIR_main.cpp)/Circle.o \
+		$(TARGETDIR_main.cpp)/Bin.o \
+		$(TARGETDIR_main.cpp)/Oct.o \
+		$(TARGETDIR_main.cpp)/Hex.o \
+		$(TARGETDIR_main.cpp)/Bytes.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)
