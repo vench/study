@@ -305,10 +305,33 @@ Now I am in class Circle
 	//			восьмеричные, двоичные цифры;
 	//в) изменять отдельные двоичные, восьмеричные или шестнадцатеричные цифры;
         {
-            Bytes byte(0x1f);
-            byte.ShowHex();
+            Bytes byte(0x0b); // 0x0b - 11
+            byte.ShowChar();
+            byte.ShowDec();
+          
             byte.ShowBin();
-	//...
+            byte.ShowOct();
+            byte.ShowHex();
+	
+            
+            byte.ShowBinPos(2);
+            byte.ShowOctPos(1);
+            byte.ShowHexnPos(1);
+            
+            //
+            byte.EditBin(2, 0); //11 - 2
+            byte.ShowDec();
+            byte.ShowBin();
+                        
+            //
+            byte.EditOct(2, 0); //9 - 8
+            byte.ShowDec();
+            byte.ShowOct();
+            
+            //
+            byte.EditHex(2, 1);//1 + 16
+            byte.ShowDec();
+            byte.ShowHex();
         }
 
 /**/
