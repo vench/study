@@ -5,7 +5,11 @@ Circle::Circle() {
 }
 
 //
-Circle::Circle(const Circle& orig) {
+Circle::Circle(const Circle& orig) : Shape(orig) {
+    this->x = orig.x;
+    this->y = orig.y;
+    this->radius = orig.radius;
+    
 }
 
 //
@@ -27,14 +31,13 @@ void Circle::Inflate(int size) {
 }
 
 //
-Circle::Circle(const Rect& orig) {
+Circle::Circle(const Rect& orig)  : Shape(orig)  {
     int l,r,t,b;
     orig.GetAll(l,r,t,b); 
     
-    Circle( r + l >> 1,
-            b + t >> 1,
-            (r - l > b - t ? b - t : r - l) >> 1, 
-            orig.getColor());
+    this->x =  r + l >> 1;
+    this->y =  b + t >> 1;
+     this->radius =       ((r - l > b - t ? b - t : r - l) >> 1);
 }
 
 

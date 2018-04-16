@@ -3,7 +3,8 @@
 
 
 //
-Rect::Rect(){
+Rect::Rect()  : 
+    Shape(Shape::RED) {
     initialize(0,0,0,0);
 };
 
@@ -26,7 +27,7 @@ void Rect::Inflate(int size) {
 }
 
 //
-Rect::Rect(const  Rect &r) {
+Rect::Rect(const  Rect &r) : Shape(r) {
     std::cout << "From Rect::Rect copy\n" ;
     
     initialize( r.m_left, r.m_right, r.m_top, r.m_bottom);

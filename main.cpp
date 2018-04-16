@@ -221,6 +221,9 @@ Now I am in class Circle
 
 	//Задание 4*. В чем заключается отличие 1) и 2)
 	{
+            
+            
+            std::cout << "TODO!!!\n";
 		Shape* pShapes = new Rect[10];//1)
 		Rect* pRects = new Rect[10];//2)
 
@@ -228,10 +231,10 @@ Now I am in class Circle
 		//в чем заключается проблема???
                 
                 for(int i = 0; i < 10; i ++) {
-                    pShapes->WhereAmI(); //Now I am in class Shape *(если убрать слово virtual)
+                    (static_cast<Rect*>(pShapes) + i) ->WhereAmI(); //Now I am in class Shape *(если убрать слово virtual)
                     //Если не убирать, то будет Now I am in class Rect
 
-                    pRects->WhereAmI();//Now I am in class Rect
+                    pRects[i].WhereAmI();//Now I am in class Rect
 
                 }
                 //Причина в создании таблицы адресов функций, если метод объявлен вирутальный, и он реализован в 
