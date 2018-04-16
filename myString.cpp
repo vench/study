@@ -64,6 +64,22 @@ void MyString::ConcatString(const char *c){
     std::strcat(m_pStr, c); 
 };
 
+//
+MyString& MyString::operator=(const MyString& orig) {
+    if(this != &orig) {
+        this->copyValue(orig.m_pStr);
+    }
+    return *this;
+}
+
+
+//
+MyString& MyString::operator=(const char* str) { 
+    this->copyValue(str);
+    return *this;
+}
+
+
 
 //
 MyString  CreateString(size_t number, ...) {

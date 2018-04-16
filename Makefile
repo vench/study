@@ -26,6 +26,7 @@ all: $(TARGETDIR_main.cpp)/main.cpp
 ## Цель: main.cpp
 OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/myRect.o \
+	$(TARGETDIR_main.cpp)/Point.o \
 	$(TARGETDIR_main.cpp)/myString.o \
 	$(TARGETDIR_main.cpp)/Bochka.o \
 	$(TARGETDIR_main.cpp)/Shape.o \
@@ -73,6 +74,8 @@ $(TARGETDIR_main.cpp)/Hex.o: $(TARGETDIR_main.cpp) Hex.cpp
 $(TARGETDIR_main.cpp)/Bytes.o: $(TARGETDIR_main.cpp) Bytes.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Bytes.cpp
 
+$(TARGETDIR_main.cpp)/Point.o: $(TARGETDIR_main.cpp) Point.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Point.cpp
 
 $(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ main.cpp
@@ -97,6 +100,7 @@ clean:
 		$(TARGETDIR_main.cpp)/Oct.o \
 		$(TARGETDIR_main.cpp)/Hex.o \
 		$(TARGETDIR_main.cpp)/Bytes.o \
+		$(TARGETDIR_main.cpp)/Point.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)
