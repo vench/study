@@ -32,9 +32,15 @@ class MyString
         
         MyString& operator=(const MyString&);
         MyString& operator=(const char*);
-        //operator=(MyString const&);
+        MyString operator+(const MyString&);
+        MyString& operator+=(const MyString&);
+        
+        friend std::ostream& operator<<(std::ostream&, const MyString&); 
     
 };
 
 
 MyString CreateString(size_t number, ...);
+
+std::ostream& operator<< (std::ostream&, const MyString&);
+

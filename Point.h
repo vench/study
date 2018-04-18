@@ -4,12 +4,33 @@ class Point {
     int x;
     int y;
 public:
+    Point();
     Point(int x, int y);
     Point(const Point& orig);
     Point(Point &&p);
     virtual ~Point();
+    
+    int getX() const;
+    int getY() const;
+    
+    Point& operator+=(const int&);
+    Point& operator+=(const Point&);
+    Point& operator-=(const int&);
+    Point& operator-=(const Point&);
+    Point& operator=(const Point&);
+    
+    Point operator+(const int&);
+    Point operator+(const Point&);
+    Point operator-(const int&);
+    Point operator-(const Point&);
+    
+    Point& operator-();
+    Point& operator+();
+    
 private:
 
 };
  
+Point operator+(const int&, const Point& );
+Point operator-(const int&, const Point& );
 

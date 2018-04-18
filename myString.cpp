@@ -79,6 +79,17 @@ MyString& MyString::operator=(const char* str) {
     return *this;
 }
 
+//
+MyString MyString::operator+(const MyString& s) {
+    return CreateString(2, this->m_pStr, s.m_pStr);
+}
+        
+//
+MyString& MyString::operator+=(const MyString& s) {
+    this->ConcatString(s.m_pStr);
+    return *this;
+}
+
 
 
 //
@@ -108,3 +119,11 @@ MyString  CreateString(size_t number, ...) {
     va_end(argList); 
     return std::move(MyString(str));//почему то не работает по умолчанию
 };
+
+
+//
+std::ostream& operator<< (std::ostream& stream, const MyString& s) { 
+    stream << s.m_pStr;
+    return stream;
+}
+
