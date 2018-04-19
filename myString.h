@@ -31,7 +31,8 @@ class MyString
         
         
         MyString& operator=(const MyString&);
-        MyString& operator=(const char*);
+        MyString& operator=(const char*); 
+        MyString & operator=(MyString&&);
         MyString operator+(const MyString&);
         MyString& operator+=(const MyString&);
         

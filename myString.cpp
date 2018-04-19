@@ -72,6 +72,13 @@ MyString& MyString::operator=(const MyString& orig) {
     return *this;
 }
 
+//
+MyString & MyString::operator=(MyString&& orig) {
+    if(this != &orig) {
+        this->copyValue(orig.m_pStr);
+    }
+    return *this;
+}
 
 //
 MyString& MyString::operator=(const char* str) { 

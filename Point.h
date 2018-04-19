@@ -18,6 +18,7 @@ public:
     Point& operator-=(const int&);
     Point& operator-=(const Point&);
     Point& operator=(const Point&);
+    Point& operator=(Point&&);
     
     Point operator+(const int&);
     Point operator+(const Point&);

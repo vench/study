@@ -86,6 +86,14 @@ Point Point::operator+(const int& orig) {
 Point& Point::operator=(const Point& orig) {
     this->x = orig.x;
     this->y = orig.y;
+    return *this;
+}
+
+//
+Point& Point::operator=(Point&& orig){
+    this->x = orig.x;
+    this->y = orig.y;
+    return *this;
 }
 
 //
