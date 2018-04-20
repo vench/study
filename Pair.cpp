@@ -1,14 +1,11 @@
 
 #include "Pair.h"
 
-//
-Pair::Pair(){
-    //TODO
-}
 
 //
 Pair::Pair(const char *k, const MyData& d) {
-    //TODO
+    this->key = k;
+    this->data = d;  
 }
     
 //
@@ -18,35 +15,38 @@ Pair::~Pair() {
 
 //
 Pair::Pair(const Pair& other) {
-    //TODO
+    this->key = other.key;
+    this->data = other.data;
 }
 
 //
 Pair& Pair::operator=(const Pair& other) {
-    //TODO
+    this->key = other.key;
+    this->data = other.data;
     return *this;
 }
    
 //
 Pair::Pair(Pair&& other) {
-    //TODO
+    this->key = other.key;
+    this->data = other.data;
 }
 
 //
 Pair& Pair::operator=(Pair&& other) {
-    //TODO
+    this->key = other.key;
+    this->data = other.data;
     return *this;
 }
 
 //
-bool Pair::operator==(const char *k) const {
-    //TODO
-    return false;
+bool Pair::operator==(const char *k) const { 
+    MyString s = this->key; 
+    return s.Compare(k);
 }
 
 //
 std::ostream& operator<< (std::ostream& stream, const Pair& p) {
-        //TODO
-    // stream << "something";
+    stream << "Key: " << p.key << " => Data: "<< p.data;
     return stream;
 }

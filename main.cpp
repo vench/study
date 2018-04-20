@@ -8,6 +8,8 @@
 
 #include "myString.h"
 #include "Point.h"
+#include "Base.h"
+#include "MyData.h"
 
 #define	  stop 
 
@@ -124,20 +126,32 @@ int main(int argc, char* argv[])
 	//вывод информации о конкретном сотруднике
 	//вывод всей (или интересующей) информации о всех сотрудниках
 	//Например:
-/*
-		BD bd;	//создание пустой базы
-		bd["Ivanov"] = Data(30,MALE,<остальные данные>);	//если Ivanov-а в базе еще нет, то
-						//добавление, если уже есть, то замена его реквизитов
-		std::cout<<bd;	//вывод информации обо всех сотрудниках
+        {
+		Base bd;	//создание пустой базы
+                //Sex s, size_t age, const char* job, float sal
+                MyData item = MyData(MyData::FMALE,30,"Oracle DB", 1200.0);
+               
+		bd["Ivanov"] = item;	//если Ivanov-а в базе еще нет, то
+						//доба,вление, если уже есть, то замена его реквизитов
+                bd["Stepanov"] = MyData(MyData::FMALE,32,"Oracle DB", 1300.0);
+                
+                
+		std::cout << bd;	//вывод информации обо всех сотрудниках
 		//А также:
-		// BD bdnew = bd;
+		Base bdnew = bd;
+                bdnew["Stepanov"] =  MyData(MyData::FMALE,32,"C++", 100.0);
 		//
-		// bdnew = bd;
-
+		bdnew = bd;
+                
+                std::cout << bdnew; 
+                
+                bdnew.deletePair("Ivanov");
+                std::cout << bdnew;
+                std::cout << bd;
 		//А также можно вспомнить про семантику перемещения...
 
-
-*/
+                    
+/**/      }
 	
 	return 0;
 }//endmain

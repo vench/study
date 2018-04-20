@@ -22,6 +22,7 @@ MyString::MyString() {
      this->copyValue(c); 
  };
 
+ //
 MyString::MyString(MyString &&s) {
      //std::cout << "Move;\n";   
      this-> m_pStr = s.m_pStr; 
@@ -63,6 +64,11 @@ void MyString::SetNewString(const char *c) {
 void MyString::ConcatString(const char *c){
     std::strcat(m_pStr, c); 
 };
+
+//
+bool MyString::Compare(const char* s) {
+    return std::strcmp(m_pStr, s) == 0;
+}
 
 //
 MyString& MyString::operator=(const MyString& orig) {

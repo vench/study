@@ -28,6 +28,7 @@ class MyString
         void SetNewString(const char*);
         
         void ConcatString(const char*);
+        bool Compare(const char*);
         
         
         MyString& operator=(const MyString&);

@@ -11,7 +11,7 @@ class Pair {
 //ключ - фамилия
     MyData data; //данные о сотруднике
 //Подумайте, все ли перечисленные ниже методы надо реализовывать
-    Pair();
+    //Pair(); Такой конструктор ненужен
     Pair(const char *k, const MyData& d);
     ~Pair();
     Pair(const Pair& other);
