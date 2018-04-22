@@ -140,14 +140,20 @@ int main(int argc, char* argv[])
 		//А также:
 		Base bdnew = bd;
                 bdnew["Stepanov"] =  MyData(MyData::FMALE,32,"C++", 100.0);
+                bdnew["Stepano2v"] =  MyData(MyData::FMALE,33,"C++", 100.0);
+                //bdnew["Ivanov"]
 		//
-		bdnew = bd;
                 
+                std::cout << "===============\n";
+                std::cout << bdnew;
+                
+		bdnew = std::move(bd);
+                 std::cout << "123\n";
                 std::cout << bdnew; 
                 
                 bdnew.deletePair("Ivanov");
                 std::cout << bdnew;
-                std::cout << bd;
+               // std::cout << bd;
 		//А также можно вспомнить про семантику перемещения...
 
                     

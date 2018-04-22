@@ -9,9 +9,11 @@ Base::Base() {
     
 //
 Base::~Base() {   
-    for(int i = 0; i < this->count; i ++) {
-        delete this->pBase[i];
-    }  
+    if(pBase) { 
+        for(int i = 0; i < this->count; i ++) {
+            delete this->pBase[i];
+        }  
+    }
     delete[] this->pBase;
     //std::cout << "Base::~Base\n";
 }
@@ -19,7 +21,7 @@ Base::~Base() {
 //
 Base::Base(const Base& bd) {
     this->count = bd.count;
-    this->capacity = bd.capacity;
+    this->capacity = bd.count;
     //copy
     this->pBase = new Pair*[this->capacity];      
     //TODO копируем по ссылке, но можно и по значению
@@ -31,7 +33,7 @@ Base::Base(const Base& bd) {
 //
 Base& Base::operator=(const Base& bd) {
     this->count = bd.count;
-    this->capacity = bd.capacity;
+    this->capacity = bd.count;
     //copy
     this->pBase = new Pair*[this->capacity];  
      //TODO копируем по ссылке, но можно и по значению
@@ -46,13 +48,27 @@ Base::Base(Base&& bd) {
     this->count = bd.count;
     this->capacity = bd.capacity;
     this->pBase = bd.pBase;
+    bd.pBase = nullptr;
 }
 
 //    
 Base& Base::operator=(Base&& bd) {
-    this->count = bd.count;
+   
+    
+    for(int i = 0; i < this->count; i ++) {
+        delete this->pBase[i];
+    }
+    
+     this->count = bd.count;
     this->capacity = bd.capacity;
+    
+    
     this->pBase = bd.pBase;
+    
+    
+    
+    
+    bd.pBase = nullptr;
     return *this;
 }
  
