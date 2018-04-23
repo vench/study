@@ -90,6 +90,13 @@ Point& Point::operator=(const Point& orig) {
 }
 
 //
+Point& Point::operator=(int i) {
+    this->x = i;
+    this->y = i;
+    return *this;
+}
+
+//
 Point& Point::operator=(Point&& orig){
     this->x = orig.x;
     this->y = orig.y;

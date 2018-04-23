@@ -1,5 +1,7 @@
 #pragma once
 
+class Circle;
+
 class Point {
     int x;
     int y;
@@ -19,6 +21,7 @@ public:
     Point& operator-=(const Point&);
     Point& operator=(const Point&);
     Point& operator=(Point&&);
+    Point& operator=(int);
     
     Point operator+(const int&);
     Point operator+(const Point&);
@@ -27,6 +30,10 @@ public:
     
     Point& operator-();
     Point& operator+();
+    
+    friend Circle;
+    
+    
     
 private:
 

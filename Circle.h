@@ -1,26 +1,27 @@
 #pragma once
 
-#include "Shape.h"
-#include "myRect.h"
 #include <iostream>
+#include "Point.h"
 
-class Circle : public Shape {
+class Circle  {
     
-    int x;
-    int y;
+    Point p; 
     int radius;
     
 public:
     Circle();
-    Circle(int x, int y, int radius, Shape::COLOR color);
+    Circle(int x, int y, int radius);
     Circle(const Circle& orig);
-    Circle(const Rect& orig);
+     
     void Inflate(int); 
      ~Circle();
      
     void WhereAmI();
+    
+    
+    friend std::ostream& operator<<(std::ostream&, const Circle&);
 private:
 
 };
 
-
+std::ostream& operator<< (std::ostream&, const Circle&);
