@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <iostream>
 #include "Node.h"
 
 class List {
@@ -38,6 +39,9 @@ public:
      * @return 
      */
     int RemoveAll(Circle*);
+    
+    //
+    int RemoveAll(Circle*, int);
      
     /**
      * Сделать список пустым
@@ -46,7 +50,13 @@ public:
     void Clear(); 
     
     
+    friend std::ostream& operator<<(std::ostream&, const List&);
+    
 private:
 
 }; 
 
+
+
+//
+std::ostream& operator<< (std::ostream&, const List&);

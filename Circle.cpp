@@ -20,6 +20,10 @@ Circle::~Circle() {
    // std::cout << "Now I am in Circle's destructor!\n";
 }
 
+bool Circle::operator==(const Circle& c) { 
+    return ( c.radius == this->radius && this->p.x == c.p.x && this->p.y == c.p.y);
+}
+
 //
 void Circle::Inflate(int size) {
      this->radius = size;

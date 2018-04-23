@@ -18,6 +18,8 @@ public:
      
     void WhereAmI();
     
+    bool operator==(const Circle&);
+    
     
     friend std::ostream& operator<<(std::ostream&, const Circle&);
 private:
