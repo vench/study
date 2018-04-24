@@ -94,7 +94,54 @@ void List::Clear() {
     this->m_size = 0;
     Head.pNext = &Tail;
     Tail.pPrev = &Head;    
-} 
+}
+
+//
+void List::Swap(Node* a, Node* b)   {
+    
+    if(a->isHead() || a->isTail() || b->isHead() || b->isTail()) {
+        return;
+    } 
+    
+   
+    
+    if(a->pNext == b) { //A >>>> B 
+        Node *tmpAPrev = a->pPrev;
+        a->pNext = b->pNext;
+        a->pPrev = b;
+        b->pNext = a;
+        b->pPrev = tmpAPrev;
+        
+        tmpAPrev->pNext = b;
+        a->pNext->pPrev = a;
+        
+    } else if(b->pNext == a) { //B >>>>> A
+       
+        Node *tmpBPrev = b->pPrev;
+        b->pNext = a->pNext;
+        b->pPrev = a;
+        a->pNext = b;
+        a->pPrev = tmpBPrev;
+        
+        tmpBPrev->pNext = a;
+        b->pNext->pPrev = b;
+    }
+    /*
+     * 
+     *  Node *tAn = a->pNext;//B
+    Node *tAp = a->pPrev;//H
+    Node *tBn = b->pNext;//T
+    Node *tBp = b->pPrev;//A
+    a->pNext = (tBn == a) ? b : tBn;;//T
+   // a->pPrev = (tBp == a) ? b : tBp;//
+    b->pNext = (tAn == b) ? a : tAn;//
+   // b->pPrev = tAp;
+   
+    //tAn->pPrev = (tAp->pPrev == b) ? a : b; 
+    tAp->pNext = (tAp->pNext == b) ? a : b;
+   // tBn->pPrev = (tBn->pPrev == a) ? b : a;
+    tBp->pNext = (tBp->pNext == a) ? b : a; */
+}
 
 //
 std::ostream& operator<< (std::ostream& stream, const List& l) {
@@ -108,4 +155,24 @@ std::ostream& operator<< (std::ostream& stream, const List& l) {
     stream << "}"<< std::endl;
      
     return stream;
+}
+
+
+//
+void List::SortBySquare( ) {
+ 
+    for (int i = 0; i < this->m_size; i ++) {
+        Node *pNode = this->Head.pNext;
+
+        do {
+            Node *pNodeNext = pNode->pNext;
+
+            if(*pNodeNext < *pNode) {   
+                this->Swap(pNodeNext, pNode);  
+            }
+            pNode = pNodeNext; 
+
+        } while(pNode && !pNode->isTail()) ;
+     
+    }
 }

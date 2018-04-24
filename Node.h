@@ -23,20 +23,26 @@ public:
     Node(const Node& orig);
     Node(N_TYPE);
     Node(const Circle *);
-    virtual ~Node();
-    
-    bool operator==(const Point&);
+    virtual ~Node(); 
     
     bool isHead() const;    
     bool isTail() const; 
-    Node *GetNext() const;
+    Node *GetNext() const; 
     
     friend List;
     friend std::ostream& operator<<(std::ostream&, const Node&);
+    friend bool operator< (const Node&, const Node&);
+    friend bool operator> (const Node&, const Node&);
 private:
 
 }; 
 
 //
 std::ostream& operator<< (std::ostream&, const Node&);
+
+//
+bool operator< (const Node&, const Node&);
+
+//
+bool operator> (const Node&, const Node&);
 

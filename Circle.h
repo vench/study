@@ -17,6 +17,8 @@ public:
      ~Circle();
      
     void WhereAmI();
+    int GetSquare() const;
+    int GetRadius() const;
     
     bool operator==(const Circle&);
     

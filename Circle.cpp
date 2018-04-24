@@ -20,6 +20,17 @@ Circle::~Circle() {
    // std::cout << "Now I am in Circle's destructor!\n";
 }
 
+//
+int Circle::GetSquare() const {
+    return 3.14 * this->radius  * this->radius;
+}
+
+//
+int Circle::GetRadius() const {
+    return this->radius;
+}
+
+//
 bool Circle::operator==(const Circle& c) { 
     return ( c.radius == this->radius && this->p.x == c.p.x && this->p.y == c.p.y);
 }

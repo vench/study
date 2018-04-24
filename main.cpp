@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     {
     
         Circle c(10,10, 100);
-        std::cout << c << std::endl;
+      //  std::cout << c << std::endl;
         
     }
     
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
         Circle c(10,10, 100);
         Node n(&c);
         
-        std::cout << n << std::endl; 
+        //std::cout << n << std::endl; 
     }
     
     //list
@@ -39,28 +39,50 @@ int main(int argc, char* argv[])
         list.AddToHead(&c1);
         list.AddToHead(&c2);
         
-        std::cout << list << std::endl; //140, 120, 100
+        //std::cout << list << std::endl; //140, 120, 100
         
         list.AddToTail(&c);
         list.AddToTail(&c1);
         list.AddToTail(&c2);
         
-        std::cout << list << std::endl; //140, 120, 100, 100, 120, 140
+        //std::cout << list << std::endl; //140, 120, 100, 100, 120, 140
         
         
         list.Remove(&c3);//nothing
         list.Remove(&c1);//
-        std::cout << list << std::endl; //140,  100, 100, 120, 140
+        //std::cout << list << std::endl; //140,  100, 100, 120, 140
         list.RemoveAll(&c2);//
-        std::cout << list << std::endl; // 100, 100, 120
+        //std::cout << list << std::endl; // 100, 100, 120
         
         list.Clear();
         
-        std::cout << list << std::endl; //empty
+        //std::cout << list << std::endl; //empty
         
         list.AddToTail(&c3);
         
-        std::cout << list << std::endl; //160
+       // std::cout << list << std::endl; //160
+    }
+    
+    //1. сортировку по возрастанию площади объекта.
+    {
+    
+        Circle c(10,10, 50);
+        Circle c1(10,10, 4); 
+        Circle c2(10,10, 11);
+        Circle c3(10,10, 8);
+        Circle c4(10,10, 1);
+        List list;
+        list.AddToTail(&c);
+        list.AddToTail(&c1);  
+        list.AddToTail(&c2);
+        list.AddToTail(&c3);
+        list.AddToTail(&c4);
+        
+        std::cout << list << std::endl;
+        
+        list.SortBySquare();
+        
+        std::cout << list << std::endl;
     }
 	
     return 0;

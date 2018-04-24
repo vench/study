@@ -27,12 +27,7 @@ Node::~Node() {
     
     //TODO
 }
-
-//
-bool Node::operator==(const Point&) {
-    //TODO
-    return false;
-}
+ 
 
 //
 bool Node::isHead() const {
@@ -44,8 +39,7 @@ bool Node::isTail() const {
     return this->type == TAIL;
 }
 
-
-
+//
 Node *Node::GetNext() const {
     return this->pNext;
 }
@@ -54,4 +48,14 @@ Node *Node::GetNext() const {
 std::ostream& operator<< (std::ostream& stream, const Node& n) {
      stream << "Node{data: " << n.m_Data <<"  }" << std::endl;
     return stream;
+}
+
+//
+bool operator< (const Node& a, const Node& b) {
+    return a.m_Data.GetSquare() < b.m_Data.GetSquare();
+}
+
+//
+bool operator> (const Node& a, const Node& b) {
+    return a.m_Data.GetSquare() > b.m_Data.GetSquare();
 }

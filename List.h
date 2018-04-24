@@ -49,14 +49,26 @@ public:
      */
     void Clear(); 
     
+    /**
+     * 
+     * @param 
+     * @param 
+     */
+    void Swap(Node*, Node*);
     
-    friend std::ostream& operator<<(std::ostream&, const List&);
+    
+    void SortBySquare();
+    
+    
+    friend std::ostream& operator<<(std::ostream&, const List&); 
     
 private:
 
+   
 }; 
 
 
 
 //
 std::ostream& operator<< (std::ostream&, const List&);
+ 
