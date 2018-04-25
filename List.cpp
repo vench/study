@@ -101,9 +101,7 @@ void List::Swap(Node* a, Node* b)   {
     
     if(a->isHead() || a->isTail() || b->isHead() || b->isTail()) {
         return;
-    } 
-    
-   
+    }  
     
     if(a->pNext == b) { //A >>>> B 
         Node *tmpAPrev = a->pPrev;
@@ -125,54 +123,69 @@ void List::Swap(Node* a, Node* b)   {
         
         tmpBPrev->pNext = a;
         b->pNext->pPrev = b;
-    }
-    /*
-     * 
-     *  Node *tAn = a->pNext;//B
-    Node *tAp = a->pPrev;//H
-    Node *tBn = b->pNext;//T
-    Node *tBp = b->pPrev;//A
-    a->pNext = (tBn == a) ? b : tBn;;//T
-   // a->pPrev = (tBp == a) ? b : tBp;//
-    b->pNext = (tAn == b) ? a : tAn;//
-   // b->pPrev = tAp;
-   
-    //tAn->pPrev = (tAp->pPrev == b) ? a : b; 
-    tAp->pNext = (tAp->pNext == b) ? a : b;
-   // tBn->pPrev = (tBn->pPrev == a) ? b : a;
-    tBp->pNext = (tBp->pNext == a) ? b : a; */
+    } else {
+        Node *tmpAPrev = a->pPrev;
+        Node *tmpANext = a->pNext;
+        Node *tmpBPrev = b->pPrev;
+        Node *tmpBNext = b->pNext;
+        
+        b->pNext = tmpANext;
+        b->pPrev = tmpAPrev;
+        a->pNext = tmpBNext;
+        a->pPrev = tmpBPrev;
+        
+        tmpANext->pPrev = b;
+        tmpAPrev->pNext = b;
+        tmpBNext->pPrev = a;
+        tmpBPrev->pNext = a;
+    } 
 }
 
 //
 std::ostream& operator<< (std::ostream& stream, const List& l) {
-    stream << "List{ Items: "<< std::endl;
+    stream << "radius, x, y\n";
     const Node *pNode = l.Head.GetNext();
     while(pNode && !pNode->isTail()) {
         stream << *pNode;  
         pNode = pNode->GetNext();
-    }
-    
-    stream << "}"<< std::endl;
+    } 
      
     return stream;
 }
 
+//
+void operator<<(List& l, std::istream& s) {
+    const int n = 128;
+    int r,x,y = 0;
+  
+    char *line = new char[n];
+    s.getline(line, n);//skip header
+    while(!s.eof()) { 
+        s.getline(line, n);         
+        if(sscanf (line,"%d,%d,%d\n",&r, &x, &y) >= 0) {
+            Circle c(x, y, r);
+            l.AddToTail(&c);
+        }        
+    }
+    delete[] line;
+}
 
 //
-void List::SortBySquare( ) {
- 
-    for (int i = 0; i < this->m_size; i ++) {
-        Node *pNode = this->Head.pNext;
+void List::SortBySquare( ) { 
+     Node *pNode = this->Head.pNext;
+     Node *pNodeNext;
 
-        do {
-            Node *pNodeNext = pNode->pNext;
-
-            if(*pNodeNext < *pNode) {   
-                this->Swap(pNodeNext, pNode);  
-            }
-            pNode = pNodeNext; 
-
-        } while(pNode && !pNode->isTail()) ;
-     
-    }
+     while(!pNode->isTail() && !(pNodeNext = pNode->pNext)->isTail()) {  
+        
+        if(*pNodeNext < *pNode) {   
+            this->Swap(pNodeNext, pNode); 
+                
+            if (pNodeNext->pPrev && !pNodeNext->pPrev->isHead()) {
+                pNode = pNodeNext->pPrev;
+                continue;
+            }  
+        } 
+        
+        pNode = pNodeNext; 
+    }    
 }

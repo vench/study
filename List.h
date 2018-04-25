@@ -2,7 +2,10 @@
 #pragma once
 
 #include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include "Node.h"
+#include "Circle.h"
 
 class List {
     
@@ -61,6 +64,7 @@ public:
     
     
     friend std::ostream& operator<<(std::ostream&, const List&); 
+    friend void operator<<(List&, std::istream&);
     
 private:
 
@@ -72,3 +76,5 @@ private:
 //
 std::ostream& operator<< (std::ostream&, const List&);
  
+//
+void operator<<(List&, std::istream&);

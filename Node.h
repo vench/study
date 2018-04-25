@@ -27,7 +27,7 @@ public:
     
     bool isHead() const;    
     bool isTail() const; 
-    Node *GetNext() const; 
+    Node *GetNext() const;  
     
     friend List;
     friend std::ostream& operator<<(std::ostream&, const Node&);

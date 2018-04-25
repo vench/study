@@ -1,5 +1,6 @@
 // LAB 4.
 
+#include <fstream>
 #include "Point.h"
 #include "Circle.h" 
 #include "Node.h"
@@ -71,18 +72,44 @@ int main(int argc, char* argv[])
         Circle c2(10,10, 11);
         Circle c3(10,10, 8);
         Circle c4(10,10, 1);
+        Circle c5(10,10, 3);
+        Circle c6(10,10, 1);
         List list;
         list.AddToTail(&c);
         list.AddToTail(&c1);  
         list.AddToTail(&c2);
         list.AddToTail(&c3);
         list.AddToTail(&c4);
+        list.AddToTail(&c5);
+        list.AddToTail(&c6);
+        list.AddToHead(&c);//c(50)
         
         std::cout << list << std::endl;
         
         list.SortBySquare();
         
         std::cout << list << std::endl;
+        
+        //save list
+        {
+            std::cout << "Enter Output File Name  - " ;
+            char ar[80] = "test.txt";
+            //std::cin >> ar;
+            std::cout << "Save data to - "  << ar << "\n";
+            std::ofstream fout(ar);
+            fout << list;
+            fout.close();
+            
+            //LOAD
+            std::cout << "Load data from - "  << ar << "\n";
+            List nList;
+            std::ifstream fin(ar, std::ifstream::in);           
+            nList << fin;            
+            fin.close();
+            
+            std::cout << nList;
+            
+        }
     }
 	
     return 0;

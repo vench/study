@@ -49,7 +49,7 @@ void Circle::WhereAmI() {
 
 //
 std::ostream& operator<< (std::ostream& stream, const Circle& c) {
-    stream << "Circle{radius: " << c.radius << ", x: " << c.p.getX() << " , y: " << c.p.getY() << "  }" << std::endl;
+    stream <<  c.radius << "," << c.p.getX() << "," << c.p.getY();
     return stream;
 }
 

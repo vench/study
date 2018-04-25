@@ -46,7 +46,7 @@ Node *Node::GetNext() const {
 
 //
 std::ostream& operator<< (std::ostream& stream, const Node& n) {
-     stream << "Node{data: " << n.m_Data <<"  }" << std::endl;
+     stream << n.m_Data << std::endl;
     return stream;
 }
 
