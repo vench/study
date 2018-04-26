@@ -8,87 +8,128 @@
 using namespace std;
 
 //
+Counter MyString::head;
+
+
+
+
+//
 MyString::MyString() {
-    this->copyValue("");
+    this->pStr = nullptr;
 };
 
 // Определение конструктора.
- MyString::MyString(const  MyString &s) {
-      this->copyValue(s.m_pStr);
+ MyString::MyString(const  MyString &s) { 
+    
+    this->pStr = MyString::head.GetCounter(s.GetString());
+    this->pStr->IncrementOwner(); 
  };
  
  //
  MyString::MyString(const char *c) {
-     this->copyValue(c); 
+    this->pStr = MyString::head.GetCounter(c);
+    this->pStr->IncrementOwner(); 
  };
 
-MyString::MyString(MyString &&s) {
-     //std::cout << "Move;\n";   
-     this-> m_pStr = s.m_pStr; 
-     s.m_pStr = nullptr; 
+MyString::MyString(MyString &&s) {  
+     this-> pStr = s.pStr; 
+     s.pStr = nullptr; 
 }
 
-//
-void MyString::copyValue(const char *c) {
-    int size = 1; 
 
-    while(*c++) {
-        size ++;
-    }
-
-    m_pStr = new char[size]; 
-    for(; size >= 0; size --)   {
-        m_pStr[size] = *c--;        
-    }   
-}; 
  
 
 // Определение деструктора.
 MyString::~MyString() {
-    delete[] this->m_pStr;
-};
-
-//
-const char* MyString::GetString() { 
-    return this->m_pStr;
-};
-
-//
-void MyString::SetNewString(const char *c) {
-     delete[] this->m_pStr;
-    this->copyValue(c);
-};
-
-//
-void MyString::ConcatString(const char *c){
-    std::strcat(m_pStr, c); 
-};
-
-
-//
-MyString  CreateString(size_t number, ...) {
-     
-    va_list argList;
-    va_start(argList, number);
-    
-    int size = 0;
-    for(size_t i = 1; i <= number; i ++) {
-        const char* c = va_arg(argList, const char*);
-        size += std::strlen(c);
+    if(this-> pStr) {
+        this-> pStr->DecrementOwner(); 
+        if(this->pStr->CountOwner() <= 0) {
+            MyString::head.Optimize();
+        }        
     }
-    va_end(argList);
-    va_start(argList, number);
-    
-    char* str = new char[size]; 
-    for(size_t i = 1; i <= number; i ++) {
-        const char* c = va_arg(argList, const char*);
-        if(i == 1){
-            std::strcpy(str, c);
-        } else {
-            std::strcat(str, c);
-        }          
-    }
-    
-    va_end(argList); 
-    return std::move(MyString(str));//почему то не работает по умолчанию
 };
+
+//
+const char* MyString::GetString() const { 
+    if(this-> pStr) { 
+        return this-> pStr->GetString();
+    }
+    return nullptr;
+};
+
+//
+void MyString::PrintAllString() {
+    Counter *pStr = MyString::head.pNext;
+    
+    std::cout << "MyString::PrintAllString();\n";
+    
+    while(pStr) {
+        std::cout << pStr->m_pStr << "\n";
+        pStr = pStr->pNext;
+    }    
+}
+
+//
+void MyString::ChnageRegisterAllString() {
+    Counter *pStr = MyString::head.pNext;
+    
+    std::cout << "MyString::ChnageRegisterAllString();\n";
+    
+    while(pStr) {         
+        pStr->ChnageRegister();        
+        pStr = pStr->pNext;
+    }    
+}
+
+
+
+//
+void MyString::ChnageSortAllString() {
+    //TODO
+    std::cout << "MyString::ChnageSortAllString();\n";
+    Counter *head = &MyString::head;
+    Counter *pStr = head->pNext;
+    Counter *pStrNext = nullptr;
+    
+    //    xyz, abc, def 
+    while(pStr) {  
+        
+        while((pStrNext = pStr->pNext)) {
+            
+            if(std::strcmp(pStrNext->m_pStr, pStr->m_pStr) < 0) {  //swap
+                Counter *tmp = pStrNext->pNext;
+                pStrNext->pNext = pStr;
+                pStr->pNext = tmp;
+                head->pNext = pStrNext;
+                
+                if(pStrNext != &MyString::head) {
+                    
+                }
+                
+               // pStr 
+                //pStr = pStrNext;
+            } else {
+               // pStr = pStrNext;
+                //break;
+                head = pStr;
+               // pStr = pStrNext;
+                //pStr = pStrNext;
+            }
+            pStr = pStrNext;
+            
+        }
+        
+        
+        head = pStr;
+        pStr = pStr->pNext;
+    }  
+    
+}
+
+
+//
+std::ostream& operator<<(std::ostream& stream, const MyString& s) {
+    stream << s.GetString();
+    return stream;
+}
+ 

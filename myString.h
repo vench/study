@@ -1,30 +1,34 @@
 #pragma once
 
+#include <iostream>
+#include "Counter.h"
+
+
 class MyString
-{
-    char* m_pStr;	//строка-член класса
+{ 
     
+    static Counter head;  
     
-    void copyValue(const char *c);
+    Counter *pStr;
 
     public:
  
         MyString();
     
         MyString(const  MyString &s);
-        MyString(MyString &&s);
-    
-        explicit MyString(const char *c);    
-    
-        ~MyString(); 
+        MyString(MyString &&s);    
+        explicit MyString(const char *c);        
+        ~MyString();         
+        const char* GetString() const; 
         
-        const char* GetString();
+        static void PrintAllString();
+        static void ChnageRegisterAllString();
+        static void ChnageSortAllString();
         
-        void SetNewString(const char*);
-        
-        void ConcatString(const char*);
+        friend std::ostream& operator<<(std::ostream&, const MyString&); 
     
 };
 
+std::ostream& operator<<(std::ostream&, const MyString&);
 
-MyString CreateString(size_t number, ...);
+ 
