@@ -67,22 +67,17 @@ int main(int argc, char* argv[])
     //1. сортировку по возрастанию площади объекта.
     {
     
-        Circle c(10,10, 50);
-        Circle c1(10,10, 4); 
-        Circle c2(10,10, 11);
-        Circle c3(10,10, 8);
-        Circle c4(10,10, 1);
-        Circle c5(10,10, 3);
-        Circle c6(10,10, 1);
+        
         List list;
-        list.AddToTail(&c);
-        list.AddToTail(&c1);  
-        list.AddToTail(&c2);
-        list.AddToTail(&c3);
-        list.AddToTail(&c4);
-        list.AddToTail(&c5);
-        list.AddToTail(&c6);
-        list.AddToHead(&c);//c(50)
+        for (int i = 0; i < 8; i ++) {
+            Circle c(0,0, i);
+            if (i % 2 == 0) {
+                list.AddToTail(&c);
+            } else {
+                list.AddToHead(&c);
+            } 
+        }
+        
         
         std::cout << list << std::endl;
         
