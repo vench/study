@@ -92,7 +92,9 @@ void MyString::ChnageSortAllString() {
     Counter *pStrNext = nullptr;
     
     //    xyz, abc, def 
-    while(pStr) {  
+    for(int i = 0; i < 9; i ++) {
+        pStr = MyString::head.pNext;
+      
         
         while((pStrNext = pStr->pNext)) {
             
@@ -100,29 +102,16 @@ void MyString::ChnageSortAllString() {
                 Counter *tmp = pStrNext->pNext;
                 pStrNext->pNext = pStr;
                 pStr->pNext = tmp;
-                head->pNext = pStrNext;
-                
-                if(pStrNext != &MyString::head) {
-                    
-                }
-                
-               // pStr 
-                //pStr = pStrNext;
-            } else {
-               // pStr = pStrNext;
-                //break;
-                head = pStr;
-               // pStr = pStrNext;
-                //pStr = pStrNext;
+                head->pNext = pStrNext; 
+            } else { 
+                head = pStr; 
             }
-            pStr = pStrNext;
-            
-        }
+            pStr = pStrNext; 
+        } 
         
-        
-        head = pStr;
-        pStr = pStr->pNext;
+        head = pStr; 
     }  
+    //}
     
 }
 

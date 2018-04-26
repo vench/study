@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
             MyString s2("abc");
             MyString s3("def"); 
             MyString s4("abx");
+            MyString s7("test");
             std::cout << s1 << " - " << s2 <<  " " <<  s3 << "\n";
             
             
