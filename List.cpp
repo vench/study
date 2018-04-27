@@ -18,6 +18,41 @@ List::List(const List& orig) : Head(orig.Head), Tail(orig.Tail) {
 }
 
 //
+List::List(const List&& copy) {
+    this->Copy(copy);
+}
+
+//
+List& List::operator=(const List& copy) { 
+    this->Copy(copy); 
+    return *this;
+}
+
+//
+void List::Copy(const List& copy) {
+    this->m_size = copy.m_size;
+    
+    Node *pNode = &this->Head;
+    const Node *pCopy = copy.Head.pNext; 
+    
+    while((pNode = pNode->pNext)  && !pNode->isTail()) { 
+        if(!pCopy || pCopy->isTail()) {   //delete pNode
+            this->Remove(&pNode->m_Data);
+        } else {  //copy
+            pNode->m_Data = pCopy->m_Data;
+            pCopy = pCopy->pNext;
+        }  
+    } 
+    
+    while(pCopy && !pCopy->isTail()) {
+        Circle* c = new Circle(pCopy->m_Data);
+        this->AddToTail(c);
+        pCopy = pCopy->pNext;
+        delete c;
+    } 
+}
+
+//
 List::~List() {
     this->Clear();
      
@@ -52,17 +87,17 @@ void List::AddToTail(Circle* c) {
 }
 
 //
-bool List::Remove(Circle* c) {
+bool List::Remove(const Circle* c) {
     return RemoveAll(c, 1);
 }
     
 //
-int List::RemoveAll(Circle* c) { 
+int List::RemoveAll(const Circle* c) { 
     return RemoveAll(c, this->m_size);
 }
 
 //
-int List::RemoveAll(Circle* c, int limit) {
+int List::RemoveAll(const Circle* c, int limit) {
     int count = 0;
     const Node *pNode = this->Head.GetNext();
     while(limit > 0 && pNode  && !pNode->isTail()) { 

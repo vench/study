@@ -15,7 +15,8 @@ class List {
     
 public:
     List();
-    List(const List& orig);
+    List(const List& );
+    List(const List&& );
     virtual ~List();
     
     /**
@@ -34,17 +35,17 @@ public:
            если элемента с таким значением в списке не было – false
      * @return 
      */
-    bool Remove(Circle*);
+    bool Remove(const Circle*);
     
     /**
      * удаление из списка всех элементов, данное которых совпадает со значением параметра. 
          Метод возвращает количество удаленных элементов.
      * @return 
      */
-    int RemoveAll(Circle*);
+    int RemoveAll(const Circle*);
     
     //
-    int RemoveAll(Circle*, int);
+    int RemoveAll(const Circle*, int);
      
     /**
      * Сделать список пустым
@@ -62,12 +63,14 @@ public:
     
     void SortBySquare();
     
+    List& operator=(const List&);
+    
     
     friend std::ostream& operator<<(std::ostream&, const List&); 
     friend void operator<<(List&, std::istream&);
     
 private:
-
+    void Copy(const List&);
    
 }; 
 

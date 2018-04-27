@@ -14,6 +14,16 @@ Node::Node(const Node& orig) : m_Data(orig.m_Data) {
 }
 
 //
+Node::Node(const Node&& orig): m_Data(orig.m_Data)  {
+    this->type = orig.type;
+}
+
+
+//
+Node::Node() : Node(Node::HEAD) { 
+}
+
+//
 Node::Node(const Circle *c) : m_Data(*c) {
     this->type = NODE;
 }

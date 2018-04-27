@@ -11,6 +11,12 @@ Circle::Circle(const Circle& orig) : p(orig.p)  {
 }
 
 //
+Circle::Circle(const Circle&& orig) : p(orig.p) {
+    this->radius = orig.radius;
+    
+}
+
+//
 Circle::Circle(int x, int y, int radius) : p(x, y) { 
     this->radius = radius;
 }
@@ -32,8 +38,24 @@ int Circle::GetRadius() const {
 
 //
 bool Circle::operator==(const Circle& c) { 
-    return ( c.radius == this->radius && this->p.x == c.p.x && this->p.y == c.p.y);
+    return ( c.radius == this->radius && c.p == this->p);
 }
+
+//
+bool operator==(const Circle& b, const Circle& a) {
+    return ( a.radius == b.radius && b.p == a.p);
+}  
+
+//
+Circle& Circle::operator=(const Circle& c) {
+    this->radius = c.GetRadius();
+    this->p.x = c.p.x;
+    this->p.y = c.p.y;
+    return *this;
+}
+
+
+
 
 //
 void Circle::Inflate(int size) {

@@ -32,6 +32,7 @@ public:
     Point& operator+();
     
     friend Circle;
+    friend bool operator==(const Point&, const Point& );
     
     
     
@@ -39,6 +40,8 @@ private:
 
 };
  
+
+bool operator==(const Point&, const Point& );
 Point operator+(const int&, const Point& );
 Point operator-(const int&, const Point& );
 

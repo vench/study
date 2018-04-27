@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     {
     
         Circle c(10,10, 100);
-        Node n(&c);
+     //   Node n(&c);
         
         //std::cout << n << std::endl; 
     }
@@ -55,13 +55,22 @@ int main(int argc, char* argv[])
         list.RemoveAll(&c2);//
         //std::cout << list << std::endl; // 100, 100, 120
         
-        list.Clear();
+        //list.Clear();
         
         //std::cout << list << std::endl; //empty
         
         list.AddToTail(&c3);
         
        // std::cout << list << std::endl; //160
+        
+       
+        List list2; 
+        Circle ct(10,10, 100);
+        list2.AddToHead(&ct);
+        
+        list2 = list;
+        std::cout << list << " ### " << std::endl;
+        std::cout << list2 << " *** " << std::endl;
     }
     
     //1. сортировку по возрастанию площади объекта.

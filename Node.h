@@ -19,11 +19,13 @@ private:
     Circle m_Data;
     N_TYPE type;
     
-public: 
+
+    Node();
     Node(const Node& orig);
+    Node(const Node&& orig);
     Node(N_TYPE);
     Node(const Circle *);
-    virtual ~Node(); 
+    ~Node(); 
     
     bool isHead() const;    
     bool isTail() const; 
@@ -31,9 +33,10 @@ public:
     
     friend List;
     friend std::ostream& operator<<(std::ostream&, const Node&);
+    friend std::ostream& operator<<(std::ostream&, const List&);
     friend bool operator< (const Node&, const Node&);
     friend bool operator> (const Node&, const Node&);
-private:
+
 
 }; 
 
