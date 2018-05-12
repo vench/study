@@ -15,11 +15,27 @@ List::List() : Head(Node::HEAD), Tail(Node::TAIL){
 //
 List::List(const List& orig) : Head(orig.Head), Tail(orig.Tail) { 
     this->m_size = orig.m_size;
+    
 }
 
 //
-List::List(const List&& copy) {
-    this->Copy(copy);
+List::List( List&& copy) {
+    this->Clear();
+    this->Head = copy.Head;
+    this->Tail = copy.Tail;
+    
+    copy.Head.pNext = &copy.Tail;
+    copy.Tail.pPrev = &copy.Head;
+    //this->Copy(copy);
+}
+
+List& List::operator=( List&& copy) {
+    this->Clear();
+    this->Head = copy.Head;
+    this->Tail = copy.Tail;
+    
+    copy.Head.pNext = &copy.Tail;
+    copy.Tail.pPrev = &copy.Head;
 }
 
 //

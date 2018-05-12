@@ -16,7 +16,7 @@ class List {
 public:
     List();
     List(const List& );
-    List(const List&& );
+    List( List&& );
     virtual ~List();
     
     /**
@@ -64,6 +64,7 @@ public:
     void SortBySquare();
     
     List& operator=(const List&);
+    List& operator=( List&&);
     
     
     friend std::ostream& operator<<(std::ostream&, const List&); 

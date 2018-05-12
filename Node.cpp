@@ -8,6 +8,13 @@ Node::Node(N_TYPE t) {
     this->pNext = nullptr; 
 }
 
+Node& Node::operator=(const Node& c) {
+    this->pPrev = c.pPrev;
+    this->pNext = c.pNext;
+    this->m_Data = c.m_Data;
+    return *this;
+}
+
 //
 Node::Node(const Node& orig) : m_Data(orig.m_Data) {
     this->type = orig.type;

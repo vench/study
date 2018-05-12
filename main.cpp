@@ -71,10 +71,28 @@ int main(int argc, char* argv[])
         list2 = list;
         std::cout << list << " ### " << std::endl;
         std::cout << list2 << " *** " << std::endl;
+        
+        List list3;
+        list3.AddToHead(&c1);
+        list3.AddToHead(&c2);
+        list3.AddToHead(&c3); 
+        
+        /*
+        std::cout << list << " *** " << std::endl;
+        std::cout << list3 << " *** " << std::endl;
+        list = std::move(list3);
+        std::cout << list << "  list = list3 " << std::endl;
+        std::cout << list3 << " list3 " << std::endl;
+        */
+        List list4(list); //
+         std::cout << list4 << " list " << std::endl;
+        // std::cout << list4 << " list4 " << std::endl;
+        //list4 = list3;
+        
     }
     
     //1. сортировку по возрастанию площади объекта.
-    {
+    {/*
     
         
         List list;
@@ -113,7 +131,7 @@ int main(int argc, char* argv[])
             
             std::cout << nList;
             
-        }
+        } */
     }
 	
     return 0;

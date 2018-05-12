@@ -30,12 +30,14 @@ private:
     bool isHead() const;    
     bool isTail() const; 
     Node *GetNext() const;  
+    Node& operator=(const Node&);
     
     friend List;
     friend std::ostream& operator<<(std::ostream&, const Node&);
     friend std::ostream& operator<<(std::ostream&, const List&);
     friend bool operator< (const Node&, const Node&);
     friend bool operator> (const Node&, const Node&);
+    
 
 
 }; 
