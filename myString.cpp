@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//
+//как элемент каунтера
 Counter MyString::head;
 
 
@@ -63,8 +63,8 @@ void MyString::PrintAllString() {
     
     std::cout << "MyString::PrintAllString();\n";
     
-    while(pStr) {
-        std::cout << pStr->m_pStr << "\n";
+    while(pStr) { 
+        std::cout << pStr->m_pStr << "  " << pStr->m_nOwners << "\n";
         pStr = pStr->pNext;
     }    
 }

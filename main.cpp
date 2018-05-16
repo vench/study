@@ -28,10 +28,15 @@ int main(int argc, char* argv[])
 
         {
             MyString s1("xyz");
+             MyString s22("xyz");
+             MyString s133("xyz");
             MyString s2("abc");
             MyString s3("def"); 
             MyString s4("abx");
             MyString s7("test");
+            
+           // s2 = s7;
+            
             std::cout << s1 << " - " << s2 <<  " " <<  s3 << "\n";
             
             

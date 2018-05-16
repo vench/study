@@ -1,5 +1,7 @@
 
 
+//Сместить всю логику
+
 #include <cstring>
 #include <iostream>
 
