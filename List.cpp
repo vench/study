@@ -125,10 +125,11 @@ int List::RemoveAll(const Circle* c, int limit) {
             pTmpNext->pPrev = pTmpPrev;
             pTmpPrev->pNext = pTmpNext;
             
-            if(!pNode->deleted) {
-                pNode->deleted = 1;
+            //if(!pNode->deleted) {
+                //pNode->deleted = 1;
                 delete pNode; 
-            }
+                //pNode = nullptr;
+           // }
             pNode = pTmpPrev;
             this->m_size --;
             count ++;
@@ -145,10 +146,10 @@ int List::RemoveAll(const Circle* c, int limit) {
 void List::Clear() {
     Node *pNode = &this->Head;
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
-        if(!pNode->deleted) {
-            pNode->deleted = 1;
+       // if(!pNode->deleted) {
+        //    pNode->deleted = 1;
             delete pNode; 
-        } 
+       // } 
     } 
     this->m_size = 0;
     Head.pNext = &Tail;
