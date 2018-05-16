@@ -102,6 +102,83 @@ int main(int argc, char* argv[])
         std::cout << " list3 "  << list3 << std::endl;
     }
     
+    
+    //
+      //list
+    {
+        
+        Circle c(10,10, 100);
+        Circle c1(10,10, 120);
+        Circle c2(10,10, 140);
+        Circle c3(10,10, 160);
+        List list;
+        list.AddToHead(&c);
+        list.AddToHead(&c1);
+        list.AddToHead(&c2);
+        
+        //std::cout << list << std::endl; //140, 120, 100
+        
+        list.AddToTail(&c);
+        list.AddToTail(&c1);
+        list.AddToTail(&c2);
+        
+        //std::cout << list << std::endl; //140, 120, 100, 100, 120, 140
+        
+        
+        list.Remove(&c3);//nothing
+        list.Remove(&c1);//
+        //std::cout << list << std::endl; //140,  100, 100, 120, 140
+        list.RemoveAll(&c2);//
+        //std::cout << list << std::endl; // 100, 100, 120
+        
+        //list.Clear();
+        
+        //std::cout << list << std::endl; //empty
+        
+        list.AddToTail(&c3);
+        
+       // std::cout << list << std::endl; //160
+        
+       
+        List list2; 
+        Circle ct(10,10, 100);
+        list2.AddToHead(&ct);
+        
+        list2 = list;
+        std::cout << list << " ### " << std::endl;
+        std::cout << list2 << " *** " << std::endl;
+        
+        List list3;
+        list3.AddToHead(&c1);
+        list3.AddToHead(&c2);
+        list3.AddToHead(&c3); 
+        
+        /*
+        std::cout << list << " *** " << std::endl;
+        std::cout << list3 << " *** " << std::endl;
+        list = std::move(list3);
+        std::cout << list << "  list = list3 " << std::endl;
+        std::cout << list3 << " list3 " << std::endl;
+        */
+        List list4(list); //std::move
+         std::cout << " list "  << list << std::endl;
+         std::cout << " list4 "  << list4 << std::endl;
+         
+        list4 = list3;//std::move
+        
+        std::cout << " list3 "  << list3 << std::endl;
+        std::cout << " list4 "  << list4 << std::endl;
+        
+        List list5(list);
+        list5.AddToHead(&c1);
+        std::cout << " list5 "  << list5 << std::endl;
+        list5 = list3; //std::move
+        
+         std::cout << " list5 "  << list5 << std::endl;
+        std::cout << " list3 "  << list3 << std::endl;
+    }
+    ///
+    
     //1. сортировку по возрастанию площади объекта.
     {/*
     
