@@ -18,6 +18,7 @@ private:
     Node* pNext;		//указатель на следующий элемент
     Circle m_Data;
     N_TYPE type;
+    bool deleted;
     
 
     Node();

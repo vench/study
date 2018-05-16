@@ -84,11 +84,22 @@ int main(int argc, char* argv[])
         std::cout << list << "  list = list3 " << std::endl;
         std::cout << list3 << " list3 " << std::endl;
         */
-        List list4(list); //
-         std::cout << list4 << " list " << std::endl;
-        // std::cout << list4 << " list4 " << std::endl;
-        //list4 = list3;
+        List list4(list); //std::move
+         std::cout << " list "  << list << std::endl;
+         std::cout << " list4 "  << list4 << std::endl;
+         
+        list4 = list3;//std::move
         
+        std::cout << " list3 "  << list3 << std::endl;
+        std::cout << " list4 "  << list4 << std::endl;
+        
+        List list5(list);
+        list5.AddToHead(&c1);
+        std::cout << " list5 "  << list5 << std::endl;
+        list5 = list3; //std::move
+        
+         std::cout << " list5 "  << list5 << std::endl;
+        std::cout << " list3 "  << list3 << std::endl;
     }
     
     //1. сортировку по возрастанию площади объекта.

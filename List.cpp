@@ -3,32 +3,33 @@
 #include "List.h"
 
 //
-List::List() : Head(Node::HEAD), Tail(Node::TAIL){ 
-    
+List::List() : Head(Node::HEAD), Tail(Node::TAIL){     
+    this->m_size = 0;    
+    Head.pNext = &Tail;
+    Tail.pPrev = &Head;    
+}
+
+//copy constr
+List::List(const List& orig) : Head(Node::HEAD), Tail(Node::TAIL){ 
     this->m_size = 0;
     
     Head.pNext = &Tail;
     Tail.pPrev = &Head;
     
+   this->Copy(orig); 
 }
 
-//
-List::List(const List& orig) : Head(orig.Head), Tail(orig.Tail) { 
-    this->m_size = orig.m_size;
-    
-}
-
-//
+//move constructor
 List::List( List&& copy) {
     this->Clear();
     this->Head = copy.Head;
     this->Tail = copy.Tail;
     
     copy.Head.pNext = &copy.Tail;
-    copy.Tail.pPrev = &copy.Head;
-    //this->Copy(copy);
+    copy.Tail.pPrev = &copy.Head; 
 }
 
+//move 
 List& List::operator=( List&& copy) {
     this->Clear();
     this->Head = copy.Head;
@@ -38,7 +39,7 @@ List& List::operator=( List&& copy) {
     copy.Tail.pPrev = &copy.Head;
 }
 
-//
+//copy
 List& List::operator=(const List& copy) { 
     this->Copy(copy); 
     return *this;
@@ -47,10 +48,11 @@ List& List::operator=(const List& copy) {
 //
 void List::Copy(const List& copy) {
     this->m_size = copy.m_size;
-    
-    Node *pNode = &this->Head;
+   
+    Node *pNode = &this->Head; 
     const Node *pCopy = copy.Head.pNext; 
     
+   
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
         if(!pCopy || pCopy->isTail()) {   //delete pNode
             this->Remove(&pNode->m_Data);
@@ -58,14 +60,14 @@ void List::Copy(const List& copy) {
             pNode->m_Data = pCopy->m_Data;
             pCopy = pCopy->pNext;
         }  
-    } 
+    }
     
     while(pCopy && !pCopy->isTail()) {
         Circle* c = new Circle(pCopy->m_Data);
         this->AddToTail(c);
         pCopy = pCopy->pNext;
         delete c;
-    } 
+    }
 }
 
 //
@@ -115,20 +117,24 @@ int List::RemoveAll(const Circle* c) {
 //
 int List::RemoveAll(const Circle* c, int limit) {
     int count = 0;
-    const Node *pNode = this->Head.GetNext();
+    Node *pNode = this->Head.pNext;
     while(limit > 0 && pNode  && !pNode->isTail()) { 
         if(*c == pNode->m_Data) { 
             Node *pTmpNext = pNode->pNext;
             Node *pTmpPrev = pNode->pPrev;
             pTmpNext->pPrev = pTmpPrev;
             pTmpPrev->pNext = pTmpNext;
-            delete pNode; 
+            
+            if(!pNode->deleted) {
+                pNode->deleted = 1;
+                delete pNode; 
+            }
             pNode = pTmpPrev;
             this->m_size --;
-            count --;
+            count ++;
             limit --;
         }         
-        pNode = pNode->GetNext();
+        pNode = pNode->pNext;
     }   
     
     return count;
@@ -137,10 +143,12 @@ int List::RemoveAll(const Circle* c, int limit) {
      
 //
 void List::Clear() {
-    const Node *pNode = this->Head.GetNext();
-    while(pNode  && !pNode->isTail()) { 
-        delete pNode;        
-        pNode = pNode->GetNext();
+    Node *pNode = &this->Head;
+    while((pNode = pNode->pNext)  && !pNode->isTail()) { 
+        if(!pNode->deleted) {
+            pNode->deleted = 1;
+            delete pNode; 
+        } 
     } 
     this->m_size = 0;
     Head.pNext = &Tail;
