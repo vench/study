@@ -41,6 +41,7 @@ List& List::operator=( List&& copy) {
 
 //copy
 List& List::operator=(const List& copy) { 
+   // std::cout << "!!!!\n";
     this->Copy(copy); 
     return *this;
 }
@@ -51,11 +52,12 @@ void List::Copy(const List& copy) {
    
     Node *pNode = &this->Head; 
     const Node *pCopy = copy.Head.pNext; 
-    
-   
+       
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
         if(!pCopy || pCopy->isTail()) {   //delete pNode
+            Node *tmp = pNode->pPrev;
             this->Remove(&pNode->m_Data);
+            pNode = tmp;
         } else {  //copy
             pNode->m_Data = pCopy->m_Data;
             pCopy = pCopy->pNext;
