@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 {
 
         std::cout << "Ok\n";
-
+        MyString s("test");
             
         {
         
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
             MyString s4("abx");
             MyString s7("test");
             
-           // s2 = s7;
+            s2 = s7;
             
             std::cout << s1 << " - " << s2 <<  " " <<  s3 << "\n";
             
@@ -47,6 +47,33 @@ int main(int argc, char* argv[])
             MyString::PrintAllString();
             
         }
+        
+        {
+            
+            MyString s3 = MyString("some string"); 
+            
+            MyString s7("test");
+            MyString s8("some string");
+            MyString s4("abx");
+            s3 = "u765";
+            MyString::PrintAllString();
+            MyString::ChnageRegisterAllString();
+            MyString::ChnageSortAllString();
+            MyString::PrintAllString();
+        }
+        
+        {
+            MyString s2("enm");
+            MyString s3("xyz");
+            MyString s1("abc");
+            MyString::PrintAllString();
+           // MyString::ChnageRegisterAllString();
+            MyString::ChnageSortAllString();
+            MyString::PrintAllString();
+        }
+        
+        //before delete 
+        MyString::PrintAllString();
 	
 	return 0;
 }//endmain

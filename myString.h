@@ -7,7 +7,7 @@
 class MyString
 { 
     
-    static Counter head;  
+     
     
     Counter *pStr;
 
@@ -24,6 +24,10 @@ class MyString
         static void PrintAllString();
         static void ChnageRegisterAllString();
         static void ChnageSortAllString();
+        
+        MyString& operator=(const MyString&);
+        MyString& operator=( MyString&&);
+        MyString& operator=(const char *c); 
         
         friend std::ostream& operator<<(std::ostream&, const MyString&); 
     
