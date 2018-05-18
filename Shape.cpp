@@ -39,6 +39,7 @@ int Shape::GetSquare() const {
 }
 
 //
-std::ostream& operator<< (std::ostream&, const Shape&) {
-    
+std::ostream& operator<< (std::ostream& stream, const Shape& s) {
+    stream << s.WhereAmI() << std::endl;
+    return stream;
 }

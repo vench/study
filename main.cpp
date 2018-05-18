@@ -1,6 +1,7 @@
-// LAB 4.
+// LAB 6.
 
 #include <fstream>
+#include <typeinfo>
 #include "Point.h"
 #include "Circle.h" 
 #include "Shape.h"
@@ -14,12 +15,16 @@ int main(int argc, char* argv[])
 {
 
     {
-        Circle c1(0,0, 1);
-        Rect r1(0,0,1,1);
+        Circle c1 (0,0, 1);
+        Rect r1  (1,4,1,4);
+        Shape *pC1 = &c1; 
         
         List list; 
         list.AddToHead(&r1);
-        list.AddToHead(&c1);
+        list.AddToHead(&c1);  
+        
+        std::cout << list << std::endl;   
+        
     }
 /*
     {

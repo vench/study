@@ -18,7 +18,8 @@ class Rect  : public Shape {
             
             ~Rect();       
            
-            void Inflate(int);              
+            virtual void Inflate(int);  
+            virtual int GetSquare() const;            
             void InflateRect(int sizeHor = 1, int sizeVert =  1);            
             void InflateRect(int m_left, int m_right, int m_top, int m_bottom);            
             void View();            

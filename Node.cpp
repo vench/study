@@ -21,7 +21,7 @@ Node::Node(const Node& orig) : m_Data(orig.m_Data) {
 }
 
 //
-Node::Node(const Node&& orig): m_Data(orig.m_Data)  {
+Node::Node( Node&& orig): m_Data(orig.m_Data)  {
     this->type = orig.type;
 }
 

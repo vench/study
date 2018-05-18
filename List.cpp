@@ -65,7 +65,7 @@ void List::Copy(const List& copy) {
     }
     
     while(pCopy && !pCopy->isTail()) {
-        Circle* c = new Circle(pCopy->m_Data);
+        Circle* c = new Circle(0,0,1);//TODO//Circle(pCopy->m_Data);
         this->AddToTail(c);
         pCopy = pCopy->pNext;
         delete c;
@@ -79,7 +79,9 @@ List::~List() {
 }
 
 //
-void List::AddToHead(Shape* c) {
+void List::AddToHead(Shape *c) {
+    //TODO print type
+    
     Node *pNewNode = new Node(c);
     
     Node *pTmpNext = this->Head.pNext;
@@ -93,7 +95,7 @@ void List::AddToHead(Shape* c) {
 }
     
 //
-void List::AddToTail(Shape* c) {
+void List::AddToTail(Shape *c) {
     Node *pNewNode = new Node(c);
     
     Node *pTmpPrev = this->Tail.pPrev;

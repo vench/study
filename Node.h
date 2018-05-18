@@ -23,7 +23,7 @@ private:
 
     Node();
     Node(const Node& orig);
-    Node(const Node&& orig);
+    Node( Node&& orig);
     Node(N_TYPE);
     Node(const Shape *);
     ~Node(); 

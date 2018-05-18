@@ -128,6 +128,11 @@ const char* Rect::WhereAmI() const {
     return "Now I am in class Rect\n";
 };
 
+//
+int Rect::GetSquare() const {
+    return (m_right - m_left) * (m_bottom - m_top);
+}
+
 
 //
 Rect BoundingRect(Rect a, Rect b) { 
