@@ -3,6 +3,8 @@
 #include <fstream>
 #include "Point.h"
 #include "Circle.h" 
+#include "Shape.h"
+#include "Rect.h"
 #include "Node.h"
 #include "List.h"
 
@@ -11,7 +13,15 @@
 int main(int argc, char* argv[])
 {
 
-
+    {
+        Circle c1(0,0, 1);
+        Rect r1(0,0,1,1);
+        
+        List list; 
+        list.AddToHead(&r1);
+        list.AddToHead(&c1);
+    }
+/*
     {
         
         Circle c1(0,0, 1);
@@ -27,6 +37,7 @@ int main(int argc, char* argv[])
         big.AddToTail(&c3);
         big.AddToTail(&c4);
         big.AddToTail(&c5);
+        
         
         List minCopy = min;
         List bigCopy = List(big);
@@ -92,7 +103,7 @@ int main(int argc, char* argv[])
             
         } 
     }
-	
+*/	
     return 0;
 }//endmain
 

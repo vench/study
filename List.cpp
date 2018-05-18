@@ -79,7 +79,7 @@ List::~List() {
 }
 
 //
-void List::AddToHead(Circle* c) {
+void List::AddToHead(Shape* c) {
     Node *pNewNode = new Node(c);
     
     Node *pTmpNext = this->Head.pNext;
@@ -93,7 +93,7 @@ void List::AddToHead(Circle* c) {
 }
     
 //
-void List::AddToTail(Circle* c) {
+void List::AddToTail(Shape* c) {
     Node *pNewNode = new Node(c);
     
     Node *pTmpPrev = this->Tail.pPrev;
@@ -107,17 +107,17 @@ void List::AddToTail(Circle* c) {
 }
 
 //
-bool List::Remove(const Circle* c) {
+bool List::Remove(const Shape* c) {
     return RemoveAll(c, 1);
 }
     
 //
-int List::RemoveAll(const Circle* c) { 
+int List::RemoveAll(const Shape* c) { 
     return RemoveAll(c, this->m_size);
 }
 
 //
-int List::RemoveAll(const Circle* c, int limit) {
+int List::RemoveAll(const Shape* c, int limit) {
     int count = 0;
     Node *pNode = this->Head.pNext;
     while(limit > 0 && pNode  && !pNode->isTail()) { 

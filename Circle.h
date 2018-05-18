@@ -2,8 +2,10 @@
 
 #include <iostream>
 #include "Point.h"
+#include "Shape.h"
 
-class Circle  {
+//
+class Circle : public Shape {
     
     Point p; 
     int radius;
@@ -11,13 +13,16 @@ class Circle  {
 public:
     Circle();
     Circle(int x, int y, int radius);
+    Circle(int x, int y, int radius, Shape::COLOR color);
     Circle(const Circle& orig);
-    Circle(const Circle&& orig);
+    Circle( Circle&& orig);
+    Circle(const Shape&);
+    Circle( Shape&&);
      
     void Inflate(int); 
      ~Circle();
      
-    void WhereAmI();
+    virtual const char* WhereAmI() const;
     int GetSquare() const;
     int GetRadius() const;
      

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "Circle.h"
+#include "Shape.h"
 
 //
 class List;
@@ -16,7 +16,7 @@ private:
     
     Node* pPrev;		//указатель на предыдущий элемент
     Node* pNext;		//указатель на следующий элемент
-    Circle m_Data;
+    Shape m_Data;
     N_TYPE type;
     bool deleted;
     
@@ -25,7 +25,7 @@ private:
     Node(const Node& orig);
     Node(const Node&& orig);
     Node(N_TYPE);
-    Node(const Circle *);
+    Node(const Shape *);
     ~Node(); 
     
     bool isHead() const;    

@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "Node.h"
+#include "Shape.h"
 #include "Circle.h"
 
 class List {
@@ -22,12 +23,12 @@ public:
     /**
      * метод, который добавляет элемент в начало списка
      */
-    void AddToHead(Circle*);
+    void AddToHead(Shape*);
     
     /**
      * метод, который добавляет элемент в конец списка
      */
-    void AddToTail(Circle*);
+    void AddToTail(Shape*);
     
     /**
      * удаление из списка первого элемента, данное которого совпадает 
@@ -35,17 +36,17 @@ public:
            если элемента с таким значением в списке не было – false
      * @return 
      */
-    bool Remove(const Circle*);
+    bool Remove(const Shape*);
     
     /**
      * удаление из списка всех элементов, данное которых совпадает со значением параметра. 
          Метод возвращает количество удаленных элементов.
      * @return 
      */
-    int RemoveAll(const Circle*);
+    int RemoveAll(const Shape*);
     
     //
-    int RemoveAll(const Circle*, int);
+    int RemoveAll(const Shape*, int);
      
     /**
      * Сделать список пустым

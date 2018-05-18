@@ -1,23 +1,34 @@
 #include "Circle.h"
 
 //
-Circle::Circle() : p() {
+Circle::Circle() : p(), Shape(Shape::RED) {
     this->radius = 1; 
 }
 
 //
-Circle::Circle(const Circle& orig) : p(orig.p)  { 
+Circle::Circle(const Circle& orig) : p(orig.p), Shape(orig.color)  { 
     this->radius = orig.radius; 
 }
 
 //
-Circle::Circle(const Circle&& orig) : p(orig.p) {
+Circle::Circle( Circle&& orig) : p(orig.p), Shape(orig.color)  {
     this->radius = orig.radius;
     
 }
 
 //
-Circle::Circle(int x, int y, int radius) : p(x, y) { 
+Circle::Circle(const Shape& orig) {}
+
+//
+Circle::Circle( Shape&& orig) {}
+
+//
+Circle::Circle(int x, int y, int radius) : p(x, y), Shape(Shape::RED) { 
+    this->radius = radius;
+}
+
+//
+Circle::Circle(int x, int y, int radius, Shape::COLOR color): p(x, y), Shape(color) {
     this->radius = radius;
 }
 
@@ -65,8 +76,8 @@ void Circle::Inflate(int size) {
  
 
 //
-void Circle::WhereAmI() {
-    std::cout << "Now I am in class Circle\n";
+const char* Circle::WhereAmI() const {
+    return "Now I am in class Circle\n";
 };
 
 //

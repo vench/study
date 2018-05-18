@@ -31,7 +31,7 @@ Node::Node() : Node(Node::HEAD) {
 }
 
 //
-Node::Node(const Circle *c) : m_Data(*c) {
+Node::Node(const Shape *c) : m_Data(*c) {
     this->type = NODE;
 }
 
