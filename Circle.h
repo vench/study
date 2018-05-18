@@ -23,6 +23,7 @@ public:
      ~Circle();
      
     virtual const char* WhereAmI() const;
+    virtual void Serialuze(std::ostream&) const;
     int GetSquare() const;
     int GetRadius() const;
      

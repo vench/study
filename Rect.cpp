@@ -125,8 +125,13 @@ void Rect::GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) const {
 
 //
 const char* Rect::WhereAmI() const {
-    return "Now I am in class Rect\n";
+    return "Now I am in class Rect";
 };
+
+//
+void Rect::Serialuze(std::ostream& stream) const {
+    stream << this->m_left << "," << this->m_right << "," << this->m_bottom << "," << this->m_top;
+}
 
 //
 int Rect::GetSquare() const {

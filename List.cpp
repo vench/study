@@ -56,7 +56,7 @@ void List::Copy(const List& copy) {
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
         if(!pCopy || pCopy->isTail()) {   //delete pNode
             Node *tmp = pNode->pPrev;
-            this->Remove(&pNode->m_Data);
+            this->Remove(pNode->m_Data);
             pNode = tmp;
         } else {  //copy
             pNode->m_Data = pCopy->m_Data;
@@ -74,7 +74,7 @@ void List::Copy(const List& copy) {
 
 //
 List::~List() {
-    this->Clear();
+    //this->Clear();
      
 }
 
@@ -123,7 +123,7 @@ int List::RemoveAll(const Shape* c, int limit) {
     int count = 0;
     Node *pNode = this->Head.pNext;
     while(limit > 0 && pNode  && !pNode->isTail()) { 
-        if(*c == pNode->m_Data) { 
+        if(*c == *pNode->m_Data) { 
             Node *pTmpNext = pNode->pNext;
             Node *pTmpPrev = pNode->pPrev;
             pTmpNext->pPrev = pTmpPrev;
@@ -207,7 +207,7 @@ void List::Swap(Node* a, Node* b)   {
 
 //
 std::ostream& operator<< (std::ostream& stream, const List& l) {
-    stream << "radius, x, y\n";
+    stream << "List - size: " << l.m_size << "\n";
     const Node *pNode = l.Head.GetNext();
     while(pNode && !pNode->isTail()) {
         stream << *pNode;  
@@ -220,7 +220,7 @@ std::ostream& operator<< (std::ostream& stream, const List& l) {
 //
 void operator<<(List& l, std::istream& s) {
     const int n = 128;
-    int r,x,y = 0;
+    int r,x,y,z = 0;
   
     char *line = new char[n];
     s.getline(line, n);//skip header
@@ -229,7 +229,10 @@ void operator<<(List& l, std::istream& s) {
         if(sscanf (line,"%d,%d,%d\n",&r, &x, &y) >= 0) {
             Circle c(x, y, r);
             l.AddToTail(&c);
-        }        
+        } else if(sscanf (line,"%d,%d,%d,%d\n",&r, &x, &y, &z) >= 0) {
+            Rect s(x, y, r, z);
+            l.AddToTail(&s);
+        }         
     }
     delete[] line;
 }

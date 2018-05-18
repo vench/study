@@ -16,14 +16,18 @@ int main(int argc, char* argv[])
 
     {
         Circle c1 (0,0, 1);
-        Rect r1  (1,4,1,4);
-        Shape *pC1 = &c1; 
+        Rect r1  (1,4,1,4); 
+        Rect r2  (1,43,1,42);
         
         List list; 
         list.AddToHead(&r1);
+        list.AddToHead(&r2);
         list.AddToHead(&c1);  
         
         std::cout << list << std::endl;   
+        
+        list.SortBySquare();
+        std::cout << list << std::endl;
         
     }
 /*

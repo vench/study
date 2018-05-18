@@ -1,9 +1,11 @@
 
 #include "Node.h"
+#include "Circle.h"
 
 //
 Node::Node(N_TYPE t) {
     this->type = t;
+    this->m_Data = nullptr;
     this->pPrev = nullptr;
     this->pNext = nullptr; 
 }
@@ -31,7 +33,8 @@ Node::Node() : Node(Node::HEAD) {
 }
 
 //
-Node::Node(const Shape *c) : m_Data(*c) {
+Node::Node( Shape *c)  { 
+    this->m_Data = &(*c);
     this->type = NODE;
 }
 
@@ -40,9 +43,13 @@ Node::~Node() {
     
     this->pPrev = nullptr;
     this->pNext = nullptr; 
-    //Изъяли текущий элемент из списка
     
-    //TODO
+    if(this->m_Data) {
+        delete this->m_Data;
+        this->m_Data = nullptr;
+        std::cout << "DL\n";
+    }
+            
 }
  
 
@@ -63,16 +70,16 @@ Node *Node::GetNext() const {
 
 //
 std::ostream& operator<< (std::ostream& stream, const Node& n) {
-     stream << n.m_Data << std::endl;
+    stream << *n.m_Data << std::endl;
     return stream;
 }
 
 //
 bool operator< (const Node& a, const Node& b) {
-    return a.m_Data.GetSquare() < b.m_Data.GetSquare();
+    return a.m_Data->GetSquare() < b.m_Data->GetSquare();
 }
 
 //
 bool operator> (const Node& a, const Node& b) {
-    return a.m_Data.GetSquare() > b.m_Data.GetSquare();
+    return a.m_Data->GetSquare() > b.m_Data->GetSquare();
 }

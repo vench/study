@@ -77,12 +77,17 @@ void Circle::Inflate(int size) {
 
 //
 const char* Circle::WhereAmI() const {
-    return "Now I am in class Circle\n";
+    return "Now I am in class Circle";
 };
 
 //
+void Circle::Serialuze(std::ostream& stream) const { 
+    stream <<  this->radius << "," << this->p.getX() << "," << this->p.getY();
+}
+
+//
 std::ostream& operator<< (std::ostream& stream, const Circle& c) {
-    stream <<  c.radius << "," << c.p.getX() << "," << c.p.getY();
+    c.Serialuze(stream);
     return stream;
 }
 

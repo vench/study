@@ -21,6 +21,7 @@ public:
      virtual  ~Shape();
     
     virtual const char* WhereAmI() const;
+    virtual void Serialuze(std::ostream&) const;
     virtual void Inflate(int);
     virtual int GetSquare() const;
     const Shape::COLOR getColor() const;

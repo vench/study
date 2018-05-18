@@ -30,8 +30,13 @@ const Shape::COLOR Shape::getColor() const {
 
 //
 const char* Shape::WhereAmI() const {
-    return "Now I am in class Shape\n";
+    return "Now I am in class Shape";
 };
+
+//
+void Shape::Serialuze(std::ostream& stream) const {
+     stream << "Now I am in class Shape";
+}
 
 //
 int Shape::GetSquare() const {
@@ -40,6 +45,6 @@ int Shape::GetSquare() const {
 
 //
 std::ostream& operator<< (std::ostream& stream, const Shape& s) {
-    stream << s.WhereAmI() << std::endl;
+    s.Serialuze(stream);
     return stream;
 }

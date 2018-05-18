@@ -7,6 +7,7 @@
 #include "Node.h"
 #include "Shape.h"
 #include "Circle.h"
+#include "Rect.h"
 
 class List {
     
