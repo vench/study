@@ -80,7 +80,7 @@ MyString& MyString::operator=( MyString&& s) {
         this->pStr->DecrementOwner();
     }
     this->pStr = s.pStr;
-    this->pStr->IncrementOwner();
+    s.pStr = nullptr;
     return *this;
 }
 
