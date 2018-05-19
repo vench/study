@@ -18,11 +18,15 @@ int main(int argc, char* argv[])
         Circle c1 (0,0, 1);
         Rect r1  (1,4,1,4); 
         Rect r2  (1,43,1,42);
+        Rect *pR3 = new Rect(1,1,1,1);
         
         List list; 
         list.AddToHead(&r1);
         list.AddToHead(&r2);
         list.AddToHead(&c1);  
+        list.AddToHead(pR3);
+       // delete pR3;
+        pR3 = nullptr;
         
         std::cout << list << std::endl;   
         
