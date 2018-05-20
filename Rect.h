@@ -21,11 +21,13 @@ class Rect  : public Shape {
             virtual void Inflate(int);  
             virtual int GetSquare() const;     
             virtual void Serialuze(std::ostream&) const;
+            virtual Shape* Clone() const;
             void InflateRect(int sizeHor = 1, int sizeVert =  1);            
             void InflateRect(int m_left, int m_right, int m_top, int m_bottom);            
             void View();            
             void SetAll(int m_left, int m_right, int m_top, int m_bottom); 
             void GetAll(int &m_left, int &m_right, int &m_top, int &m_bottom) const;
+            
             
             Rect BoundingRect(const Rect&, const Rect&);
          

@@ -33,21 +33,8 @@ Node::Node() : Node(Node::HEAD) {
 }
 
 //
-Node::Node( Shape *c)  { 
-    //this->m_Data = &(*c);
-   // Shape cp = *c;
-    
-    if(Rect* pr = dynamic_cast<Rect*>(c)) {
-        Rect r = *pr;
-        this->m_Data = &r;
-    } else if(Circle* pr = dynamic_cast<Circle*>(c)) {
-        Circle r = *pr;
-        this->m_Data = &r;
-    } else {
-        this->m_Data = c;
-    }
-    
-    
+Node::Node( Shape *c)  {  
+    this->m_Data = c->Clone();  
     this->type = NODE;
 }
 
@@ -59,8 +46,7 @@ Node::~Node() {
     
     if(this->m_Data) {
         delete this->m_Data;
-        this->m_Data = nullptr;
-        std::cout << "DL\n";
+        this->m_Data = nullptr; 
     }
             
 }

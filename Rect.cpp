@@ -134,6 +134,11 @@ void Rect::Serialuze(std::ostream& stream) const {
 }
 
 //
+Shape* Rect::Clone() const {
+    return new Rect(*this); 
+}
+
+//
 int Rect::GetSquare() const {
     return (m_right - m_left) * (m_bottom - m_top);
 }

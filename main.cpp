@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
         list.AddToHead(&r2);
         list.AddToHead(&c1);  
         list.AddToHead(pR3);
-       // delete pR3;
+        delete pR3;
         pR3 = nullptr;
         
         std::cout << list << std::endl;   
@@ -34,9 +34,9 @@ int main(int argc, char* argv[])
         std::cout << list << std::endl;
         
     }
-/*
+
     {
-        
+        /*
         Circle c1(0,0, 1);
         Circle c2(0,0, 2);
         Circle c3(0,0, 3);
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     
         std::cout << "Min copy\n" << minCopy << std::endl;
         std::cout << "Big copy\n" << bigCopy << std::endl;
-        
+       
         minCopy = bigCopy;
         std::cout << "minCopy = bigCopy >>> " << std::endl;
         std::cout << "Min copy\n" << minCopy << std::endl;
@@ -70,10 +70,10 @@ int main(int argc, char* argv[])
         big = min;
         std::cout << "min = big >>> " << std::endl;
         std::cout << "Min copy\n" << min << std::endl;
-        std::cout << "Big copy\n" << big << std::endl;
+        std::cout << "Big copy\n" << big << std::endl; */
     }
     ///
-    
+/*    
     //1. сортировку по возрастанию площади объекта.
     {
     

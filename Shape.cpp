@@ -37,6 +37,7 @@ const char* Shape::WhereAmI() const {
 void Shape::Serialuze(std::ostream& stream) const {
      stream << "Now I am in class Shape";
 }
+ 
 
 //
 int Shape::GetSquare() const {

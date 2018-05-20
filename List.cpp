@@ -59,7 +59,8 @@ void List::Copy(const List& copy) {
             this->Remove(pNode->m_Data);
             pNode = tmp;
         } else {  //copy
-            pNode->m_Data = pCopy->m_Data;
+            //можно попробовать сравнимать типы и грохать
+            pNode->m_Data = pCopy->m_Data;//виртуальный оператор присваивания
             pCopy = pCopy->pNext;
         }  
     }
@@ -123,7 +124,7 @@ int List::RemoveAll(const Shape* c, int limit) {
     int count = 0;
     Node *pNode = this->Head.pNext;
     while(limit > 0 && pNode  && !pNode->isTail()) { 
-        if(*c == *pNode->m_Data) { 
+        if(*c == *pNode->m_Data) {//фиртуальный метод сравнения на равенство 
             Node *pTmpNext = pNode->pNext;
             Node *pTmpPrev = pNode->pPrev;
             pTmpNext->pPrev = pTmpPrev;

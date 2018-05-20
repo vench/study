@@ -86,6 +86,11 @@ void Circle::Serialuze(std::ostream& stream) const {
 }
 
 //
+Shape* Circle::Clone() const {
+    return new Circle(*this); 
+}
+
+//
 std::ostream& operator<< (std::ostream& stream, const Circle& c) {
     c.Serialuze(stream);
     return stream;

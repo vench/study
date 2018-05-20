@@ -24,6 +24,7 @@ public:
      
     virtual const char* WhereAmI() const;
     virtual void Serialuze(std::ostream&) const;
+    virtual Shape* Clone() const;
     int GetSquare() const;
     int GetRadius() const;
      
