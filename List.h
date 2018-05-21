@@ -9,6 +9,7 @@
 #include "Circle.h"
 #include "Rect.h"
 
+//
 class List {
     
     Node Head;	// фиктивный элемент, который является признаком начала списка
@@ -84,3 +85,7 @@ std::ostream& operator<< (std::ostream&, const List&);
  
 //
 void operator<<(List&, std::istream&);
+
+//
+//
+List testMoveList();

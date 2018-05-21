@@ -20,22 +20,30 @@ Node& Node::operator=(const Node& c) {
 //
 Node::Node(const Node& orig) : m_Data(orig.m_Data) {
     this->type = orig.type;
+    this->pPrev = nullptr;
+    this->pNext = nullptr;
 }
 
 //
 Node::Node( Node&& orig): m_Data(orig.m_Data)  {
     this->type = orig.type;
+    this->pPrev = nullptr;
+    this->pNext = nullptr;
 }
 
 
 //
 Node::Node() : Node(Node::HEAD) { 
+    this->pPrev = nullptr;
+    this->pNext = nullptr;    
 }
 
 //
 Node::Node( Shape *c)  {  
     this->m_Data = c->Clone();  
     this->type = NODE;
+    this->pPrev = nullptr;
+    this->pNext = nullptr;
 }
 
 //

@@ -20,8 +20,7 @@ private:
     Node* pPrev;		//указатель на предыдущий элемент
     Node* pNext;		//указатель на следующий элемент
     Shape* m_Data;
-    N_TYPE type;
-    bool deleted;
+    N_TYPE type; 
     
 
     Node();

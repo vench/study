@@ -1,5 +1,4 @@
-
-
+//
 #include "List.h"
 
 //
@@ -37,11 +36,12 @@ List& List::operator=( List&& copy) {
     
     copy.Head.pNext = &copy.Tail;
     copy.Tail.pPrev = &copy.Head;
+    
+    return *this;
 }
 
 //copy
-List& List::operator=(const List& copy) { 
-   // std::cout << "!!!!\n";
+List& List::operator=(const List& copy) {  
     this->Copy(copy); 
     return *this;
 }
@@ -54,6 +54,7 @@ void List::Copy(const List& copy) {
     const Node *pCopy = copy.Head.pNext; 
        
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
+        //std::cout << *pNode << "****\n";
         if(!pCopy || pCopy->isTail()) {   //delete pNode
             Node *tmp = pNode->pPrev;
             this->Remove(pNode->m_Data);
@@ -64,12 +65,11 @@ void List::Copy(const List& copy) {
             pCopy = pCopy->pNext;
         }  
     }
+     
     
-    while(pCopy && !pCopy->isTail()) {
-        Circle* c = new Circle(0,0,1);//TODO//Circle(pCopy->m_Data);
-        this->AddToTail(c);
-        pCopy = pCopy->pNext;
-        delete c;
+    while(pCopy && !pCopy->isTail()) { 
+        this->AddToTail(pCopy->m_Data->Clone());
+        pCopy = pCopy->pNext; 
     }
 }
 
@@ -80,9 +80,7 @@ List::~List() {
 }
 
 //
-void List::AddToHead(Shape *c) {
-    //TODO print type
-    
+void List::AddToHead(Shape *c) { 
     Node *pNewNode = new Node(c);
     
     Node *pTmpNext = this->Head.pNext;
@@ -97,8 +95,7 @@ void List::AddToHead(Shape *c) {
     
 //
 void List::AddToTail(Shape *c) {
-    Node *pNewNode = new Node(c);
-    
+    Node *pNewNode = new Node(c);    
     Node *pTmpPrev = this->Tail.pPrev;
     this->Tail.pPrev = pNewNode;
     pNewNode->pNext = &this->Tail;
@@ -121,20 +118,16 @@ int List::RemoveAll(const Shape* c) {
 
 //
 int List::RemoveAll(const Shape* c, int limit) {
-    int count = 0;
+    int count = 0; 
     Node *pNode = this->Head.pNext;
     while(limit > 0 && pNode  && !pNode->isTail()) { 
-        if(*c == *pNode->m_Data) {//фиртуальный метод сравнения на равенство 
+        if(c->IsEqual(pNode->m_Data)) {
             Node *pTmpNext = pNode->pNext;
             Node *pTmpPrev = pNode->pPrev;
             pTmpNext->pPrev = pTmpPrev;
             pTmpPrev->pNext = pTmpNext;
             
-            //if(!pNode->deleted) {
-                //pNode->deleted = 1;
-                delete pNode; 
-                //pNode = nullptr;
-           // }
+            delete pNode;  
             pNode = pTmpPrev;
             this->m_size --;
             count ++;
@@ -256,4 +249,12 @@ void List::SortBySquare( ) {
         
         pNode = pNodeNext; 
     }    
+}
+
+//
+List testMoveList(){
+    Circle c1 (10,10, 50);
+    List list;
+    list.AddToHead(&c1);
+    return list;
 }

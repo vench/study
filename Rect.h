@@ -32,6 +32,7 @@ class Rect  : public Shape {
             Rect BoundingRect(const Rect&, const Rect&);
          
             virtual const char* WhereAmI() const;
+            virtual bool IsEqual(Shape*) const;
             
             
         private:

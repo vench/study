@@ -30,6 +30,7 @@ public:
      
     Circle& operator=(const Circle&);
     bool operator==(const Circle&);
+    virtual bool IsEqual(Shape*) const;
     friend bool operator==(const Circle&,const Circle&);
     
     

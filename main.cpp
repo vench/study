@@ -11,6 +11,7 @@
 
 #define	  stop 
 
+//
 int main(int argc, char* argv[])
 {
 
@@ -36,7 +37,7 @@ int main(int argc, char* argv[])
     }
 
     {
-        /*
+        
         Circle c1(0,0, 1);
         Circle c2(0,0, 2);
         Circle c3(0,0, 3);
@@ -66,25 +67,35 @@ int main(int argc, char* argv[])
         
         std::cout << "Min copy\n" << min << std::endl;
         std::cout << "Big copy\n" << big << std::endl;
-        
+         
         big = min;
         std::cout << "min = big >>> " << std::endl;
         std::cout << "Min copy\n" << min << std::endl;
-        std::cout << "Big copy\n" << big << std::endl; */
+        std::cout << "Big copy\n" << big << std::endl; 
+        /* */
     }
     ///
-/*    
+    
     //1. сортировку по возрастанию площади объекта.
     {
     
         
         List list;
         for (int i = 0; i < 8; i ++) {
-            Circle c(0,0, i);
+            Circle c(0,0, i*i);
             if (i % 2 == 0) {
                 list.AddToTail(&c);
             } else {
                 list.AddToHead(&c);
+            } 
+        }
+        
+        for (int i = 10; i < 18; i ++) {
+            Rect r(0,i, 0, i);
+            if (i % 2 == 0) {
+                list.AddToTail(&r);
+            } else {
+                list.AddToHead(&r);
             } 
         }
         
@@ -96,7 +107,7 @@ int main(int argc, char* argv[])
         std::cout << list << std::endl;
         
         //save list
-        {
+        { /*
             std::cout << "Enter Output File Name  - " ;
             char ar[80] = "test.txt";
             //std::cin >> ar;
@@ -113,10 +124,10 @@ int main(int argc, char* argv[])
             fin.close();
             
             std::cout << nList;
-            
+            */
         } 
     }
-*/	
+/**/	
     return 0;
 }//endmain
 

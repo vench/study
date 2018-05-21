@@ -25,7 +25,10 @@ public:
     virtual void Inflate(int);
     virtual int GetSquare() const;
     virtual Shape* Clone() const =0;
+    virtual bool IsEqual(Shape*) const = 0;
     const Shape::COLOR getColor() const;
+    
+    
     
     friend std::ostream& operator<<(std::ostream&, const Shape&);
     

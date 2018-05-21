@@ -130,7 +130,9 @@ const char* Rect::WhereAmI() const {
 
 //
 void Rect::Serialuze(std::ostream& stream) const {
-    stream << this->m_left << "," << this->m_right << "," << this->m_bottom << "," << this->m_top;
+    stream << "Rect{ l:" << this->m_left << ", r:" << this->m_right 
+            << ", b:" << this->m_bottom << ", t:" << this->m_top << ", c:" << this->color 
+            << ", sq:" << this->GetSquare() << "}";
 }
 
 //
@@ -143,6 +145,18 @@ int Rect::GetSquare() const {
     return (m_right - m_left) * (m_bottom - m_top);
 }
 
+//
+bool Rect::IsEqual( Shape*s) const{
+    if(Rect *r = dynamic_cast<Rect*>(s)) {
+        
+        return this->m_left == r->m_left && 
+               this->m_right == r->m_right && 
+               this->m_top == r->m_top && 
+               this->m_bottom == r->m_bottom &&
+               this->color == r->color;
+    }
+    return false;
+}
 
 //
 Rect BoundingRect(Rect a, Rect b) { 

@@ -82,7 +82,8 @@ const char* Circle::WhereAmI() const {
 
 //
 void Circle::Serialuze(std::ostream& stream) const { 
-    stream <<  this->radius << "," << this->p.getX() << "," << this->p.getY();
+    stream << "Circle{ r:" <<  this->radius << ", x:" << this->p.getX() 
+            << ", y:" << this->p.getY() << ", sq: " << this->GetSquare() << "}";
 }
 
 //
@@ -90,11 +91,21 @@ Shape* Circle::Clone() const {
     return new Circle(*this); 
 }
 
+
+//
+bool Circle::IsEqual(Shape* s) const {
+    if(Circle *c = dynamic_cast<Circle*>(s)) {
+       return this->radius == c->radius &&
+               this->p == c->p &&
+               this->color == c->color;
+    }
+    return false;
+}
+
 //
 std::ostream& operator<< (std::ostream& stream, const Circle& c) {
     c.Serialuze(stream);
     return stream;
 }
-
 
 
