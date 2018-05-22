@@ -9,7 +9,8 @@ Shape::Shape(Shape::COLOR c) : color(c) {
 };
 
 //
-Shape::Shape(const Shape& orig) {
+Shape::Shape(const Shape& orig) : color(orig.color) {
+     
 }
 
 //
@@ -36,6 +37,11 @@ const char* Shape::WhereAmI() const {
 //
 void Shape::Serialuze(std::ostream& stream) const {
      stream << "Now I am in class Shape";
+}
+
+//
+bool Shape::UnSerialuze(const char*)  {
+    return false;
 }
  
 

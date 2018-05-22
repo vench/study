@@ -11,31 +11,42 @@ Node::Node(N_TYPE t) {
 }
 
 Node& Node::operator=(const Node& c) {
+  
     this->pPrev = c.pPrev;
     this->pNext = c.pNext;
-    this->m_Data = c.m_Data;
+    this->type = c.type;
+    if(this->type == Node::NODE && c.m_Data) {
+        this->m_Data = c.m_Data->Clone();
+    }
+     
     return *this;
 }
 
 //
-Node::Node(const Node& orig) : m_Data(orig.m_Data) {
+Node::Node(const Node& orig)  {
     this->type = orig.type;
+    if(this->type == Node::NODE && orig.m_Data) {
+        this->m_Data = orig.m_Data->Clone();
+    }
     this->pPrev = nullptr;
     this->pNext = nullptr;
 }
 
 //
-Node::Node( Node&& orig): m_Data(orig.m_Data)  {
+Node::Node( Node&& orig)  {
     this->type = orig.type;
+    this->m_Data = orig.m_Data;
     this->pPrev = nullptr;
-    this->pNext = nullptr;
+    this->pNext = nullptr; 
+    orig.m_Data = nullptr;
 }
 
 
 //
 Node::Node() : Node(Node::HEAD) { 
     this->pPrev = nullptr;
-    this->pNext = nullptr;    
+    this->pNext = nullptr;  
+    this->m_Data = nullptr;
 }
 
 //
@@ -48,15 +59,14 @@ Node::Node( Shape *c)  {
 
 //
 Node::~Node() {
-    
+  
     this->pPrev = nullptr;
     this->pNext = nullptr; 
     
     if(this->m_Data) {
         delete this->m_Data;
         this->m_Data = nullptr; 
-    }
-            
+    }       
 }
  
 

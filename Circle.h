@@ -24,6 +24,7 @@ public:
      
     virtual const char* WhereAmI() const;
     virtual void Serialuze(std::ostream&) const;
+    virtual bool UnSerialuze(const char*);
     virtual Shape* Clone() const;
     int GetSquare() const;
     int GetRadius() const;
@@ -32,6 +33,8 @@ public:
     bool operator==(const Circle&);
     virtual bool IsEqual(Shape*) const;
     friend bool operator==(const Circle&,const Circle&);
+    virtual Shape& operator=(const Shape&);
+    virtual Shape& operator=(Shape&&);
     
     
     friend std::ostream& operator<<(std::ostream&, const Circle&);

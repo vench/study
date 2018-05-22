@@ -30,19 +30,24 @@ List::List( List&& copy) {
 
 //move 
 List& List::operator=( List&& copy) {
-    this->Clear();
-    this->Head = copy.Head;
-    this->Tail = copy.Tail;
-    
-    copy.Head.pNext = &copy.Tail;
-    copy.Tail.pPrev = &copy.Head;
-    
+    if(this != &copy) { 
+        this->Clear(); 
+        this->Head = copy.Head;
+        this->Tail = copy.Tail;
+        this->m_size = copy.m_size;
+
+        copy.Head.pNext = &copy.Tail;
+        copy.Tail.pPrev = &copy.Head;
+        copy.m_size = 0;
+    }
     return *this;
 }
 
 //copy
 List& List::operator=(const List& copy) {  
-    this->Copy(copy); 
+    if(this != &copy) { 
+        this->Copy(copy);
+    }    
     return *this;
 }
 
@@ -54,14 +59,13 @@ void List::Copy(const List& copy) {
     const Node *pCopy = copy.Head.pNext; 
        
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
-        //std::cout << *pNode << "****\n";
+     
         if(!pCopy || pCopy->isTail()) {   //delete pNode
             Node *tmp = pNode->pPrev;
             this->Remove(pNode->m_Data);
             pNode = tmp;
-        } else {  //copy
-            //можно попробовать сравнимать типы и грохать
-            pNode->m_Data = pCopy->m_Data;//виртуальный оператор присваивания
+        } else {  //copy  
+            pNode->m_Data = pCopy->m_Data->Clone();//TODO thing
             pCopy = pCopy->pNext;
         }  
     }
@@ -75,8 +79,7 @@ void List::Copy(const List& copy) {
 
 //
 List::~List() {
-    //this->Clear();
-     
+    this->Clear();     
 }
 
 //
@@ -144,10 +147,7 @@ int List::RemoveAll(const Shape* c, int limit) {
 void List::Clear() {
     Node *pNode = &this->Head;
     while((pNode = pNode->pNext)  && !pNode->isTail()) { 
-       // if(!pNode->deleted) {
-        //    pNode->deleted = 1;
-            delete pNode; 
-       // } 
+       delete pNode;  
     } 
     this->m_size = 0;
     Head.pNext = &Tail;
@@ -214,21 +214,20 @@ std::ostream& operator<< (std::ostream& stream, const List& l) {
 //
 void operator<<(List& l, std::istream& s) {
     const int n = 128;
-    int r,x,y,z = 0;
+    Circle circle(0,0,0);
+    Rect rect;
   
     char *line = new char[n];
     s.getline(line, n);//skip header
     while(!s.eof()) { 
         s.getline(line, n);         
-        if(sscanf (line,"%d,%d,%d\n",&r, &x, &y) >= 0) {
-            Circle c(x, y, r);
-            l.AddToTail(&c);
-        } else if(sscanf (line,"%d,%d,%d,%d\n",&r, &x, &y, &z) >= 0) {
-            Rect s(x, y, r, z);
-            l.AddToTail(&s);
+        if(circle.UnSerialuze(line)) { 
+            l.AddToTail(&circle);
+        } else if(rect.UnSerialuze(line)) { 
+            l.AddToTail(&rect);
         }         
     }
-    delete[] line;
+    delete[] line; 
 }
 
 //

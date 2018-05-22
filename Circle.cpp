@@ -83,7 +83,21 @@ const char* Circle::WhereAmI() const {
 //
 void Circle::Serialuze(std::ostream& stream) const { 
     stream << "Circle{ r:" <<  this->radius << ", x:" << this->p.getX() 
-            << ", y:" << this->p.getY() << ", sq: " << this->GetSquare() << "}";
+            << ", y:" << this->p.getY() << ", c: " << this->color << ", sq: " << this->GetSquare() << "}";
+}
+
+//
+bool Circle::UnSerialuze(const char* str)  {
+    int r,x,y,c,z = 0;
+    if(sscanf (str,"Circle{ r:%d, x:%d, y:%d, c: %d, sq: %d}\n",&r, &x, &y, &c, &z) > 0) {
+        this->radius = r;
+        this->color = Shape::COLOR(c);
+        this->p.x = x;
+        this->p.y = y;
+        return true;
+    }
+    
+    return false;
 }
 
 //
@@ -100,6 +114,16 @@ bool Circle::IsEqual(Shape* s) const {
                this->color == c->color;
     }
     return false;
+}
+
+//
+Shape& Circle::operator=(const Shape&) {
+    return *this;
+}
+
+//
+Shape& Circle::operator=(Shape&&) {
+    return *this;
 }
 
 //

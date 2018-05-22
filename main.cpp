@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
         
         Circle c1(0,0, 1);
         Circle c2(0,0, 2);
-        Circle c3(0,0, 3);
+        Rect r1(0,0, 3,0);
         Circle c4(0,0, 4);
         Circle c5(0,0, 5);
         
@@ -48,22 +48,24 @@ int main(int argc, char* argv[])
         min.AddToTail(&c1);
         List big; 
         big.AddToTail(&c2);
-        big.AddToTail(&c3);
+        big.AddToTail(&r1);
         big.AddToTail(&c4);
         big.AddToTail(&c5);
         
-        
+       
         List minCopy = min;
+        std::cout << "testMoveList" << std::endl;
+        minCopy = testMoveList();
         List bigCopy = List(big);
         
     
         std::cout << "Min copy\n" << minCopy << std::endl;
-        std::cout << "Big copy\n" << bigCopy << std::endl;
+        //std::cout << "Big copy\n" << bigCopy << std::endl;
        
         minCopy = bigCopy;
         std::cout << "minCopy = bigCopy >>> " << std::endl;
         std::cout << "Min copy\n" << minCopy << std::endl;
-        std::cout << "Big copy\n" << bigCopy << std::endl;
+        //std::cout << "Big copy\n" << bigCopy << std::endl;
         
         std::cout << "Min copy\n" << min << std::endl;
         std::cout << "Big copy\n" << big << std::endl;
@@ -72,7 +74,7 @@ int main(int argc, char* argv[])
         std::cout << "min = big >>> " << std::endl;
         std::cout << "Min copy\n" << min << std::endl;
         std::cout << "Big copy\n" << big << std::endl; 
-        /* */
+         /* */
     }
     ///
     
@@ -91,8 +93,8 @@ int main(int argc, char* argv[])
         }
         
         for (int i = 10; i < 18; i ++) {
-            Rect r(0,i, 0, i);
-            if (i % 2 == 0) {
+            Rect r(0,i, 0, i, i % 2 == 0 ? Shape::BLUE : Shape::RED);
+            if (i % 2 == 0) {                
                 list.AddToTail(&r);
             } else {
                 list.AddToHead(&r);
@@ -107,7 +109,7 @@ int main(int argc, char* argv[])
         std::cout << list << std::endl;
         
         //save list
-        { /*
+        { 
             std::cout << "Enter Output File Name  - " ;
             char ar[80] = "test.txt";
             //std::cin >> ar;
@@ -124,9 +126,9 @@ int main(int argc, char* argv[])
             fin.close();
             
             std::cout << nList;
-            */
+          
         } 
-    }
+    }/**/
 /**/	
     return 0;
 }//endmain

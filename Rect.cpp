@@ -136,6 +136,20 @@ void Rect::Serialuze(std::ostream& stream) const {
 }
 
 //
+bool Rect::UnSerialuze(const char* str) {
+    int l,r,b,t,c,z = 0;
+    if(sscanf (str,"Rect{ l:%d, r:%d, b:%d, t:%d, c:%d, sq:%d}\n",&l,&r,&b,&t,&c,&z) > 0) {
+        this->m_left = l;
+        this->m_right = r;
+        this->m_bottom = b;
+        this->m_top = t;
+        this->color = Shape::COLOR(c);
+        return true;
+    }
+    return false;
+}
+
+//
 Shape* Rect::Clone() const {
     return new Rect(*this); 
 }
@@ -156,6 +170,16 @@ bool Rect::IsEqual( Shape*s) const{
                this->color == r->color;
     }
     return false;
+}
+
+//
+Shape& Rect::operator=(const Shape&) {
+    return *this;
+}
+
+//
+Shape& Rect::operator=(Shape&&) {
+    return *this;
 }
 
 //
