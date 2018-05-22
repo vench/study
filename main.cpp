@@ -1,135 +1,91 @@
-// LAB 6.
+//Исключения
 
-#include <fstream>
-#include <typeinfo>
-#include "Point.h"
-#include "Circle.h" 
-#include "Shape.h"
-#include "Rect.h"
-#include "Node.h"
-#include "List.h"
+//Шаблоны: 
+	//		шаблоны функций,
+	//		шаблоны классов,
 
-#define	  stop 
+ 
+//#include <stdexcept>
+#include <iostream>
 
-//
+
+#define stop __asm nop
+
+#include "lib.h"
+
 int main(int argc, char* argv[])
 {
+	
 
-    {
-        Circle c1 (0,0, 1);
-        Rect r1  (1,4,1,4); 
-        Rect r2  (1,43,1,42);
-        Rect *pR3 = new Rect(1,1,1,1);
-        
-        List list; 
-        list.AddToHead(&r1);
-        list.AddToHead(&r2);
-        list.AddToHead(&c1);  
-        list.AddToHead(pR3);
-        delete pR3;
-        pR3 = nullptr;
-        
-        std::cout << list << std::endl;   
-        
-        list.SortBySquare();
-        std::cout << list << std::endl;
-        
-    }
 
-    {
-        
-        Circle c1(0,0, 1);
-        Circle c2(0,0, 2);
-        Rect r1(0,0, 3,0);
-        Circle c4(0,0, 4);
-        Circle c5(0,0, 5);
-        
-        List min;
-        min.AddToTail(&c1);
-        List big; 
-        big.AddToTail(&c2);
-        big.AddToTail(&r1);
-        big.AddToTail(&c4);
-        big.AddToTail(&c5);
-        
-       
-        List minCopy = min;
-        std::cout << "testMoveList" << std::endl;
-        minCopy = testMoveList();
-        List bigCopy = List(big);
-        
+////////////////////////////////////////////////////////////////////////////
+	//Тема. Шаблоны функций.
+	//Создайте шаблон функции перестановки местами двух
+	//значений - Swap(). Проверьте работоспособность созданного
+	//шаблона с помощью приведенного ниже фрагмента кода.
+	//Подсказка 1: объявление шаблона корректнее поместить в .h-файл.
     
-        std::cout << "Min copy\n" << minCopy << std::endl;
-        //std::cout << "Big copy\n" << bigCopy << std::endl;
-       
-        minCopy = bigCopy;
-        std::cout << "minCopy = bigCopy >>> " << std::endl;
-        std::cout << "Min copy\n" << minCopy << std::endl;
-        //std::cout << "Big copy\n" << bigCopy << std::endl;
-        
-        std::cout << "Min copy\n" << min << std::endl;
-        std::cout << "Big copy\n" << big << std::endl;
-         
-        big = min;
-        std::cout << "min = big >>> " << std::endl;
-        std::cout << "Min copy\n" << min << std::endl;
-        std::cout << "Big copy\n" << big << std::endl; 
-         /* */
-    }
-    ///
+        std::cout << Swap() << "\n";
     
-    //1. сортировку по возрастанию площади объекта.
-    {
-    
-        
-        List list;
-        for (int i = 0; i < 8; i ++) {
-            Circle c(0,0, i*i);
-            if (i % 2 == 0) {
-                list.AddToTail(&c);
-            } else {
-                list.AddToHead(&c);
-            } 
-        }
-        
-        for (int i = 10; i < 18; i ++) {
-            Rect r(0,i, 0, i, i % 2 == 0 ? Shape::BLUE : Shape::RED);
-            if (i % 2 == 0) {                
-                list.AddToTail(&r);
-            } else {
-                list.AddToHead(&r);
-            } 
-        }
-        
-        
-        std::cout << list << std::endl;
-        
-        list.SortBySquare();
-        
-        std::cout << list << std::endl;
-        
-        //save list
-        { 
-            std::cout << "Enter Output File Name  - " ;
-            char ar[80] = "test.txt";
-            //std::cin >> ar;
-            std::cout << "Save data to - "  << ar << "\n";
-            std::ofstream fout(ar);
-            fout << list;
-            fout.close();
-            
-            //LOAD
-            std::cout << "Load data from - "  << ar << "\n";
-            List nList;
-            std::ifstream fin(ar, std::ifstream::in);           
-            nList << fin;            
-            fin.close();
-            
-            std::cout << nList;
-          
-        } 
-    }/**/
-/**/	
-    return 0;
-}//endmain
+/*
+	int iX = 1, iY = -1;
+	Swap(iX, iY);
+
+	double dX = 0.5, dY = -5.5;
+	Swap(dX, dY);
+
+
+	//Подсказка 2: подумайте, что нужно реализовать, для того,
+	//			чтобы следующий вызов работал с объектами MyString
+	//			не только корректно, но и эффективно
+//	MyString str1("One"), str2("Two");
+//	Swap(str1, str2);
+
+*/
+/////////////////////////////////////////////////////////////////////
+	
+	//Тема. Шаблоны классов.
+	//Задание 1.
+	//Создайте шаблон класса MyStack для хранения элементов любого типа T.
+	//Подсказка: 1.элементы нужно где-то хранить - простым и удобным средством
+	//			для хранения последовательно расположенных в памяти элементов
+	//			является массив, 
+	//			2.для задания максимального размера стека может быть использован
+	//			параметр-константа шаблона
+	//			3.обязательными операциями со стеком являются "push" и "pop". Для
+	//			того, чтобы гарантировать корректное выполнение этих операций 
+	//			хорошо было бы генерировать исключение в аварийной ситуации
+	//			4. дополнительно реализуйте operator[] таким образом, чтобы пользователь
+	//			мог читать/изменять значения только тех элементов, которые он формировал
+
+	
+	//С помощью шаблона MyStack создайте стек из 5 элементов int - iStack и
+	//стек из 10 элементов MyString - strStack и поэкспериментируйте с функциями
+	//push() и pop(), operator[]
+
+
+
+
+
+
+
+
+	//Задание 2. Реализуйте шаблон стека - MyStack2 таким образом, чтобы 
+	//для хранения элементов использовался ОДНОСВЯЗНЫЙ список.
+	//Реализуйте возможность распечатать элементы стека в том порядке, в котором их заносил (push())
+	//пользователь
+
+
+
+
+
+
+	//Задание 3. Реализуйте шаблон очереди - MyQueue таким образом, чтобы 
+	//для хранения элементов использовался динамический массив.
+	//При использовании массива следует учесть специфику очереди, то есть
+	//когда заполнен "хвост", в "голове" скорее всего уже имеются свободные элементы
+	//=> должен быть организован кольцевой буфер
+
+	return 0;
+}
 
