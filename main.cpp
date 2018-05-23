@@ -7,7 +7,9 @@
  
 //#include <stdexcept>
 #include <iostream>
-
+#include "MyString.h"
+#include "ArrayStack.h"
+#include "StackException.h"
 
 #define stop __asm nop
 
@@ -37,9 +39,10 @@ int main(int argc, char* argv[])
 	//Подсказка 2: подумайте, что нужно реализовать, для того,
 	//			чтобы следующий вызов работал с объектами MyString
 	//			не только корректно, но и эффективно
-//	MyString str1("One"), str2("Two");
-        //const 
-	//Swap(str1, str2);
+	MyString str1("One"), str2("Two");
+        //TODO
+	Swap(str1, str2);
+        std::cout <<  "str1: " << str1 << ", str2: "  << str2 << "\n";
 
 /**/
 /////////////////////////////////////////////////////////////////////
@@ -65,7 +68,40 @@ int main(int argc, char* argv[])
 
 
 
-
+        {
+        
+            ArrayStack<int> iStack(5);
+            //throw
+            try {
+                iStack.push(10);
+                iStack.push(102);
+                iStack.push(110);
+                iStack.push(1440);
+                iStack.push(110);
+                iStack.push(11);
+            } catch(StackException e) {
+               std::cout << "Exception: " <<  e.what() << std::endl;
+            } 
+            
+            //readn value
+            int n = iStack[2]; //=110
+            std::cout << "int n = iStack[2] => "  << n << std::endl;
+            
+            while(!iStack.isEmpty()) { 
+                std::cout << "iStack: " << iStack.pop() << std::endl;
+            }
+            
+            //throw
+            try {
+                iStack.pop() ;
+            } catch(StackException e) {
+               std::cout << "Exception: " <<  e.what() << std::endl;
+            }    
+            
+            
+            //str
+            ArrayStack<MyString> strStack(10); 
+        }
 
 
 
