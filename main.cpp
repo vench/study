@@ -141,6 +141,16 @@ int main(int argc, char* argv[])
                 std::cout << "iStack: " << iStack.pop() << std::endl;
             }
             
+            iStack.push(1);
+            iStack.push(2);
+            iStack.push(3);
+            iStack.push(4);
+            iStack.push(5);
+            iStack.reverse();
+            
+            while(!iStack.isEmpty()) { 
+                std::cout << "iStack: " << iStack.pop() << std::endl;
+            }
         }
 
 
@@ -150,6 +160,11 @@ int main(int argc, char* argv[])
 	//При использовании массива следует учесть специфику очереди, то есть
 	//когда заполнен "хвост", в "голове" скорее всего уже имеются свободные элементы
 	//=> должен быть организован кольцевой буфер
+        
+        {
+        
+            
+        }
 
 	return 0;
 }

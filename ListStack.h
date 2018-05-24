@@ -18,7 +18,7 @@ class ListStack {
             this->next = nullptr;
         };
         
-        ~Node() {
+        ~Node() { 
             if(this->next) {
                 delete this->next;
                 this->next = nullptr;
@@ -37,6 +37,7 @@ public:
     void push(const T&);
     T pop(); 
     bool isEmpty();
+    void reverse();
 private:
 
 };
@@ -51,7 +52,19 @@ ListStack<T>::ListStack() {
 //
 template <class T>
 ListStack<T>::ListStack(const ListStack& orig) {
-    //TODO copy list
+    this->top = nullptr;
+    if(orig.isEmpty()) {
+        return;
+    }
+    
+    Node *tmp = orig.top; 
+    Node *head = new Node(tmp->data);
+    this->top = head;
+    
+    while((tmp = tmp->next)) {
+        head->next = new Node(tmp->data);
+        head = head->next;  
+    };
 }
 
 //
@@ -91,5 +104,16 @@ bool ListStack<T>::isEmpty() {
     return !(this->top);
 }
 
-
+//
+template <class T>
+void ListStack<T>::reverse() {
+    ListStack<T> tmp;
+    while(!this->isEmpty()) { 
+        tmp.push( this->pop() );
+    }
+    
+    delete this->top;
+    this->top = tmp.top;
+    tmp.top = nullptr;
+}
 
