@@ -11,6 +11,7 @@
 #include "ArrayStack.h"
 #include "ListStack.h"
 #include "StackException.h"
+#include "ArrayQueue.h"
 
 #define stop __asm nop
 
@@ -170,7 +171,20 @@ int main(int argc, char* argv[])
         
         {
         
+            ArrayQueue<int> q(3);
+            q.push(123);
+            q.push(456);
+            q.push(789);
             
+            
+            std::cout << "Pop() = 123; " << q.pop() << std::endl;
+            
+            q.push(7892);
+            q.push(78921);
+            
+            while(!q.isEmpty()) { 
+                std::cout << "q: " << q.pop() << std::endl;
+            }
         }
 
 	return 0;
