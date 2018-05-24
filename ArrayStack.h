@@ -18,6 +18,9 @@ public:
     ArrayStack(ArrayStack&& orig);
     virtual ~ArrayStack();
     
+    ArrayStack& operator=(const ArrayStack&);
+    ArrayStack& operator=( ArrayStack&&);
+    
     void push(const T&);
     T& pop();
     T& operator[](int);
@@ -40,12 +43,7 @@ ArrayStack<T>::ArrayStack(const unsigned int size) {
 
 //copy
 template <class T>
-ArrayStack<T>::ArrayStack(const ArrayStack& orig) {
-    
-    if(this->list) { 
-        delete[]this->list;
-    }
-    
+ArrayStack<T>::ArrayStack(const ArrayStack& orig) { 
     this->listCapa = orig.listCapa;
     this->listSize = orig.listSize;
     
@@ -57,17 +55,46 @@ ArrayStack<T>::ArrayStack(const ArrayStack& orig) {
  
 //move
 template <class T>
-ArrayStack<T>::ArrayStack(ArrayStack&& orig) {
-    if(this->list) { 
-        delete[]this->list;
-    }
-    
+ArrayStack<T>::ArrayStack(ArrayStack&& orig) {     
     this->listCapa = orig.listCapa;
     this->listSize = orig.listSize;
     this->list = orig.list;
     orig.list = nullptr;
 }
  
+//
+template <class T>
+ArrayStack<T>& ArrayStack<T>::operator=(const ArrayStack& orig) {
+    if(this != &orig) { //TODO эффективная копия
+        if(this->list) { 
+            delete[]this->list;
+        }
+        this->listCapa = orig.listCapa;
+        this->listSize = orig.listSize;
+    
+        this->list = new T[this->listCapa]();
+        for(int i = 0; i < this->listSize; i ++) {
+           this->list[i] = orig.list[i];
+        }
+    }
+    return *this;
+}
+
+//
+template <class T>
+ArrayStack<T>& ArrayStack<T>::operator=( ArrayStack&& orig) {
+    if(this != &orig) {
+        if(this->list) { 
+            delete[]this->list;
+        }
+        this->listCapa = orig.listCapa;
+        this->listSize = orig.listSize;
+        this->list = orig.list;
+        orig.list = nullptr;
+    }    
+    return *this;
+}
+
 //
 template <class T>
 ArrayStack<T>::~ArrayStack() {

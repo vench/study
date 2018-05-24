@@ -30,6 +30,7 @@ OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/Counter.o \
 	$(TARGETDIR_main.cpp)/ArrayStack.o \
 	$(TARGETDIR_main.cpp)/ListStack.o \
+	$(TARGETDIR_main.cpp)/ArrayQueue.o \
 	$(TARGETDIR_main.cpp)/StackException.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
@@ -61,6 +62,9 @@ $(TARGETDIR_main.cpp)/ArrayStack.o: $(TARGETDIR_main.cpp) ArrayStack.cpp
 $(TARGETDIR_main.cpp)/StackException.o: $(TARGETDIR_main.cpp) StackException.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ StackException.cpp	
 	
+$(TARGETDIR_main.cpp)/ArrayQueue.o: $(TARGETDIR_main.cpp) ArrayQueue.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ ArrayQueue.cpp
+	
 $(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ main.cpp
 
@@ -81,6 +85,7 @@ clean:
 		$(TARGETDIR_main.cpp)/StackException.o \
 		$(TARGETDIR_main.cpp)/ArrayStack.o \
 		$(TARGETDIR_main.cpp)/ListStack.o \
+		$(TARGETDIR_main.cpp)/ArrayQueue.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)

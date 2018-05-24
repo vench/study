@@ -104,7 +104,7 @@ ListStack<T>::~ListStack() {
 //
 template <class T>
 void ListStack<T>::copy(const ListStack& orig) {
-    if(this->top) { //TODO
+    if(this->top) { //TODO эффективная копия
         delete this->top;
     }
     this->top = nullptr;
