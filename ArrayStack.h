@@ -15,6 +15,7 @@ class ArrayStack {
 public:
     ArrayStack(const unsigned int);
     ArrayStack(const ArrayStack& orig);
+    ArrayStack(ArrayStack&& orig);
     virtual ~ArrayStack();
     
     void push(const T&);
@@ -37,7 +38,7 @@ ArrayStack<T>::ArrayStack(const unsigned int size) {
 } 
 
 
-//
+//copy
 template <class T>
 ArrayStack<T>::ArrayStack(const ArrayStack& orig) {
     
@@ -52,6 +53,19 @@ ArrayStack<T>::ArrayStack(const ArrayStack& orig) {
     for(int i = 0; i < this->listSize; i ++) {
            this->list[i] = orig.list[i];
     }
+}
+ 
+//move
+template <class T>
+ArrayStack<T>::ArrayStack(ArrayStack&& orig) {
+    if(this->list) { 
+        delete[]this->list;
+    }
+    
+    this->listCapa = orig.listCapa;
+    this->listSize = orig.listSize;
+    this->list = orig.list;
+    orig.list = nullptr;
 }
  
 //

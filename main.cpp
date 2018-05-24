@@ -146,10 +146,17 @@ int main(int argc, char* argv[])
             iStack.push(3);
             iStack.push(4);
             iStack.push(5);
-            iStack.reverse();
+            
+            ListStack<int> iStack2 = iStack;
             
             while(!iStack.isEmpty()) { 
                 std::cout << "iStack: " << iStack.pop() << std::endl;
+            }
+            
+            iStack2.reverse();
+            
+            while(!iStack2.isEmpty()) { 
+                std::cout << "iStack2: " << iStack2.pop() << std::endl;
             }
         }
 

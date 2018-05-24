@@ -31,13 +31,18 @@ class ListStack {
     
 public:
     ListStack();
-    ListStack(const ListStack& orig);
+    ListStack(const ListStack&);
+    ListStack(ListStack&&);
     virtual ~ListStack();
+    
+    ListStack& operator=(const ListStack&);
+    ListStack& operator=( ListStack&&);
     
     void push(const T&);
     T pop(); 
-    bool isEmpty();
+    bool isEmpty() const;
     void reverse();
+    void copy(const ListStack&);
 private:
 
 };
@@ -49,9 +54,59 @@ ListStack<T>::ListStack() {
     this->top = nullptr;
 } 
 
-//
+//move
+template <class T>
+ListStack<T>::ListStack(ListStack&& orig) {
+    this->top = orig.top;
+    orig.top = nullptr;
+}
+
+//copy
 template <class T>
 ListStack<T>::ListStack(const ListStack& orig) {
+    this->top = nullptr;
+    this->copy(orig);
+}
+
+//
+template <class T>
+ListStack<T>& ListStack<T>::operator=(const ListStack& orig) {
+    if(this != &orig) {
+        this->copy(orig);
+    }
+    return *this;
+}
+
+//
+template <class T>
+ListStack<T>& ListStack<T>::operator=( ListStack&& orig) {
+    
+    if(this != &orig) {
+        if(this->top) {
+            delete this->top;
+        }
+        this->top = orig.top;
+        orig.top = nullptr;
+    }    
+
+    return *this;
+}
+
+//
+template <class T>
+ListStack<T>::~ListStack() { 
+    if(this->top) {
+        delete this->top;
+        this->top = nullptr;
+    }
+}
+
+//
+template <class T>
+void ListStack<T>::copy(const ListStack& orig) {
+    if(this->top) { //TODO
+        delete this->top;
+    }
     this->top = nullptr;
     if(orig.isEmpty()) {
         return;
@@ -64,16 +119,7 @@ ListStack<T>::ListStack(const ListStack& orig) {
     while((tmp = tmp->next)) {
         head->next = new Node(tmp->data);
         head = head->next;  
-    };
-}
-
-//
-template <class T>
-ListStack<T>::~ListStack() { 
-    if(this->top) {
-        delete this->top;
-        this->top = nullptr;
-    }
+    }; /**/
 }
 
 //
@@ -100,7 +146,7 @@ T ListStack<T>::pop() {
 
 //
 template <class T>
-bool ListStack<T>::isEmpty() {
+bool ListStack<T>::isEmpty() const {
     return !(this->top);
 }
 
