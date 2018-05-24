@@ -9,6 +9,7 @@
 #include <iostream>
 #include "MyString.h"
 #include "ArrayStack.h"
+#include "ListStack.h"
 #include "StackException.h"
 
 #define stop __asm nop
@@ -101,6 +102,21 @@ int main(int argc, char* argv[])
             
             //str
             ArrayStack<MyString> strStack(10); 
+            strStack.push(MyString("test"));
+            strStack.push(MyString("abc"));
+            strStack.push(MyString("test2"));
+            strStack.push(MyString("test3"));
+            strStack.push(MyString("test4"));
+            strStack.push(MyString("test5"));
+            strStack.push(MyString("test6"));
+            strStack.push(MyString("test7"));
+            strStack.push(MyString("test8"));
+            strStack.push(MyString("test9"));
+            
+            while(!strStack.isEmpty()) { 
+                std::cout << "strStack: " << strStack.pop() << std::endl;
+            }
+            
         }
 
 
@@ -112,7 +128,20 @@ int main(int argc, char* argv[])
 	//пользователь
 
 
-
+        {
+            std::cout << "\n\n============\nList stack" << std::endl;
+            ListStack<int> iStack;
+            iStack.push(123);
+            iStack.push(12324);
+            iStack.push(1235);
+            std::cout << "iStack.pop() == 1235; " << iStack.pop() << std::endl;
+            //std::cout << "iStack.pop() == 12324; " << iStack.pop() << std::endl;
+            
+            while(!iStack.isEmpty()) { 
+                std::cout << "iStack: " << iStack.pop() << std::endl;
+            }
+            
+        }
 
 
 

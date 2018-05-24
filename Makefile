@@ -29,6 +29,7 @@ OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/MyString.o \
 	$(TARGETDIR_main.cpp)/Counter.o \
 	$(TARGETDIR_main.cpp)/ArrayStack.o \
+	$(TARGETDIR_main.cpp)/ListStack.o \
 	$(TARGETDIR_main.cpp)/StackException.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
@@ -47,6 +48,9 @@ $(TARGETDIR_main.cpp)/lib.o: $(TARGETDIR_main.cpp) lib.cpp
 	
 $(TARGETDIR_main.cpp)/MyString.o: $(TARGETDIR_main.cpp) MyString.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ MyString.cpp
+	
+$(TARGETDIR_main.cpp)/ListStack.o: $(TARGETDIR_main.cpp) ListStack.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ ListStack.cpp
 	
 $(TARGETDIR_main.cpp)/Counter.o: $(TARGETDIR_main.cpp) Counter.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Counter.cpp
@@ -76,6 +80,7 @@ clean:
 		$(TARGETDIR_main.cpp)/Counter.o \
 		$(TARGETDIR_main.cpp)/StackException.o \
 		$(TARGETDIR_main.cpp)/ArrayStack.o \
+		$(TARGETDIR_main.cpp)/ListStack.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)
