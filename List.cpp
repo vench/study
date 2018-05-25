@@ -231,13 +231,23 @@ void operator<<(List& l, std::istream& s) {
 }
 
 //
-void List::SortBy( bool(*cmp)(const Node*, const Node*) ) {
+bool List::cmpByColor(const Node* a, const Node* b) {
+    return a->m_Data->getColor() < b->m_Data->getColor();
+}
+
+//
+bool List::cmpBySquare(const Node* a, const Node* b) {
+    return a->m_Data->GetSquare() < b->m_Data->GetSquare();
+}
+
+//
+void List::SortBy( bool(List::*cmp)(const Node*, const Node*) ) {
     Node *pNode = this->Head.pNext;
     Node *pNodeNext;
 
     while(!pNode->isTail() && !(pNodeNext = pNode->pNext)->isTail()) {  
         
-        if(cmp(pNodeNext, pNode)) {   
+        if((this->*cmp)(pNodeNext, pNode)) {   
             this->Swap(pNodeNext, pNode); 
                 
             if (pNodeNext->pPrev && !pNodeNext->pPrev->isHead()) {
@@ -252,12 +262,12 @@ void List::SortBy( bool(*cmp)(const Node*, const Node*) ) {
 
 //
 void List::SortBySquare( ) {  
-    this->SortBy(&compareBySquare);
+    this->SortBy(&List::cmpBySquare);
 }
 
 //
 void List::SortByColor() {
-    this->SortBy(&compareByColor);
+    this->SortBy(&List::cmpByColor);
 }
 
 

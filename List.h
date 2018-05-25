@@ -63,8 +63,10 @@ public:
      */
     void Swap(Node*, Node*);
     
-    void SortBy( bool(*)(const Node*, const Node*));
+    void SortBy( bool(List::*)(const Node*, const Node*));
     
+    bool cmpByColor(const Node*, const Node*);
+    bool cmpBySquare(const Node*, const Node*); 
     void SortBySquare();
     void SortByColor();
     
