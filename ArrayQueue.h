@@ -16,7 +16,11 @@ class ArrayQueue {
 public:
     ArrayQueue(const unsigned int);
     ArrayQueue(const ArrayQueue& orig);
+    ArrayQueue( ArrayQueue&& orig);
     virtual ~ArrayQueue();
+
+    ArrayQueue& operator=(const ArrayQueue&);
+    ArrayQueue& operator=( ArrayQueue&&);
     
     void push(const T&);
     T& pop();
@@ -34,6 +38,66 @@ ArrayQueue<T>::ArrayQueue(const unsigned int size) {
     this->listCapa = size; 
     this->listFirst = this->listCapa - 1;
     this->list = new T[this->listCapa]();
+}
+
+//copy
+template <class T>
+ArrayQueue<T>::ArrayQueue(const ArrayQueue& orig) { 
+    this->listCapa = orig.listCapa;
+    this->listSize = orig.listSize;
+    this->listFirst = orig.listFirst;
+    this->listLast = orig.listLast;
+    
+    this->list = new T[this->listCapa]();
+    for(int i = 0; i < this->listSize; i ++) {
+        this->list[i] = orig.list[i];
+    }
+}
+
+//move
+template <class T>
+ArrayQueue<T>::ArrayQueue( ArrayQueue&& orig) {
+    this->listCapa = orig.listCapa;
+    this->listSize = orig.listSize;
+    this->listFirst = orig.listFirst;
+    this->listLast = orig.listLast;
+    
+    this->list = orig.list;
+    orig.list = nullptr;
+}
+
+//
+template <class T>
+ArrayQueue<T>& ArrayQueue<T>::operator=(const ArrayQueue& orig) {
+    if(this->list) { 
+        delete[]this->list;
+    }
+    this->listCapa = orig.listCapa;
+    this->listSize = orig.listSize;
+    this->listFirst = orig.listFirst;
+    this->listLast = orig.listLast;
+    
+    this->list = new T[this->listCapa]();
+    for(int i = 0; i < this->listSize; i ++) {
+        this->list[i] = orig.list[i];
+    }
+    return *this;
+}
+
+//
+template <class T>
+ArrayQueue<T>& ArrayQueue<T>::operator=( ArrayQueue&& orig) {
+    if(this->list) { 
+        delete[]this->list;
+    }
+    this->listCapa = orig.listCapa;
+    this->listSize = orig.listSize;
+    this->listFirst = orig.listFirst;
+    this->listLast = orig.listLast;
+    
+    this->list = orig.list;
+    orig.list = nullptr;
+    return *this;
 }
 
 
@@ -54,8 +118,7 @@ void ArrayQueue<T>::push(const T& val) {
     //}
     this->listFirst = (this->listFirst + 1) % this->listCapa;
     this->list[this->listFirst] = val;
-    
-   // this->listLast = 0;
+     
     if(this->isFull()){
         this->listLast = (this->listLast + 1) % this->listCapa;
     } else {
@@ -80,7 +143,7 @@ T& ArrayQueue<T>::pop() {
 //
 template <class T>
 T& ArrayQueue<T>::operator[](int index) {
-    if(index >= 0 && index < this->listSize) {
+    if(index < 0 || index >= this->listSize) {
         throw StackException("Out of range");
     }
     return this->list[index];
