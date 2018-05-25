@@ -104,7 +104,8 @@ int main(int argc, char* argv[])
         
         std::cout << list << std::endl;
         
-        list.SortBySquare();
+        //list.SortBySquare();
+        list.SortByColor();
         
         std::cout << list << std::endl;
         

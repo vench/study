@@ -40,7 +40,8 @@ private:
     friend std::ostream& operator<<(std::ostream&, const List&);
     friend bool operator< (const Node&, const Node&);
     friend bool operator> (const Node&, const Node&);
-    
+    friend bool compareBySquare(const Node*, const Node*);
+    friend bool compareByColor(const Node*, const Node*);
 
 
 }; 
@@ -54,3 +55,9 @@ bool operator< (const Node&, const Node&);
 //
 bool operator> (const Node&, const Node&);
 
+
+//
+bool compareBySquare(const Node*, const Node*);
+
+//
+bool compareByColor(const Node*, const Node*);

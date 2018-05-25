@@ -63,8 +63,10 @@ public:
      */
     void Swap(Node*, Node*);
     
+    void SortBy( bool(*)(const Node*, const Node*));
     
     void SortBySquare();
+    void SortByColor();
     
     List& operator=(const List&);
     List& operator=( List&&);

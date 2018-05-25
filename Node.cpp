@@ -100,3 +100,13 @@ bool operator< (const Node& a, const Node& b) {
 bool operator> (const Node& a, const Node& b) {
     return a.m_Data->GetSquare() > b.m_Data->GetSquare();
 }
+
+//
+bool compareBySquare(const Node* a, const Node* b) {
+    return a->m_Data->GetSquare() < b->m_Data->GetSquare();
+}
+
+//
+bool compareByColor(const Node* a, const Node* b) {
+    return a->m_Data->getColor() < b->m_Data->getColor();
+}

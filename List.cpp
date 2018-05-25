@@ -231,13 +231,13 @@ void operator<<(List& l, std::istream& s) {
 }
 
 //
-void List::SortBySquare( ) { 
-     Node *pNode = this->Head.pNext;
-     Node *pNodeNext;
+void List::SortBy( bool(*cmp)(const Node*, const Node*) ) {
+    Node *pNode = this->Head.pNext;
+    Node *pNodeNext;
 
-     while(!pNode->isTail() && !(pNodeNext = pNode->pNext)->isTail()) {  
+    while(!pNode->isTail() && !(pNodeNext = pNode->pNext)->isTail()) {  
         
-        if(*pNodeNext < *pNode) {   
+        if(cmp(pNodeNext, pNode)) {   
             this->Swap(pNodeNext, pNode); 
                 
             if (pNodeNext->pPrev && !pNodeNext->pPrev->isHead()) {
@@ -247,8 +247,19 @@ void List::SortBySquare( ) {
         } 
         
         pNode = pNodeNext; 
-    }    
+    }
 }
+
+//
+void List::SortBySquare( ) {  
+    this->SortBy(&compareBySquare);
+}
+
+//
+void List::SortByColor() {
+    this->SortBy(&compareByColor);
+}
+
 
 //
 List testMoveList(){
