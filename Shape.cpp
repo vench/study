@@ -51,6 +51,11 @@ int Shape::GetSquare() const {
 }
 
 //
+bool Shape::IsEqual(Shape* s)  const {
+    return s->getColor() == this->getColor();
+}
+
+//
 std::ostream& operator<< (std::ostream& stream, const Shape& s) {
     s.Serialuze(stream);
     return stream;

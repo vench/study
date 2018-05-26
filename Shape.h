@@ -26,7 +26,7 @@ public:
     virtual void Inflate(int);
     virtual int GetSquare() const;
     virtual Shape* Clone() const =0;
-    virtual bool IsEqual(Shape*) const = 0;
+    virtual bool IsEqual(Shape*) const;
     virtual Shape& operator=(const Shape&)=0;
     virtual Shape& operator=(Shape&&)=0;
     const Shape::COLOR getColor() const;

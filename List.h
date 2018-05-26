@@ -4,10 +4,12 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <typeinfo>
 #include "Node.h"
 #include "Shape.h"
 #include "Circle.h"
 #include "Rect.h"
+
 
 //
 class List {

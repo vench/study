@@ -111,7 +111,7 @@ bool Circle::IsEqual(Shape* s) const {
     if(Circle *c = dynamic_cast<Circle*>(s)) {
        return this->radius == c->radius &&
                this->p == c->p &&
-               this->color == c->color;
+               this->Shape::IsEqual(s);
     }
     return false;
 }

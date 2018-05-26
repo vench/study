@@ -64,8 +64,17 @@ void List::Copy(const List& copy) {
             Node *tmp = pNode->pPrev;
             this->Remove(pNode->m_Data);
             pNode = tmp;
-        } else {  //copy  
-            pNode->m_Data = pCopy->m_Data->Clone();//TODO thing
+        } else {  //copy   
+            if(typeid(pNode) != typeid(pCopy)) {
+               // std::cout << "pNode >> " << std::endl;
+                if(pNode->m_Data){
+                    delete pNode->m_Data;
+                }
+                pNode->m_Data = pCopy->m_Data->Clone();
+            } else {
+                *pNode->m_Data = *pCopy->m_Data;
+            }
+            //TODO thing
             pCopy = pCopy->pNext;
         }  
     }
@@ -159,7 +168,13 @@ void List::Swap(Node* a, Node* b)   {
     
     if(a->isHead() || a->isTail() || b->isHead() || b->isTail()) {
         return;
-    }  
+    } 
+    /*
+    Shape *tmp = a->m_Data;
+    a->m_Data = b->m_Data;
+    b->m_Data = tmp;
+    */
+    
     
     if(a->pNext == b) { //A >>>> B 
         Node *tmpAPrev = a->pPrev;

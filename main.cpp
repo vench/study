@@ -46,6 +46,9 @@ int main(int argc, char* argv[])
         
         List min;
         min.AddToTail(&c1);
+        min.AddToTail(&c1);
+        min.AddToTail(&r1);
+        min.AddToTail(&r1);
         List big; 
         big.AddToTail(&c2);
         big.AddToTail(&r1);
@@ -53,6 +56,14 @@ int main(int argc, char* argv[])
         big.AddToTail(&c5);
         
        
+        
+        min = big;
+        std::cout << "minCopy = bigCopy >>> " << std::endl;
+        std::cout << "Min copy\n" << min << std::endl;
+        std::cout << "Big copy\n" << big << std::endl;
+        //std::cout << "Big copy\n" << bigCopy << std::endl;
+        //return 0;
+        
         List minCopy = min;
         std::cout << "testMoveList" << std::endl;
         minCopy = testMoveList();
@@ -66,6 +77,7 @@ int main(int argc, char* argv[])
         std::cout << "minCopy = bigCopy >>> " << std::endl;
         std::cout << "Min copy\n" << minCopy << std::endl;
         //std::cout << "Big copy\n" << bigCopy << std::endl;
+        //return 0;
         
         std::cout << "Min copy\n" << min << std::endl;
         std::cout << "Big copy\n" << big << std::endl;
@@ -74,6 +86,8 @@ int main(int argc, char* argv[])
         std::cout << "min = big >>> " << std::endl;
         std::cout << "Min copy\n" << min << std::endl;
         std::cout << "Big copy\n" << big << std::endl; 
+        
+        //return 0;
          /* */
     }
     ///
@@ -102,13 +116,15 @@ int main(int argc, char* argv[])
         }
         
         
+       // std::cout << list << std::endl;
+        
+        
+        list.SortBySquare();
+        //list.SortByColor();
+        
+        
         std::cout << list << std::endl;
-        
-        //list.SortBySquare();
-        list.SortByColor();
-        
-        std::cout << list << std::endl;
-        
+        //return 0;
         //save list
         { 
             std::cout << "Enter Output File Name  - " ;

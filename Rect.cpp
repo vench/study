@@ -167,7 +167,7 @@ bool Rect::IsEqual( Shape*s) const{
                this->m_right == r->m_right && 
                this->m_top == r->m_top && 
                this->m_bottom == r->m_bottom &&
-               this->color == r->color;
+               this->Shape::IsEqual(s);
     }
     return false;
 }
