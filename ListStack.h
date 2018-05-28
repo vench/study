@@ -40,6 +40,7 @@ public:
     
     void push(const T&);
     T pop(); 
+    T back();
     bool isEmpty() const;
     void reverse();
     void copy(const ListStack&);
@@ -104,22 +105,38 @@ ListStack<T>::~ListStack() {
 //
 template <class T>
 void ListStack<T>::copy(const ListStack& orig) {
-    if(this->top) { //TODO эффективная копия
-        delete this->top;
-    }
-    this->top = nullptr;
-    if(orig.isEmpty()) {
-        return;
-    }
+     
+    Node *tTop = this->top;
+    Node *oTop = orig.top;
+    Node *tTopPrev = nullptr;     
     
-    Node *tmp = orig.top; 
-    Node *head = new Node(tmp->data);
-    this->top = head;
+    while(tTop && oTop) {
+        
+        tTop->data = oTop->data; 
+        
+        tTopPrev = tTop;
+        tTop = tTop->next;
+        oTop = oTop->next;        
+    }; 
     
-    while((tmp = tmp->next)) {
-        head->next = new Node(tmp->data);
-        head = head->next;  
-    }; /**/
+    if(!oTop && tTop) { //удаляем хвост this
+        
+        delete tTop;
+        
+    } else if(oTop) { //дополняем элементами из orig
+       
+        do {
+            
+            if(!this->top) {
+                this->top = new Node(oTop->data);
+                tTopPrev = this->top;
+            } else {
+                tTopPrev->next = new Node(oTop->data);
+                tTopPrev = tTopPrev->next; 
+            } 
+             
+        } while((oTop = oTop->next));
+    }
 }
 
 //
@@ -161,5 +178,28 @@ void ListStack<T>::reverse() {
     delete this->top;
     this->top = tmp.top;
     tmp.top = nullptr;
+}
+
+
+//
+template <class T>
+T ListStack<T>::back() {
+    if(this->top) {
+        Node *tmp = this->top;
+        Node *tmpPrev = tmp;
+        while ( tmp->next) {
+            tmpPrev = tmp;
+            tmp = tmp->next;
+        }; 
+        T data = tmp->data; 
+        if(tmpPrev != this->top) {
+            tmpPrev->next = nullptr;
+        } else {
+            this->top = nullptr;
+        }
+        delete tmp;
+        return data;
+    } 
+    throw StackException("Stack is empty");     
 }
 

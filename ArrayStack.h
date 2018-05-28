@@ -6,14 +6,13 @@
 
 
 
-template <class T>
+template <class T, unsigned int SIZE>
 class ArrayStack {
     
-     T*list;
-     unsigned int listCapa;
+     T list[SIZE]; 
      unsigned int listSize;
 public:
-    ArrayStack(const unsigned int);
+    ArrayStack();
     ArrayStack(const ArrayStack& orig);
     ArrayStack(ArrayStack&& orig);
     virtual ~ArrayStack();
@@ -33,80 +32,64 @@ private:
 
 
 //
-template <class T>
-ArrayStack<T>::ArrayStack(const unsigned int size) {
-    this->listCapa = size;
-    this->listSize = 0;
-    this->list = new T[this->listCapa]();
+template <class T, unsigned int SIZE>
+ArrayStack<T,SIZE>::ArrayStack() { 
+    this->listSize = 0; 
 } 
 
 
 //copy
-template <class T>
-ArrayStack<T>::ArrayStack(const ArrayStack& orig) { 
-    this->listCapa = orig.listCapa;
+template <class T, unsigned int SIZE>
+ArrayStack<T,SIZE>::ArrayStack(const ArrayStack& orig) { 
     this->listSize = orig.listSize;
     
-    this->list = new T[this->listCapa]();
+    this->list = new T[SIZE]();
     for(int i = 0; i < this->listSize; i ++) {
            this->list[i] = orig.list[i];
     }
 }
  
 //move
-template <class T>
-ArrayStack<T>::ArrayStack(ArrayStack&& orig) {     
-    this->listCapa = orig.listCapa;
+template <class T, unsigned int SIZE>
+ArrayStack<T,SIZE>::ArrayStack(ArrayStack&& orig) {      
     this->listSize = orig.listSize;
     this->list = orig.list;
     orig.list = nullptr;
 }
  
 //
-template <class T>
-ArrayStack<T>& ArrayStack<T>::operator=(const ArrayStack& orig) {
-    if(this != &orig) { //TODO эффективная копия
-        if(this->list) { 
-            delete[]this->list;
-        }
-        this->listCapa = orig.listCapa;
-        this->listSize = orig.listSize;
-    
-        this->list = new T[this->listCapa]();
-        for(int i = 0; i < this->listSize; i ++) {
+template <class T, unsigned int SIZE>
+ArrayStack<T,SIZE>& ArrayStack<T,SIZE>::operator=(const ArrayStack& orig) {
+    if(this != &orig) {   
+        for(int i = 0; i < SIZE; i ++) { 
            this->list[i] = orig.list[i];
-        }
+        }  
+        this->listSize = orig.listSize;
     }
     return *this;
 }
 
 //
-template <class T>
-ArrayStack<T>& ArrayStack<T>::operator=( ArrayStack&& orig) {
-    if(this != &orig) {
-        if(this->list) { 
-            delete[]this->list;
-        }
-        this->listCapa = orig.listCapa;
+template <class T, unsigned int SIZE>
+ArrayStack<T,SIZE>& ArrayStack<T,SIZE>::operator=( ArrayStack&& orig) {
+    if(this != &orig) { 
         this->listSize = orig.listSize;
-        this->list = orig.list;
-        orig.list = nullptr;
+        for(int i = 0; i < SIZE; i ++) { 
+           this->list[i] = orig.list[i];
+        }  
     }    
     return *this;
 }
 
 //
-template <class T>
-ArrayStack<T>::~ArrayStack() {
-    if(this->list) { 
-        delete[]this->list;
-    }
+template <class T, unsigned int SIZE>
+ArrayStack<T,SIZE>::~ArrayStack() { 
 }
 
 //
-template <class T>
-void ArrayStack<T>::push(const T &val) { 
-    if(this->listCapa > this->listSize) {
+template <class T, unsigned int SIZE>
+void ArrayStack<T,SIZE>::push(const T &val) { 
+    if(SIZE > this->listSize) {
         this->list[this->listSize] = val; 
         this->listSize ++;
     } else {
@@ -115,8 +98,8 @@ void ArrayStack<T>::push(const T &val) {
 }
 
 //
-template <class T>
-T& ArrayStack<T>::pop() {
+template <class T, unsigned int SIZE>
+T& ArrayStack<T,SIZE>::pop() {
     if(this->listSize > 0) {
         this->listSize --;
         return this->list[this->listSize];
@@ -125,8 +108,8 @@ T& ArrayStack<T>::pop() {
 }
 
 //
-template <class T>
-T& ArrayStack<T>::operator[](int index) {
+template <class T, unsigned int SIZE>
+T& ArrayStack<T,SIZE>::operator[](int index) {
     if(this->listSize > index && index >= 0) {
         return this->list[index];        
     }
@@ -134,8 +117,8 @@ T& ArrayStack<T>::operator[](int index) {
 }
 
 //
-template <class T>
-bool ArrayStack<T>::isEmpty() {
+template <class T, unsigned int SIZE>
+bool ArrayStack<T,SIZE>::isEmpty() {
     return this->listSize <= 0;
 }
 

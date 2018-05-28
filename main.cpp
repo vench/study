@@ -72,12 +72,12 @@ int main(int argc, char* argv[])
 
         {
         
-            ArrayStack<int> iStack(5);
+            ArrayStack<int, 5> iStack;
             //throw
             try {
                 iStack.push(10);
                 iStack.push(102);
-                iStack.push(110);
+                iStack.push(111);
                 iStack.push(1440);
                 iStack.push(110);
                 iStack.push(11);
@@ -87,7 +87,8 @@ int main(int argc, char* argv[])
             
             //readn value
             int n = iStack[2]; //=110
-            std::cout << "int n = iStack[2] => "  << n << std::endl;
+            std::cout << "int n = iStack[2] => "  << n << " //=111" << std::endl;
+            std::cout << "iStack.pop() : " << iStack.pop() << " //=110" << std::endl;
             
             while(!iStack.isEmpty()) { 
                 std::cout << "iStack: " << iStack.pop() << std::endl;
@@ -102,7 +103,7 @@ int main(int argc, char* argv[])
             
             
             //str
-            ArrayStack<MyString> strStack(10); 
+            ArrayStack<MyString,10> strStack; 
             strStack.push(MyString("test"));
             strStack.push(MyString("abc"));
             strStack.push(MyString("test2"));
@@ -121,6 +122,12 @@ int main(int argc, char* argv[])
         }
 
 
+        {//copy
+            ArrayStack<int, 5> ia;
+            ArrayStack<int, 5> ib;
+            ia = ib;
+        
+        }
 
 
 	//Задание 2. Реализуйте шаблон стека - MyStack2 таким образом, чтобы 
@@ -154,10 +161,15 @@ int main(int argc, char* argv[])
                 std::cout << "iStack: " << iStack.pop() << std::endl;
             }
             
-            iStack2.reverse();
+            /*iStack2.reverse();
             
             while(!iStack2.isEmpty()) { 
                 std::cout << "iStack2: " << iStack2.pop() << std::endl;
+            }*/ 
+            std::cout << "\n\n============\nList stack -> back" << std::endl;
+            
+            while(!iStack2.isEmpty()) { 
+                std::cout << "iStack2: " << iStack2.back() << std::endl;
             }
         }
 
