@@ -25,9 +25,8 @@ all: $(TARGETDIR_main.cpp)/main.cpp
 
 ## Цель: main.cpp
 OBJS_main.cpp =  \
-	$(TARGETDIR_main.cpp)/myRect.o \
-	$(TARGETDIR_main.cpp)/myString.o \
-	$(TARGETDIR_main.cpp)/Bochka.o \
+	$(TARGETDIR_main.cpp)/Counter.o \
+	$(TARGETDIR_main.cpp)/MyString.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
 DEPLIBS_main.cpp =  
@@ -39,15 +38,12 @@ $(TARGETDIR_main.cpp)/main.cpp: $(TARGETDIR_main.cpp) $(OBJS_main.cpp) $(DEPLIBS
 	$(LINK.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ $(OBJS_main.cpp) $(LDLIBS_main.cpp)
 
 
-# Скомпилировать исходные файлы .o
-$(TARGETDIR_main.cpp)/myRect.o: $(TARGETDIR_main.cpp) myRect.cpp
-	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myRect.cpp
-	
-$(TARGETDIR_main.cpp)/Bochka.o: $(TARGETDIR_main.cpp) Bochka.cpp
-	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Bochka.cpp
+# Скомпилировать исходные файлы .o 	
+$(TARGETDIR_main.cpp)/Counter.o: $(TARGETDIR_main.cpp) Counter.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Counter.cpp
 
-$(TARGETDIR_main.cpp)/myString.o: $(TARGETDIR_main.cpp) myString.cpp
-	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ myString.cpp
+$(TARGETDIR_main.cpp)/MyString.o: $(TARGETDIR_main.cpp) MyString.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ MyString.cpp
 
 $(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ main.cpp
@@ -63,9 +59,8 @@ $(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
 clean:
 	rm -f \
 		$(TARGETDIR_main.cpp)/main.cpp \
-		$(TARGETDIR_main.cpp)/myRect.o \
-		$(TARGETDIR_main.cpp)/myString.o \
-		$(TARGETDIR_main.cpp)/Bochka.o \
+		$(TARGETDIR_main.cpp)/MyString.o \
+		$(TARGETDIR_main.cpp)/Counter.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)

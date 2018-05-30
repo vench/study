@@ -1,0 +1,17 @@
+List - size: 16
+Circle{ r:0, x:0, y:0, c: 0, sq: 0}
+Circle{ r:1, x:0, y:0, c: 0, sq: 3}
+Circle{ r:4, x:0, y:0, c: 0, sq: 50}
+Rect{ l:0, r:10, b:10, t:0, c:2, sq:100}
+Rect{ l:0, r:11, b:11, t:0, c:0, sq:121}
+Rect{ l:0, r:12, b:12, t:0, c:2, sq:144}
+Rect{ l:0, r:13, b:13, t:0, c:0, sq:169}
+Rect{ l:0, r:14, b:14, t:0, c:2, sq:196}
+Rect{ l:0, r:15, b:15, t:0, c:0, sq:225}
+Circle{ r:9, x:0, y:0, c: 0, sq: 254}
+Rect{ l:0, r:16, b:16, t:0, c:2, sq:256}
+Rect{ l:0, r:17, b:17, t:0, c:0, sq:289}
+Circle{ r:16, x:0, y:0, c: 0, sq: 803}
+Circle{ r:25, x:0, y:0, c: 0, sq: 1962}
+Circle{ r:36, x:0, y:0, c: 0, sq: 4069}
+Circle{ r:49, x:0, y:0, c: 0, sq: 7539}
