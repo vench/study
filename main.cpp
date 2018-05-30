@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	//			чтобы следующий вызов работал с объектами MyString
 	//			не только корректно, но и эффективно
 	MyString str1("One"), str2("Two");
-        //TODO
+        //
 	Swap(str1, str2);
         std::cout <<  "str1: " << str1 << ", str2: "  << str2 << "\n";
 
@@ -182,19 +182,26 @@ int main(int argc, char* argv[])
 	//=> должен быть организован кольцевой буфер
         
         {
+            std::cout << "\n\n============\nArray Queue" << std::endl;
         
             ArrayQueue<int> q(3);
             q.push(123);
             q.push(456);
             q.push(789);
             
+           
+            
             std::cout << "[1] = 456; " << q[1] << std::endl;
             std::cout << "Pop() = 123; " << q.pop() << std::endl;
             
             q.push(7892);
-            q.push(78921);
-            
             ArrayQueue<int> qCopy = q;
+            q.push(78921);
+            q.push(1);
+            q.push(2);
+            q.push(3);
+            q.push(4);
+            q.push(5);
             
             while(!q.isEmpty()) { 
                 std::cout << "q: " << q.pop() << std::endl;

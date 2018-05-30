@@ -48,9 +48,10 @@ ArrayQueue<T>::ArrayQueue(const ArrayQueue& orig) {
     this->listFirst = orig.listFirst;
     this->listLast = orig.listLast;
     
+    
     this->list = new T[this->listCapa]();
-    for(int i = 0; i < this->listSize; i ++) {
-        this->list[i] = orig.list[i];
+    for(int i = 0; i < this->listCapa; i ++) {
+        this->list[i] = orig.list[i]; 
     }
 }
 
@@ -78,7 +79,7 @@ ArrayQueue<T>& ArrayQueue<T>::operator=(const ArrayQueue& orig) {
     this->listLast = orig.listLast;
     
     this->list = new T[this->listCapa]();
-    for(int i = 0; i < this->listSize; i ++) {
+    for(int i = 0; i < this->listCapa; i ++) {
         this->list[i] = orig.list[i];
     }
     return *this;
@@ -113,9 +114,28 @@ ArrayQueue<T>::~ArrayQueue() {
 //
 template <class T>
 void ArrayQueue<T>::push(const T& val) {
-    //if(this->isFull()) {//TODO relocate size
-      //  throw StackException("Queue is full");
-    //}
+    if(this->isFull()) { //resize
+        int length = this->listCapa + this->listCapa;        
+        T*l = new T[length]();
+        //copy 
+        for(int n = 0; n < this->listSize; n ++){            
+            l[n] = this->list[this->listLast];
+            this->listLast = (this->listLast + 1) % this->listSize;
+        } 
+        delete[] this->list;
+        this->list = l; 
+        this->listCapa = length;
+        this->listLast = 0;
+        this->listFirst = this->listCapa + this->listSize - 1;  
+    }
+    this->listFirst = (this->listFirst + 1) % this->listCapa;
+    this->list[this->listFirst] = val;     
+    this->listSize ++; 
+}
+/*
+// Round queue
+template <class T>
+void ArrayQueue<T>::push(const T& val) {
     this->listFirst = (this->listFirst + 1) % this->listCapa;
     this->list[this->listFirst] = val;
      
@@ -125,8 +145,9 @@ void ArrayQueue<T>::push(const T& val) {
         this->listSize ++;
     }    
 }
+*/
 
-//
+///
 template <class T>
 T& ArrayQueue<T>::pop() {
     if(this->isEmpty()) {
