@@ -27,6 +27,7 @@ all: $(TARGETDIR_main.cpp)/main.cpp
 OBJS_main.cpp =  \
 	$(TARGETDIR_main.cpp)/Counter.o \
 	$(TARGETDIR_main.cpp)/MyString.o \
+	$(TARGETDIR_main.cpp)/Point.o \
 	$(TARGETDIR_main.cpp)/main.o
 USERLIBS_main.cpp = $(SYSLIBS_main.cpp) 
 DEPLIBS_main.cpp =  
@@ -45,6 +46,9 @@ $(TARGETDIR_main.cpp)/Counter.o: $(TARGETDIR_main.cpp) Counter.cpp
 $(TARGETDIR_main.cpp)/MyString.o: $(TARGETDIR_main.cpp) MyString.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ MyString.cpp
 
+$(TARGETDIR_main.cpp)/Point.o: $(TARGETDIR_main.cpp) Point.cpp
+	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ Point.cpp
+	
 $(TARGETDIR_main.cpp)/main.o: $(TARGETDIR_main.cpp) main.cpp
 	$(COMPILE.cc) $(CCFLAGS_main.cpp) $(CPPFLAGS_main.cpp) -o $@ main.cpp
 
@@ -61,6 +65,7 @@ clean:
 		$(TARGETDIR_main.cpp)/main.cpp \
 		$(TARGETDIR_main.cpp)/MyString.o \
 		$(TARGETDIR_main.cpp)/Counter.o \
+		$(TARGETDIR_main.cpp)/Point.o \
 		$(TARGETDIR_main.cpp)/main.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_main.cpp)

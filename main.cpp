@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "MyString.h"
+#include "Point.h"
 #include "libs"
 
 
@@ -125,7 +126,16 @@ int main()
 	//будет вызван для каждого элемента?
 	//b) vPoint2 с начальным размером 5 и проинициализируйте каждый элемент координатами (1,1).
 
-
+        {
+            std::vector<Point> vPoint1(3); // Point::Point() - конструктор по умолчанию
+            std::vector<Point> vPoint2(5, Point(1,1));
+           /* for(int i = 0; i < vPoint2.size(); i ++ ) {
+                vPoint2.at(i).setXY(1,1);
+            }*/
+            
+            vectorPrint(vPoint2);
+        
+        }
 
 	//вектор указателей на Point - vpPoint с начальным размером 5
 	//Подумайте: как корректно заставить эти указатели "указывать" на объекты Point
@@ -134,6 +144,22 @@ int main()
 	//Подсказка: для вывода на печать значений скорее всего Вам понадобится
 		//а) специализация Вашей шаблонной функции
 		//б) или перегрузка operator<< для Point*
+            
+            
+             /*std::vector<Point*> vpPoint(5);
+             for(int i = 0; i < vpPoint.size(); i ++ ) {
+                vpPoint.at(i) = new Point(i,i);
+             }*/
+             std::vector<Point*> vpPoint{new Point(1,1),new Point(1,1),new Point(1,1),new Point(1,1),new Point(1,1)};
+             
+             
+             vectorPrint(vpPoint);
+             
+             //удалить память? 
+             for(int i = 0; i < vpPoint.size(); i ++ ) {
+                delete vpPoint.at(i);
+             }
+             vpPoint.clear();
 
 	}//Какие дополнительные действия нужно предпринять для такого вектора?
 
@@ -141,33 +167,51 @@ int main()
 	///////////////////////////////////////////////////////////////////////
 	//Резервирование памяти.
 	//Подумайте, всегда ли верны приведенные ниже проверки?
-		/*
+		
 		{
-		size_t n=...
+		size_t n=15;
 		vector<int> v(n);
 		v.resize(n/2);
-		if(v.capacity() == n) //true?
+                    if(v.capacity() == n) {
+                        std::cout << " if(v.capacity() == n) -> true" << std::endl;
+                    } else {
+                        std::cout << " if(v.capacity() == n) -> false" << std::endl;
+                    }//true?
+                
+                    //Всегда true - т.к. resize именно "режет" вектор, но не "отнимает" выделенную ему память
 		}
-		*/
+		/**/
 
-		/*
+		
 		{
-		int n=...
-		size_t m=...	
+		int n=10;
+		size_t m=100;	
 		vector<int> v(n);
 		v.reserve(m);
-		if(v.capacity() == m) //true?
+		if(v.capacity() == m) {
+                        std::cout << " if(v.capacity() == m) -> true" << std::endl;
+                    } else {
+                        std::cout << " if(v.capacity() == m) -> false" << std::endl;
+                    }//true?
 		}
-		*/
+                
+                //m >= n -> true
+                //m <  n -> false
+                //т.к. reserve переобпредеяет  capacity в большую сторону
+                
+		/**/
 
-		/*
+		
 		{
-		vector<int> v(3,5);
-		v.resize(4,10); //значения?
-		v.resize(5); //значения?
+		vector<int> v(3,5); //создаем вектор из 3х элеметов со значениями 5
+               // vectorPrint(v);
+		v.resize(4,10); //значения? //расширяем размер до 4 и новые инициализируем 10
+               // vectorPrint(v);
+		v.resize(5); //значения? //изменяем размер до 5, они инициализированны 0 (по умолчанию)
+               // vectorPrint(v);
 	
 		}
-		*/
+		/**/
 
 	//Создайте два "пустых" вектора с элементами
 	//любого (но одного и того же типа) типа. 
@@ -176,16 +220,41 @@ int main()
 	//Второй вектор просто заполните значениями посредством push_back.
 	//
 	//Сравните размер, емкость векторов и значения элементов
-
+                {
+                
+                    std::vector<double> a;
+                    a.reserve(5);
+                    std::vector<double> b;
+                    
+                    for(int i =0; i < 5; i ++) {
+                        a.push_back(0.1 * i);
+                        b.push_back(0.1 * i);
+                    }
+                    
+                    //веторы идентичные
+                    //vectorPrint(a);
+                    //vectorPrint(b);
+                    //vectorInfo(a);
+                    //vectorInfo(b);
+                    
+                    
+                    //
+                    //!!! shrink_to_fit - Уменьшение емкости вектора.
+                    //Для любого вектора из предыдущего задания требуется уменьшить емкость
+                    //до size. 
+                   // vectorInfo(a);
+                    int size = 2;
+                    a.resize(size);
+                    a.shrink_to_fit(); //удаляет неиспользуемую память (которая зарезервированная)
+                   // vectorInfo(a);
+                }
 
 
 	
 
 
 
-	//!!! shrink_to_fit - Уменьшение емкости вектора.
-	//Для любого вектора из предыдущего задания требуется уменьшить емкость
-	//до size.
+	
 
 	
 	
@@ -198,7 +267,17 @@ int main()
 	//vv[2] - содержит 4,4,4,4
 	//...
 	//Распечатайте содержимое такого двухмерного вектора по строкам
-	
+        {
+                  int ar[] = {11,2,4,3,5};
+                  std::vector<std::vector<int>> vv(sizeof(ar) / sizeof(ar[0]));
+                  
+                  for(int i = 0; i < sizeof(ar) / sizeof(ar[0]); i ++) {
+                      int val = ar[i]; 
+                      vv.at(i).resize(val, val);
+                  }
+                  
+                  vectorPrint(vv);
+        }
 	 stop
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +289,40 @@ int main()
 
 	
 	//Вставьте перед каждым элементом вектора vChar2 букву 'W'
-	
+         {
+             std::vector<char> vChar2{'a', 'b', 'c'};
+             vectorPrint(vChar2);
+             char x = 'z';
+             bool isset = false;
+             
+             for(std::vector<char>::iterator it = vChar2.begin(); it != vChar2.end(); ++it) {
+                 if(*it == x) {
+                     isset = true;
+                     break;
+                 }
+             }
+             /*
+             for(int i = 0; i < vChar2.size(); i ++) {
+                 if(vChar2.at(i) == x) {
+                     isset = true;
+                     break;
+                 }
+             }*/
+             //TODO std::find(vector)
+             if (!isset) { 
+                 vChar2.insert(vChar2.begin(), x);
+             } 
+             
+             vectorPrint(vChar2);
+             
+             int len = vChar2.size();
+             for(int i = 0; i < len; i ++) {
+                 vChar2.insert(vChar2.begin() + i * 2, 'W');
+             }
+             
+             std::cout << "===================" << std::endl;
+             vectorPrint(vChar2);
+         }       
 
 
 ///////////////////////////////////////////////////////////////////
