@@ -151,6 +151,17 @@ Point operator-(const int& val, const Point& p) {
 }
 
 //
+bool operator<(const Point&a, const Point& b) {
+    return a.x< b.x && a.y < b.y;
+}
+
+//
 bool operator==(const Point& a, const Point& b ) {
     return a.x == b.x && a.y == b.y;
+}
+
+//
+std::ostream& operator<<(std::ostream& stream, const Point& p) {
+    stream << "Point{x: "  << p.getX() << ", y: " << p.getY() << "}";
+    return stream;
 }

@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <list>
 
 #include "MyString.h"
 #include "Point.h"
@@ -328,9 +330,12 @@ int main()
 ///////////////////////////////////////////////////////////////////
 	//Напишите функцию, которая должна удалять только повторяющиеся последовательности.
 	//Например: было - "qwerrrrty12222r3", стало - "qwety1r3"
-
-
-
+         {
+            std::vector<char> vc {'q','w','e','r','r','r','r','t','y','1','2','2','2','2','r','3'};
+            removePair(vc);
+             std::cout << "===================" << std::endl;
+            vectorPrint(vc);
+         }
 
 	stop
 
@@ -338,7 +343,12 @@ int main()
 
 	//Удаление элемента последовательности erase()
 	//Напишите функцию удаления из любого вектора всех дублей 
-
+        {
+            std::vector<int> vb {1,0,0,0,0,1,1,1,2,7}; //1,2,7
+            removePair(vb);
+            std::cout << "===================" << std::endl;
+            vectorPrint(vb); // {1,0,0,0,0,2,3,3,0,0,7}; 1,2,7
+        }
 
 
 	
@@ -347,7 +357,15 @@ int main()
 	//Создайте новый вектор таким образом, чтобы его элементы стали
 	//копиями элементов любого из созданных ранее векторов, но расположены
 	//были бы в обратном порядке
-
+        {
+            std::vector<int> src {1,2,3,4,5};
+            
+            std::vector<int> dst(src);
+           // std::reverse(dst.begin(), dst.end()); //TODO
+            myReverse(dst.begin(), dst.end());
+            std::cout << "===================" << std::endl;
+            vectorPrint(dst);
+        }
 
 
 
@@ -359,28 +377,64 @@ int main()
 	//Создайте пустой список из элементов Point - ptList1 и наполните
 	//его значениями с помощью методов push_back(),
 	//push_front, insert()
+        {
+            std::cout << "===================" << std::endl;
+            std::list<Point> lp;
+            lp.push_back(Point(1,1));
+            lp.insert(lp.begin(), Point(2,2));
+            lp.push_front(Point(3,3));
+            
+            listPrint(lp);
+        }
 	
 
 	//Напишите шаблон функции, которая будет выводить элементы
 	//ЛЮБОГО КОНТЕЙНЕРА на печать. Проверьте работу шаблона на контейнерах
 	//vector и list. Подсказка - хотелось бы увидеть тип контейнера.
 
-
+        {
+         
+            std::vector<double> vd {1.0,2.0,3.0,4.0};
+            itPrint(vd);
+            
+             
+            std::list<bool> vb {1,0,1,0};
+            itPrint(vb);
+        
+            
 	//Сделайте любой из списков "реверсивным" - reverse()
+            // std::reverse(vd.begin(), vd.end()); //TODO
+            myReverse(vd.begin(), vd.end()); 
+            itPrint(vd);
 
 
 	//Создайте список ptList2 из элементов Point таким образом, чтобы он стал 
 	//копией вектора элементов типа Point, но значения элементов списка располагались
 	//бы в обратном порядке 
-
+            
+            
+            std::list<Point> ptList1 {Point(12,10), Point(21,31)};
+            
+            std::vector<Point> ptPoint2 {Point(1,2), Point(15,17)};
+            std::list<Point> ptList2(ptPoint2.begin(), ptPoint2.end());
+            myReverse(ptList2.begin(), ptList2.end());
+            //std::reverse_copy ?
+            itPrint(ptList2);
+            
+            
+         
 
 
 	//Отсортируйте списки  ptList1 и ptList2 - методом класса list - sort()
 	//по возрастанию.
 	//Подумайте: что должно быть перегружено в классе Point для того, чтобы
-	//работала сортировка
+	//работала сортировка //  operator<
 
-
+            ptList2.sort();
+            ptList1.sort();
+            
+            
+            
 	
 
 
@@ -388,10 +442,20 @@ int main()
 
 	//Объедините отсортированные списки - merge(). Посмотрите: что
 	//при этом происходит с каждым списком.
+            
+           itPrint(ptList1);
+            itPrint(ptList2);
+            
+           ptList2.merge(ptList1);
+        
+         itPrint(ptList1); //стал пустым
+            itPrint(ptList2); // получил 2 элемента с учетом объей сортировки
+            
 
 	
 	stop
-
+                
+                }
 	//Исключение элемента из списка - remove()
 	//Исключите из списка элемент с определенным значением.
 	//Подумайте: что должно быть перегружено в классе Point?

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 class Circle;
 
 class Point {
@@ -34,7 +36,8 @@ public:
     
     friend Circle;
     friend bool operator==(const Point&, const Point& );
-    
+    friend bool operator<(const Point&, const Point& );
+    friend std::ostream& operator<<(std::ostream&, const Point&); 
     
     
 private:
@@ -45,4 +48,5 @@ private:
 bool operator==(const Point&, const Point& );
 Point operator+(const int&, const Point& );
 Point operator-(const int&, const Point& );
-
+bool operator<(const Point&, const Point& );
+std::ostream& operator<<(std::ostream&, const Point&); 
