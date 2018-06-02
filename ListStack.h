@@ -44,6 +44,20 @@ public:
     bool isEmpty() const;
     void reverse();
     void copy(const ListStack&);
+    
+    friend std::ostream& operator<<(std::ostream& out,  ListStack<T>& s) {
+        out << "ListStack: <T>" << std::endl;
+        Node *t = s.top;
+        
+        while (t) {
+            out <<  t->data << ",";
+            t = t->next;
+        }
+         
+        
+        return out; 
+    };
+    
 private:
 
 };
@@ -96,7 +110,7 @@ ListStack<T>& ListStack<T>::operator=( ListStack&& orig) {
 //
 template <class T>
 ListStack<T>::~ListStack() { 
-    if(this->top) {
+    if(this->top) { //TEST memory
         delete this->top;
         this->top = nullptr;
     }
@@ -122,6 +136,7 @@ void ListStack<T>::copy(const ListStack& orig) {
     if(!oTop && tTop) { //удаляем хвост this
         
         delete tTop;
+        tTopPrev->next = nullptr;
         
     } else if(oTop) { //дополняем элементами из orig
        

@@ -28,6 +28,21 @@ public:
     bool isEmpty();
     bool isFull();
     
+    friend std::ostream& operator<<(std::ostream& out,  ArrayQueue<T>& s) {
+        out << "ArrayQueue: <T> capa: " << s.listCapa << ", size: "  << s.listSize 
+                << ", first: "  << s.listFirst 
+                << ", last: "  << s.listLast 
+                << std::endl;
+         
+        
+        for(int i = 0; i < s.listSize; i ++) {
+            out <<  s.list[i] << ","; 
+        }
+         
+        
+        return out; 
+    };
+    
 private:
 
 };
@@ -121,12 +136,30 @@ void ArrayQueue<T>::push(const T& val) {
         for(int n = 0; n < this->listSize; n ++){            
             l[n] = this->list[this->listLast];
             this->listLast = (this->listLast + 1) % this->listSize;
+            
+         //   std::cout << this->listLast << " " << this->list[this->listLast] << std::endl;
         } 
         delete[] this->list;
         this->list = l; 
         this->listCapa = length;
         this->listLast = 0;
-        this->listFirst = this->listCapa + this->listSize - 1;  
+        this->listFirst = this->listCapa + this->listSize - 1; 
+        /*
+        int length = this->listCapa + this->listCapa;  
+        int index = 0;
+        T*l = new T[length]();
+        while(!this->isEmpty()) {
+            l[index] = this->pop();
+            std::cout << l[index] << std::endl;
+            index ++;
+        } /*
+        delete[] this->list;
+        this->list = l; 
+        this->listCapa = length;
+        this->listLast = 0;
+        this->listFirst = length-1;
+       /* */ 
+        
     }
     this->listFirst = (this->listFirst + 1) % this->listCapa;
     this->list[this->listFirst] = val;     
@@ -155,8 +188,9 @@ T& ArrayQueue<T>::pop() {
     }
     
     int index = this->listLast; 
-    this->listLast = (this->listLast + 1) % this->listCapa;
+  //  this->listLast = (this->listLast + 1) % this->listCapa;
     this->listSize --;
+    this->listFirst = (this->listFirst - 1) % this->listCapa;
     return this->list[index];
 }
 

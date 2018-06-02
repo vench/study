@@ -13,17 +13,27 @@ class ArrayStack {
      unsigned int listSize;
 public:
     ArrayStack();
-    ArrayStack(const ArrayStack& orig);
-    ArrayStack(ArrayStack&& orig);
+    //ArrayStack(const ArrayStack<T,SIZE>& orig);
+    //ArrayStack(ArrayStack&& orig);
     virtual ~ArrayStack();
     
-    ArrayStack& operator=(const ArrayStack&);
-    ArrayStack& operator=( ArrayStack&&);
+ //   ArrayStack& operator=(const ArrayStack&);
+   // ArrayStack& operator=( ArrayStack&&);
     
     void push(const T&);
-    T& pop();
+    //void push(const T&&); TODO
+    T pop();// По значению 
     T& operator[](int);
     bool isEmpty();
+    
+    
+    friend std::ostream& operator<<(std::ostream& out,  ArrayStack<T,SIZE>& s) {
+        out << "ArrayStack: <T,SIZE>" << std::endl;
+        for(int i = 0; i < s.listSize; i ++) { 
+                out <<  s.list[i] << std::endl;
+        }
+        return out; 
+    };
 private:
 
    
@@ -37,7 +47,7 @@ ArrayStack<T,SIZE>::ArrayStack() {
     this->listSize = 0; 
 } 
 
-
+/*
 //copy
 template <class T, unsigned int SIZE>
 ArrayStack<T,SIZE>::ArrayStack(const ArrayStack& orig) { 
@@ -51,10 +61,10 @@ ArrayStack<T,SIZE>::ArrayStack(const ArrayStack& orig) {
  
 //move
 template <class T, unsigned int SIZE>
-ArrayStack<T,SIZE>::ArrayStack(ArrayStack&& orig) {      
+ArrayStack<T,SIZE>::ArrayStack(ArrayStack<T,SIZE>&& orig) {      
     this->listSize = orig.listSize;
     this->list = orig.list;
-    orig.list = nullptr;
+    //orig.list = nullptr;
 }
  
 //
@@ -80,7 +90,7 @@ ArrayStack<T,SIZE>& ArrayStack<T,SIZE>::operator=( ArrayStack&& orig) {
     }    
     return *this;
 }
-
+*/
 //
 template <class T, unsigned int SIZE>
 ArrayStack<T,SIZE>::~ArrayStack() { 
@@ -99,10 +109,10 @@ void ArrayStack<T,SIZE>::push(const T &val) {
 
 //
 template <class T, unsigned int SIZE>
-T& ArrayStack<T,SIZE>::pop() {
+T ArrayStack<T,SIZE>::pop() {
     if(this->listSize > 0) {
-        this->listSize --;
-        return this->list[this->listSize];
+        //this->listSize --;
+        return this->list[--this->listSize];
     } 
     throw StackException("Stack is empty");     
 }
@@ -121,8 +131,6 @@ template <class T, unsigned int SIZE>
 bool ArrayStack<T,SIZE>::isEmpty() {
     return this->listSize <= 0;
 }
-
-
 
  
 

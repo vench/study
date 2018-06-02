@@ -69,6 +69,13 @@ int main(int argc, char* argv[])
 	//push() и pop(), operator[]
 
 
+        {
+            testListStack();
+            testArrayQueue();
+            return 0;
+        
+        }
+        
 
         {
         
@@ -118,6 +125,9 @@ int main(int argc, char* argv[])
             while(!strStack.isEmpty()) { 
                 std::cout << "strStack: " << strStack.pop() << std::endl;
             }
+            
+            
+            testArrayStack();
             
         }
 

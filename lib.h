@@ -1,6 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include "ArrayStack.h"
+#include "ListStack.h"
+#include "ArrayQueue.h"
  
 //Swap
 template <class T> 
@@ -12,6 +15,20 @@ template <class T>
 
 
 //MyStack Array
+
+const unsigned int AS_MIN = 5; 
+const unsigned int AS_MAX = 10; 
+ 
+ArrayStack<int,AS_MIN> makeArrayStackMin();
+ArrayStack<int,AS_MAX> makeArrayStackMax();
+
+ListStack<int> makeListStackMin();
+ListStack<int> makeListStackMax();
+ArrayQueue<int> makeArrayQueue(const int);
+
+void testArrayStack();
+void testListStack();
+void testArrayQueue();
 
 
 
