@@ -4,6 +4,8 @@
 #include <vector>
 #include <list>
 #include <typeinfo>
+#include <queue>
+#include <stack>
 #include "Point.h"
 
 //
@@ -70,6 +72,46 @@ void itPrint(T cont) {
         it ++;
     }
 }
+
+//
+template <class T, typename TN = typename T::value_type>
+void stPrint( T s) {
+    std::cout << "=================== " << typeid(s).name() 
+             << " ==================="  << s.size()           
+            << " ===================" << std::endl; 
+    
+    while(!s.empty()) { 
+        std::cout << s.top()<< std::endl; 
+        s.pop();
+    }     
+}
+
+template <typename TN>
+void stPrint( std::queue<TN> s) {
+    std::cout << "=================== " << typeid(s).name() 
+             << " ==================="  << s.size()           
+            << " ===================" << std::endl; 
+    
+    while(!s.empty()) { 
+        std::cout << s.front()<< std::endl; 
+        s.pop();
+    } 
+}
+
+//
+template <class T> 
+void stPrintTop(T s) {
+     
+}
+
+/*
+template <> 
+void stPrint(std::queue<int> s) {
+    std::cout << s.front() << std::endl; 
+} */
+ 
+
+
 
 
 //
