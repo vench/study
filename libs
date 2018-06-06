@@ -74,7 +74,7 @@ void itPrint(T cont) {
 }
 
 //
-template <class T, typename TN = typename T::value_type>
+template <class T>
 void stPrint( T s) {
     std::cout << "=================== " << typeid(s).name() 
              << " ==================="  << s.size()           
@@ -93,7 +93,7 @@ void stPrint( std::queue<TN> s) {
             << " ===================" << std::endl; 
     
     while(!s.empty()) { 
-        std::cout << s.front()<< std::endl; 
+        std::cout << s.front() << std::endl; 
         s.pop();
     } 
 }

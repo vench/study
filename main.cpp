@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
         std::stack<int> s;
         std::queue<int> q;
         std::priority_queue<int> pq;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
              q.push(i);
              pq.push(i);
              s.push(i);
@@ -41,12 +41,7 @@ int main(int argc, char* argv[])
        
         stPrint(s);
         stPrint(q);
-        stPrint(pq);
-        
-        
-       // s.container_type
-        
-     //   s.c
+        stPrint(pq); 
     }
 
 
@@ -57,7 +52,13 @@ int main(int argc, char* argv[])
 	//Создайте стек таким образом, чтобы
 	//а) элементы стека стали копиями элементов вектора
 	//б) при выводе значений как вектора, так и стека порядок значений был одинаковым 
-
+    {
+        std::vector<int> sv {1,2,3,4}; 
+        std::reverse(sv.begin(), sv.end());
+        std::stack<int> ss ({sv.begin(), sv.end() }); 
+        stPrint(ss); 
+    
+    }
 
 
 	
@@ -74,7 +75,10 @@ int main(int argc, char* argv[])
 	
 
 
-
+    {
+        std::queue<Point*> ppq;
+        
+    }
 
 
 
