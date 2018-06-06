@@ -74,6 +74,11 @@ MyString& MyString::operator=(const char *c) {
     return *this;
 }
 
+//
+const char MyString::operator[](int index) {
+    return this->GetString()[index];
+}
+
 //move
 MyString& MyString::operator=( MyString&& s) {
     if(this->pStr) {

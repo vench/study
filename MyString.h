@@ -27,7 +27,8 @@ class MyString
         
         MyString& operator=(const MyString&);
         MyString& operator=( MyString&&);
-        MyString& operator=(const char *c); 
+        MyString& operator=(const char *c);
+        const char operator[](int); 
         
         friend std::ostream& operator<<(std::ostream&, const MyString&); 
     

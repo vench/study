@@ -72,7 +72,17 @@ void itPrint(T cont) {
 }
 
 
-
+//
+template <class T, class C> 
+void dequeRemoveIF(std::deque<T> &deque, C cond) {
+     auto it = deque.begin();
+     while(it != deque.end()) {
+        if(cond(*it)) {
+            deque.erase(it);
+        }
+        ++ it;
+    }
+}
 
 //
 void vectorPrint(std::vector<Point*> v) {

@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <list>
+#include <deque>
 
 #include "MyString.h"
 #include "Point.h"
@@ -443,12 +444,12 @@ int main()
 	//Объедините отсортированные списки - merge(). Посмотрите: что
 	//при этом происходит с каждым списком.
             
-           itPrint(ptList1);
+            itPrint(ptList1);
             itPrint(ptList2);
             
-           ptList2.merge(ptList1);
+            ptList2.merge(ptList1);
         
-         itPrint(ptList1); //стал пустым
+            itPrint(ptList1); //стал пустым
             itPrint(ptList2); // получил 2 элемента с учетом объей сортировки
             
 
@@ -466,6 +467,21 @@ int main()
 
 
 	//Исключение из списка подряд расположенных дублей - unique(). 
+        
+        
+        {
+            Point testPoint(33,31);
+            std::list<Point> il {Point(12,-10),Point(12,10), Point(88,66), Point(21,31), Point(21,31),testPoint,testPoint};
+            
+            il.remove(testPoint);
+            
+            il.remove_if([](Point &p) -> bool { return p.getX() < 0 || p.getY() < 0; }); //remove 1
+            itPrint(il);
+            
+            il.unique();
+            
+            itPrint(il);
+        }
 
 	stop
 
@@ -476,6 +492,15 @@ int main()
 	//assign заполните deque копиями элементов вектора. С помощью
 	//разработанного Вами в предыдущем задании универсального шаблона
 	//выведите значения элементов на печать
+                
+        {
+            
+            std::vector<Point> pv {Point(1,1),Point(2,2),Point(3,3)};
+            std::deque<Point> dPoint;
+            dPoint.assign(pv.begin(), pv.end()); 
+            
+            itPrint(dPoint);
+        }        
 
 
 
@@ -484,7 +509,27 @@ int main()
 	//С помощью erase удалите из deque все элементы, в которых строчки
 	//начинаются с 'A' или 'a'
 
-
+        {
+            std::deque<MyString> dStr;
+            dStr.push_back(MyString("Abc"));
+            dStr.push_front(MyString("aBC"));
+            dStr.insert(dStr.end(), MyString("xyz"));
+            dStr.push_front(MyString("test"));
+            dStr.push_front(MyString("aTest"));
+            
+            itPrint(dStr);  
+            /*
+            auto it = dStr.begin();
+            while(it != dStr.end()) {
+                if((*it)[0] == 'A' || (*it)[0] == 'a') {
+                    dStr.erase(it);
+                }
+                ++ it;
+            }
+            */
+            dequeRemoveIF(dStr, [](MyString& s)->bool { return s[0] == 'A' || s[0] == 'a'; });
+            itPrint(dStr);
+        }
 
 
 	return 0;
