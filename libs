@@ -57,8 +57,8 @@ void vectorPrint(std::vector<Point> v) {
 
 //
 template <class T> 
-void itPrint(T cont) {
-    auto it = cont.begin();
+void itPrint(T cont) { //TODO ref
+    auto it = cont.begin(); //Cbegin
     
     std::cout << "=================== " << typeid(cont).name() 
              << " ==================="  << typeid(it).name()  
@@ -91,6 +91,25 @@ void vectorPrint(std::vector<Point*> v) {
                 << ", y:" <<  v.at(i)->getY() << "}" << std::endl;
     } 
 }
+
+
+//
+template <class T> 
+void removeUnique(std::vector<T> &v) {
+    int n = 0, j;
+    while(v.size() > n) {
+        j = n + 1;
+        while(v.size() > j) {
+            if(v.at(n) == v.at(j)) {
+                v.erase(v.begin()+j, v.begin()+j+1); 
+            } else {
+               j ++; 
+            } 
+        }
+        n ++;
+    }
+}
+
 
 //
 template <class T> 

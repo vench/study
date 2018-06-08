@@ -87,11 +87,11 @@ int main()
 	//с помощью []. 
 
         {
-             std::vector<MyString>  vMyString(5);
-             for(int i = 0; i < vMyString.size(); i ++) {
+             std::vector<MyString>  vMyString(5, MyString("A"));
+             /*for(int i = 0; i < vMyString.size(); i ++) {
                  vMyString.at(i) = "A";
                  std::cout << "Val of " << i << " = " << vMyString[i] << std::endl;
-             }
+             }*/
              
              vMyString[2] = "Some string";
              std::cout << "Value vMyString[2] = " << vMyString[2] << std::endl;
@@ -235,11 +235,11 @@ int main()
                     }
                     
                     //веторы идентичные
-                    vectorPrint(a);
+                    //vectorPrint(a);
                     //vectorPrint(b);
                     //vectorInfo(a);
                     //vectorInfo(b);
-                    
+                    //return 0;
                      
                     //
                     //!!! shrink_to_fit - Уменьшение емкости вектора.
@@ -335,7 +335,7 @@ int main()
 	//Напишите функцию, которая должна удалять только повторяющиеся последовательности.
 	//Например: было - "qwerrrrty12222r3", стало - "qwety1r3"
          {
-            std::vector<char> vc {'q','w','e','r','r','r','r','t','y','1','2','2','2','2','r','3'};
+            std::vector<char> vc {'q','w','e','r','r','r','r','t','y','1','2','2','2','2','r','3','3'};
             removePair(vc);
              std::cout << "===================" << std::endl;
             vectorPrint(vc);
@@ -350,12 +350,12 @@ int main()
 	//Удаление элемента последовательности erase()
 	//Напишите функцию удаления из любого вектора всех дублей 
         {
-            std::vector<int> vb {1,0,0,0,0,1,1,1,2,7}; //1,2,7
+            std::vector<int> vb {7,1,0,0,0,0,1,1,1,2,7,1,99, 99, 0}; //1,2,7
            // vectorPrint(vb);            
-            removePair(vb);
+            removeUnique(vb);//TODO unique
             std::cout << "===================" << std::endl;
             vectorPrint(vb); // {1,0,0,0,0,2,3,3,0,0,7}; 1,2,7
-            //return 0;
+            return 0;
         }
 
 
@@ -369,11 +369,12 @@ int main()
             std::vector<int> src {1,2,3,4,5};
             
             //std::vector<int> dst(src);
-            std::vector<int> dst(src);
+            std::vector<int> dst(src.rbegin(), src.rend());
            // std::reverse(dst.begin(), dst.end()); //TODO
-            myReverse(dst.begin(), dst.end());
+           // myReverse(dst.begin(), dst.end());
             std::cout << "===================" << std::endl;
             vectorPrint(dst);
+            //return 0;
         }
 
 
@@ -427,7 +428,7 @@ int main()
             
             std::vector<Point> ptPoint2 {Point(1,2), Point(15,17)};
             std::list<Point> ptList2(ptPoint2.begin(), ptPoint2.end());
-            myReverse(ptList2.begin(), ptList2.end());
+            myReverse(ptList2.begin(), ptList2.end()); // TODO rbegin
             //std::reverse_copy ?
             itPrint(ptList2);
             
