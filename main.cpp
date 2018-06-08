@@ -13,7 +13,7 @@
 #include "libs"
 
 
-#pragma warning(disable: 4786)
+/* #pragma warning(disable: 4786) */
 
 
 using namespace std;	
@@ -72,6 +72,7 @@ int main()
 	
         {
             std::vector<double> vDouble1(4);
+           
             vectorInfo(vDouble1);
             //size( ): 4; capacity(): 4; max_size(): 2305843009213693951
             //все значение равны 0
@@ -110,7 +111,7 @@ int main()
 	//нужно создать и проинициализировать!
 	
         {
-             double dMas[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+             double dMas[7] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
              std::vector<double> vDouble3(dMas, dMas +  5);
              vectorInfo(vDouble3);
              vectorPrint(vDouble3);
@@ -118,7 +119,7 @@ int main()
             //вектор вещественных - vDouble4, который является копией элементов
             // [2,5) вектора vDouble3. 
              
-            std::vector<double> vDouble4(vDouble3.begin() + 1, vDouble3.begin() + 5);
+            std::vector<double> vDouble4(vDouble3.begin() + 2, vDouble3.begin() + 5);
             vectorInfo(vDouble4);
             vectorPrint(vDouble4);
         }     
@@ -131,12 +132,10 @@ int main()
 
         {
             std::vector<Point> vPoint1(3); // Point::Point() - конструктор по умолчанию
-            std::vector<Point> vPoint2(5, Point(1,1));
-           /* for(int i = 0; i < vPoint2.size(); i ++ ) {
-                vPoint2.at(i).setXY(1,1);
-            }*/
+            std::vector<Point> vPoint2(5, Point(1,1)); 
             
             vectorPrint(vPoint2);
+            //return 0;
         
         }
 
@@ -149,12 +148,13 @@ int main()
 		//б) или перегрузка operator<< для Point*
             
             
-             /*std::vector<Point*> vpPoint(5);
+             std::vector<Point*> vpPoint(5); //Если установить  new Point(1,1) то ссылка будет для всех 5 элементов
+            
              for(int i = 0; i < vpPoint.size(); i ++ ) {
                 vpPoint.at(i) = new Point(i,i);
-             }*/
-             std::vector<Point*> vpPoint{new Point(1,1),new Point(1,1),new Point(1,1),new Point(1,1),new Point(1,1)};
-             
+             }
+             /*std::vector<Point*> vpPoint{new Point(1,1),new Point(1,1),new Point(1,1),new Point(1,1),new Point(1,1)};
+             */
              
              vectorPrint(vpPoint);
              
@@ -235,12 +235,12 @@ int main()
                     }
                     
                     //веторы идентичные
-                    //vectorPrint(a);
+                    vectorPrint(a);
                     //vectorPrint(b);
                     //vectorInfo(a);
                     //vectorInfo(b);
                     
-                    
+                     
                     //
                     //!!! shrink_to_fit - Уменьшение емкости вектора.
                     //Для любого вектора из предыдущего задания требуется уменьшить емкость
@@ -280,6 +280,7 @@ int main()
                   }
                   
                   vectorPrint(vv);
+                 // return 0;
         }
 	 stop
 
@@ -325,6 +326,8 @@ int main()
              
              std::cout << "===================" << std::endl;
              vectorPrint(vChar2);
+             
+             //return 0;
          }       
 
 
@@ -336,6 +339,8 @@ int main()
             removePair(vc);
              std::cout << "===================" << std::endl;
             vectorPrint(vc);
+            
+           // return 0;
          }
 
 	stop
@@ -346,9 +351,11 @@ int main()
 	//Напишите функцию удаления из любого вектора всех дублей 
         {
             std::vector<int> vb {1,0,0,0,0,1,1,1,2,7}; //1,2,7
+           // vectorPrint(vb);            
             removePair(vb);
             std::cout << "===================" << std::endl;
             vectorPrint(vb); // {1,0,0,0,0,2,3,3,0,0,7}; 1,2,7
+            //return 0;
         }
 
 
@@ -361,6 +368,7 @@ int main()
         {
             std::vector<int> src {1,2,3,4,5};
             
+            //std::vector<int> dst(src);
             std::vector<int> dst(src);
            // std::reverse(dst.begin(), dst.end()); //TODO
             myReverse(dst.begin(), dst.end());
@@ -401,12 +409,13 @@ int main()
              
             std::list<bool> vb {1,0,1,0};
             itPrint(vb);
-        
+            
             
 	//Сделайте любой из списков "реверсивным" - reverse()
             // std::reverse(vd.begin(), vd.end()); //TODO
             myReverse(vd.begin(), vd.end()); 
-            itPrint(vd);
+            itPrint(vd); 
+           // return 0;
 
 
 	//Создайте список ptList2 из элементов Point таким образом, чтобы он стал 
