@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
         stPrint(s);
         stPrint(q);
         stPrint(pq); 
+       // return 0;
     }
 
 
@@ -53,10 +54,14 @@ int main(int argc, char* argv[])
 	//а) элементы стека стали копиями элементов вектора
 	//б) при выводе значений как вектора, так и стека порядок значений был одинаковым 
     {
+        std::cout << "=======================" <<std::endl;
         std::vector<int> sv {1,2,3,4}; 
         std::reverse(sv.begin(), sv.end());
-        std::stack<int> ss ({sv.begin(), sv.end() }); 
+        std::stack<int> ss ({sv.rbegin(), sv.rend() }); 
+        
+        stPrint(sv);
         stPrint(ss); 
+        //return 0;
     
     }
 
@@ -76,7 +81,22 @@ int main(int argc, char* argv[])
 
 
     {
-        std::queue<Point*> ppq;
+        std::queue<Point*, std::deque<Point*>> ppq;
+        ppq.push(nullptr);
+        ppq.push(nullptr); 
+         
+        ppq.front() = new Point(1,2); 
+        ppq.back()  = new Point(1,2);
+        
+        stPrint(ppq);
+         
+        while(!ppq.empty()) {
+            Point *pf = ppq.front();
+            ppq.pop();
+            if(pf) {
+                delete pf;
+            }    
+        }
         
     }
 
@@ -93,7 +113,13 @@ int main(int argc, char* argv[])
 
 	
 
-
+    {
+        
+        const char* ar[3] = {"abc", "mjv", "xwz"};
+        std::priority_queue<const char*> pqc({ar, ar + 3});
+        stPrint(pqc);
+        //TODO b
+    }
 
 
 	
@@ -110,10 +136,30 @@ int main(int argc, char* argv[])
 	//	контейнера, например, элементов массива	(что происходит, если в массиве имеются дубли?)
 
 
+    {
+        
+        //в point необходимо определить operator<
+        std::set<Point> sp;
+        sp.insert(Point(1,2));
+        sp.insert(Point(1,2));
+        sp.insert(Point(10,10));
+        std::cout << sp.size() << std::endl;
+        itPrint(sp);
+        
+        //(*sp.begin()).setXY(2,2);    //Ошибка так как значение константа
+        
+        std::set<int> si1{1,2,3};
+        std::set<int> si2{3,1,2};
+        int ai[] = {2,3,4};
+    
+        si2.insert(ai, ai + 3);
+        itPrint(si2); //множество хранит только уникальные значения
+    }
 
+    
+    
 
-
-
+    
 
 
 

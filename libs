@@ -86,6 +86,20 @@ void stPrint( T s) {
     }     
 }
 
+
+
+
+template <typename TN>
+void stPrint( std::vector<TN> v) {
+    std::cout << "=================== " << typeid(v).name() 
+             << " ==================="  << v.size()           
+            << " ===================" << std::endl; 
+    
+    for(auto s : v) { 
+        std::cout << s << std::endl;
+    }    
+}
+
 template <typename TN>
 void stPrint( std::queue<TN> s) {
     std::cout << "=================== " << typeid(s).name() 
@@ -96,6 +110,19 @@ void stPrint( std::queue<TN> s) {
         std::cout << s.front() << std::endl; 
         s.pop();
     } 
+}
+
+//
+template <>
+void stPrint( std::queue<Point*> s) {
+    std::cout << "=================== " << typeid(s).name() 
+             << " ==================="  << s.size()           
+            << " ===================" << std::endl; 
+    
+    while(!s.empty()) { 
+        std::cout << *s.front() << std::endl; 
+        s.pop();
+    }     
 }
 
 //

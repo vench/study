@@ -76,6 +76,8 @@ Point Point::operator-(const Point& orig) {
     return Point(this->x - orig.x, this->y - orig.y); // TODO std::move
 }
 
+ 
+
 //
 Point& Point::operator+=(const int& orig) {
     this->x += orig;
@@ -154,6 +156,11 @@ Point operator-(const int& val, const Point& p) {
 bool operator<(const Point&a, const Point& b) {
     return a.x< b.x && a.y < b.y;
 }
+
+/*
+bool operator<(const Point& a, const Point& b) const {
+    return a.x< b.x && a.y < b.y;
+}*/
 
 //
 bool operator==(const Point& a, const Point& b ) {

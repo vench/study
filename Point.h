@@ -32,11 +32,12 @@ public:
     Point operator-(const Point&);
     
     Point& operator-();
-    Point& operator+();
+    Point& operator+(); 
     
     friend Circle;
     friend bool operator==(const Point&, const Point& );
     friend bool operator<(const Point&, const Point& );
+  //  friend bool operator<(const Point&, const Point& ) const;
     friend std::ostream& operator<<(std::ostream&, const Point&); 
     
     
@@ -49,4 +50,5 @@ bool operator==(const Point&, const Point& );
 Point operator+(const int&, const Point& );
 Point operator-(const int&, const Point& );
 bool operator<(const Point&, const Point& );
+//bool operator<(const Point&, const Point& ) const;
 std::ostream& operator<<(std::ostream&, const Point&); 
