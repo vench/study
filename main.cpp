@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include "libs"
 
 
@@ -173,7 +174,23 @@ int main(int argc, char* argv[])
 	//г) замените один из КЛЮЧЕЙ на новый (была "Иванова", вышла замуж => стала "Петрова")
 
 	stop
-	
+        {
+            std::map<const char*, int> mf;
+            mf.insert(std::pair<const char*, int>("Иванов", 1000000));
+            mf["Петров"] = 999999;
+            mf["Иванова"] = 2000000;
+             
+            itPrint(mf);
+            
+            
+            auto val = mf.find("Иванова");
+            if(val != mf.end()) {
+                mf["Петрова"] = (*val).second;
+                mf.erase(val);                
+            }            
+            
+            itPrint(mf);
+        }
 
 	
 		
@@ -182,7 +199,31 @@ int main(int argc, char* argv[])
 		//содержать упорядоченные по алфавиту строки и
 		//количество повторений каждой строки в векторе
 	
-
+        {
+            std::vector<std::string> vs = {"xyz", "Test 1", "Abc", "xyz", "My str", "test", "Abc", "Some", "Kate"};
+            itPrint(vs);
+            
+            std::map<std::string, int> ms;
+            
+            for(auto s : vs) {
+                auto it = ms.find(s);
+                if(it != ms.end()) {
+                    (*it).second += 1;
+                } else {
+                    ms[s] = 1;
+                }
+            } 
+             
+            std::vector<std::pair<std::string, int>> vs1(ms.begin(), ms.end());           
+            std::sort(vs1.begin(), vs1.end(), 
+                    [](const std::pair<std::string, int>& l, const std::pair<std::string, int>& r){
+                return (r.first.compare(l.first) < 0);});           
+          
+            
+            itPrint(ms);
+            itPrint(vs1);
+            return 0;
+        }
 
 
 
@@ -197,6 +238,42 @@ int main(int argc, char* argv[])
 		//'B' -  "Beauty" "Beta"  ...
 		//...
 		
+        {
+            const char* words[] = {"Abba", "Alfa", "Beta", "Beauty", "test", "tor"};
+            std::map<int, std::vector<int>> sm;
+            char ch;
+            for(int i = 0; i < sizeof(words) / sizeof(words[0]); i ++) {
+                ch = words[i][0];
+                auto it = sm.find(ch);
+                if(it == sm.end()) {
+                    std::vector<int> tmp {i};
+                    sm[ch] = tmp;
+                } else {
+                    sm[ch].push_back(i);
+                }
+            }
+            
+            std::cout << "=======================" << std::endl;
+            //itPrint(sm);
+             auto it = sm.begin();
+             while(it != sm.end()) {
+                 
+                 std::cout << "Char : " << static_cast<char>( (*it).first ) << " -";
+                 auto second = (*it).second;
+                 auto it2 = second.begin();
+                 
+                 while(it2 != second.end()) {
+                     std::cout << " \"" << words[*it2] << "\"";
+                     it2 ++;
+                 }
+                 
+                 std::cout << std::endl;
+                 
+                 
+                 it ++;
+             }   
+            
+        }
 
 		//ж)
 		//создайте структуру данных, которая будет хранить информацию о студенческих группах.
@@ -205,7 +282,24 @@ int main(int argc, char* argv[])
 		//Сами группы тоже должны быть упорядочены по номеру
 		//
 		//номера 
-
+        {
+            std::map<std::string, std::vector<std::string>> students {
+                        
+                        {"234", {"Иванов", "Иванова","Петров", "Сабинин", "Иванова"}},   
+                        {"123", {"Путин", "Михалков", "Медведев"}}
+            };
+            
+            
+            auto it = students.begin();
+            while(it != students.end()) {
+                std::vector<std::string> *tmp = &(*it).second;
+                std::sort (tmp->begin(), tmp->end(), 
+                        [](std::string const &a, std::string const &b)->bool{ return a.compare(b) < 0;});
+                it ++;
+            }
+            
+            itPrint(students);
+        }
 
 
 
@@ -219,10 +313,43 @@ int main(int argc, char* argv[])
 	//г) Выведите на экран только варианты "переводов" для заданного ключа. Подсказка: для нахождения диапазона
 	//		итераторов можно использовать методы lower_bound() и upper_bound()
 
+        {
+            std::multimap<std::string, std::string> mp;
+            mp.insert(
+                std::make_pair<std::string, std::string>("hello", "привет")
+            );
+            mp.insert(
+                std::make_pair<std::string, std::string>("strange", "чужой")
+            );
+            
+            mp.insert(
+                std::make_pair<std::string, std::string>("developer", "разработчик")
+            );
+            mp.insert(
+                std::make_pair<std::string, std::string>("developer", "проявитель")
+            );
+            mp.insert(
+                std::make_pair<std::string, std::string>("developer", "застройщик")
+            ); 
+            mp.insert(
+                std::make_pair<std::string, std::string>("strange", "странный")
+            );
 
-
-
-   
+            
+            itPrint(mp);
+            
+            std::string findValue = "developer";  
+            auto low = mp.lower_bound(findValue);
+            auto upp = mp.upper_bound(findValue);
+            
+            std::cout << "=============== strange ================"  << std::endl;
+            
+            while(low != upp) {
+                std::cout << "Val: " << (*low).second << std::endl;
+                low ++;
+            }
+            
+        }
 
   stop
 

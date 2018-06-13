@@ -73,6 +73,83 @@ void itPrint(T cont) {
     }
 }
 
+
+
+
+
+//
+ template <typename T1, typename T2>
+ void itPrint(std::map<T1, T2> mf) {
+     std::cout << "=================== " << typeid(mf).name() 
+             << " ==================="  << mf.size()           
+            << " ===================" << std::endl; 
+     
+     
+     
+    auto it = mf.begin(); 
+    
+    while(it != mf.end()) {
+        std::cout << "Pair {key: " << (*it).first << ", value: " << (*it).second  << "}" << std::endl;
+        it ++;
+    }
+ }
+ 
+  //
+template <typename T1, typename T2>
+void itPrint(std::map<T1, std::vector<T2>> mf) { 
+
+ std::cout << "=================== " << typeid(mf).name() 
+             << " ==================="  << mf.size()           
+            << " ===================" << std::endl;  
+     
+     
+    auto it = mf.begin(); 
+    
+    while(it != mf.end()) {
+        std::cout << "Pair {key: " << (*it).first << ", value: "; 
+        itPrint((*it).second);
+        std::cout << "}" << std::endl;
+        it ++;
+    }    
+}
+
+
+//multimap
+template <typename T1, typename T2>
+void itPrint(std::multimap<T1, T2> mf) { 
+
+ std::cout << "=================== " << typeid(mf).name() 
+             << " ==================="  << mf.size()           
+            << " ===================" << std::endl;  
+     
+     
+    auto it = mf.begin(); 
+    
+    while(it != mf.end()) {
+        std::cout << "Pair {key: " << (*it).first << ", value: " << (*it).second  << "}" << std::endl;
+        it ++;
+    }    
+}
+
+ //
+template <typename T1, typename T2, typename T3>
+void itPrint(std::map<T1, std::map<T2, T3>> mf) { 
+ 
+ std::cout << "=================== " << typeid(mf).name() 
+             << " ==================="  << mf.size()           
+            << " ===================" << std::endl;  
+     
+     
+    auto it = mf.begin(); 
+    
+    while(it != mf.end()) {
+        std::cout << "Pair {key: " << (*it).first << ", value: "; 
+        itPrint((*it).second);
+        std::cout << "}" << std::endl;
+        it ++;
+    }    
+}
+
 //
 template <class T>
 void stPrint( T s) {
@@ -194,3 +271,19 @@ void myReverse(T first, T last)
         std::swap(*first++, *last);
     }
 }
+
+//  
+template<class T1, class T2>
+void itPrint( std::vector<std::pair<T1, T2>> cont) {
+    auto it = cont.begin();
+    
+    std::cout << "=================== " << typeid(cont).name() 
+             << " ==================="  << typeid(it).name() 
+           
+            << " ===================" << std::endl;
+    
+    while(it != cont.end()) {
+        std::cout << "Pair {key: " << (*it).first << ", value: " << (*it).second << "}" << std::endl;
+        it ++;
+    }
+} 
