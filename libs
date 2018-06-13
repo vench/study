@@ -287,3 +287,30 @@ void itPrint( std::vector<std::pair<T1, T2>> cont) {
         it ++;
     }
 } 
+
+
+
+//
+template <typename T>
+void printValue(T i) {
+    std::cout << "printValue: " << i << std::endl;
+}
+
+
+
+//
+struct PointChangeXY {
+  int X;
+  int Y;
+  
+  PointChangeXY(int x, int y) {
+      this->X = x;
+      this->Y = y;
+  };
+  
+  void operator() (Point &p) {
+      p.setXY(this->X, this->Y);
+  };
+};
+
+
