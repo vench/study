@@ -202,12 +202,27 @@ int main(int argc, char* argv[])
 		//Подсказка: класс string - это "почти" контейнер, поэтому для него
 		// определены методы begin() и end()
 
+            std::string s = "SOME STRING";
+            //std::transform(s.begin(), s.end(), s.begin(), (int (*)(int))std::toupper);
+            std::transform(s.begin(), s.end(), s.begin(), (int (*)(int))std::tolower);
+            std::cout << s << std::endl;
 
 		//Заполните list объектами string. С помощью алгоритма transform сформируте
 		//значения "пустого" set, конвертируя строки в нижний регистр
-	
+            std::list<std::string> ls {"SOME STRING", "TEST", "BIG STR", "ABC"};
+            std::set<std::string> ss;
+            /*std::for_each(ls.begin(), ls.end(), [&ss](std::string s) -> void {
+                std::transform(s.begin(), s.end(), s.begin(), (int (*)(int))std::tolower);
+                ss.insert(s);
+            });*/
+            std::transform(ls.begin(), ls.end(), ls.begin(), [&ss](std::string s)->std::string {
+                std::transform(s.begin(), s.end(), s.begin(), (int (*)(int))std::tolower);
+                ss.insert(s);                
+                return s;
+            } );
 
-
+             
+            std::for_each(ss.begin(), ss.end(), printValue<std::string>);
 
 		stop
 	}
@@ -218,14 +233,37 @@ int main(int argc, char* argv[])
 		//Создайте (и распечатайте для проверки) map<string, int>, который будет
 		//содержать упорядоченные по алфавиту строки и
 		//количество повторений каждой строки в векторе
-	
+            std::cout << "========= Map count =========" << std::endl;
 
+            std::vector<std::string> vs {"ABC", "test", "XYZ", "test", "ABC", "data", "c++", "cpp", "cpp", "cpp"};
+            std::map<std::string, int> sm;
+            
+            std::for_each(vs.begin(), vs.end(), [&sm] (std::string &s) -> void {
+                if(sm.find(s) != sm.end()) {
+                    sm[s] ++;
+                } else {
+                    sm[s] = 1;
+                }
+            }); 
 
-
-
-
-
-
+            auto it = sm.begin();
+            while(it != sm.end()) {
+                std::cout << "Key: " << (*it).first << ", Value: " << (*it).second << std::endl; 
+                it ++;
+            }
+            
+            std::cout << "========= SORT =========" << std::endl;
+            //SORT
+            std::vector<std::pair<std::string, int>> items(sm.begin(), sm.end());
+            std::sort(items.begin(), items.end(), [](std::pair<std::string, int> &a, std::pair<std::string, int>&b)->bool{
+                return a.first.compare(b.first) > 0;
+            });
+            
+            auto it1 = items.begin();
+            while(it1 != items.end()) {
+                std::cout << "Key: " << (*it1).first << ", Value: " << (*it1).second << std::endl; 
+                it1 ++;
+            }
 	}
 
 	
