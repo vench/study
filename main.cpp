@@ -11,6 +11,7 @@
 #include <iterator>     // std::ostream_iterator
 
 #include "Point.h"
+#include "Rect.h"
 #include "libs"
 
 using namespace std;	
@@ -105,7 +106,7 @@ int main(int argc, char* argv[])
         
             std::vector<Point> vp {Point(0,0), Point(1,1)};
             
-            std::for_each(vp.begin(), vp.end(), PointChangeXY(10,10));
+            std::for_each(vp.begin(), vp.end(), PointChangeXY(100,100));
             std::cout << "Changed" << std::endl;
             std::for_each(vp.begin(), vp.end(), printValue<Point>);
         
@@ -114,17 +115,43 @@ int main(int argc, char* argv[])
 
 	//С помощью алгоритма find() найдите в любой последовательности элементов Point
 	//все итераторы на элемент Point с указанным значением.
-
+        {
+            Point find(1,1);
+            std::vector<Point> vp {Point(0,0), Point(1,1),Point(10,10), Point(1,1),Point(20,20)};
+            
+            auto it = vp.begin();
+            while(true) {
+                it = std::find(it, vp.end(), find);
+                if(it != vp.end()) {
+                    printValue(*it);
+                    it ++;
+                } else {
+                    break;
+                }
+            } ; 
+        }
 
 
 	
 	
 	//С помощью алгоритма sort() отсортируйте любую последовательность элементов Point. 
 	////По умолчанию алгоритм сортирует последовательность по возрастанию.
-	//Что должно быть определено в классе Point?
+	//Что должно быть определено в классе Point? (operator <)
 	// Замечание: обобщенный алгоритм sort не работает со списком, так как
 	//это было бы не эффективно => для списка сортировка реализована методом класса!!!
-	
+	{
+            std::cout << "=========== lp sort ===========" << std::endl;
+            std::list<Point> lp {Point(10,20), Point(1,2),  Point(100,200)};
+            //std::sort(lp.begin(), lp.end());
+            lp.sort();
+            std::for_each(lp.begin(), lp.end(), printValue<Point>);
+            
+            
+            std::vector<Point> vp {Point(10,20), Point(1,2),  Point(100,200)};
+            std::sort(vp.begin(), vp.end());
+            std::for_each(vp.begin(), vp.end(), printValue<Point>);
+            
+        }
 
 
 
@@ -133,11 +160,36 @@ int main(int argc, char* argv[])
 	//итератор на элемент Point, удовлетворяющий условию: координаты x и y лежат в промежутке
 	//[-n, +m].
 
+        {
+        
+            std::vector<Point> lp{Point(10,20), Point(1,2),  Point(100,200), Point(-1,2)}; 
+            std::cout << "=========== Find if ===========" << std::endl;
+            auto it = lp.begin();
+            while(true) {
+                it = std::find_if(it, lp.end(), PointFindByMinMax(-10,10));
+                if(it != lp.end()) {
+                    printValue(*it);
+                    it ++;
+                } else {
+                    break;
+                }
+            } ;
+        }
+        
 
 
 	//С помощью алгоритма sort() отсортируйте любую последовательность элементов Rect,
 	//располагая прямоугольники по удалению центра от начала координат.
-	
+	{
+            std::cout << "=========== Sort Rect ===========" << std::endl;
+            
+            std::vector<Rect> vr {Rect(0,4,0,4), Rect(0,10,0,10), Rect(10,16,10,16), Rect(2,10,2,10)};
+            std::sort(vr.begin(), vr.end(), [](Rect &a, Rect &b ) -> bool {               
+                return a.GetCenterXY() < b.GetCenterXY();
+            });
+            
+            std::for_each(vr.begin(), vr.end(), printValue<Rect>);
+        }
 
 
 

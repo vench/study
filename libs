@@ -314,3 +314,22 @@ struct PointChangeXY {
 };
 
 
+//
+struct PointFindByMinMax {
+  int min;
+  int max;
+  
+  PointFindByMinMax(int min, int max) {
+      this->min = min;
+      this->max = max;
+  };
+  
+  bool operator() (Point &p) {
+      return p.getX() >= this->min  && 
+             p.getX() <= this->max && 
+             p.getY() >= this->min  && 
+             p.getY() <= this->max;
+  };
+};
+
+
