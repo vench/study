@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace myApp {
     class ConsoleType {
@@ -57,7 +58,31 @@ namespace myApp {
         }
 
         private void commonInfoAboutTypes() {
-            Console.WriteLine("commonInfoAboutTypes");
+            Console.WriteLine("Выберете тип из списка:");
+            Console.WriteLine(
+            @"1 - uint
+              2 - int
+              3 - long
+              4 - float
+              5 - double
+              6 - char
+              7 - string
+              8 - MyClass
+              9 - MyStruct
+              0 - Выход в главное меню");
+
+            bool localRun = true;
+            do {
+                var key = Console.ReadKey();
+                Console.WriteLine("\n");
+            
+                switch(key.Key){
+                    case ConsoleKey.D1: break;
+                    case ConsoleKey.D0: localRun = false; break;
+                }    
+            } while(localRun);
+
+            showRunMessage();
         }
 
 
@@ -69,7 +94,6 @@ namespace myApp {
                Console.WriteLine("\t4 - Параметры консоли");
                Console.WriteLine("\t0 - Выход из программы");
         }
-
     }    
 
 }
