@@ -20,51 +20,18 @@ public class JavaApplication1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-       // java.lang.
-       java.io.FileReader in;
-       
-       java.io.File file = new java.io.File("test.properties");
-        try {
-            in = new java.io.FileReader(file);
-            System.getProperties().load(in);
-        } catch (Exception ex) {
-            Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        System.out.println( System.getProperty("FOO") );
         
-        Runtime r = Runtime.getRuntime();
-        int x = 1024*1024;
-        System.out.printf("%d %d %d \n", r.freeMemory() / x, r.totalMemory() / x, r.maxMemory() / x);
-    
-       /* Process exec;
-        try {
-            exec = r.exec("/usr/bin/gedit");
-            exec.wait(1);
-            exec.destroy();
-        } catch (Exception ex) {
-            Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-       
-       int[] zz = {1,2,3};
-        int[] clone = zz.clone();
+        Task[] t1 = {/*new Task1(), new Task2(),*/ new Task3(), new Task4()};
         
-        Object ob = new Object();
-       
-        System.out.println(zz.getClass().getCanonicalName());
-        System.out.println(clone[1]);
-        
-        Class d = byte.class;
-        Class dd = Byte.TYPE;
-        
-        Class xxx = new Byte("1").getClass();
-        
-        Byte bb = Byte.valueOf("010101", 2);
-        System.out.println(bb);
-        
-        String sss = "12345абв";
-        System.out.println(sss.length());
-        
+        for (Task t11 : t1) {  
+            System.out.println("============================================");
+            System.out.println(t11.getTitle());
+            System.out.println("============================================");
+            t11.run();
+        }
     }
+    
+    
+    
     
 }
