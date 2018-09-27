@@ -1,0 +1,3 @@
+namespace myApp {
+    struct MyStruct{}
+}

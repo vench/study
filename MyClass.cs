@@ -1,0 +1,4 @@
+namespace myApp {
+
+    class MyClass { }
+}    
