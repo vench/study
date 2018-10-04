@@ -1,5 +1,6 @@
 namespace myApp.Math {
 
+    using System;
     class Matrix {
         private double[] data;
         private int nRows;
@@ -62,15 +63,45 @@ namespace myApp.Math {
         
         //Является ли матрица единичной
         public bool IsUnity { 
-            get{ return false; }
+            get{ 
+                if(!IsDiagonal) {
+                    return false;
+                }
+
+                return SumMatrix() == nRows; 
+            }
         }    
         //Является ли матрица диагональной
         public bool IsDiagonal { 
-            get{ return false;} 
+            get{ 
+                if(!IsSquared) {
+                    return false;
+                }
+                for(int i = 0; i < nRows; i ++) {
+                    for(int j = 0; j < nCols; j ++) {
+                        if(i != j && this[i, j] != 0) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            } 
         }
         //Является ли матрицa симметричной
         public bool IsSymmetric { 
-            get{ return false; } 
+            get{ 
+                if(!IsSquared) {
+                    return false;
+                }    
+
+                for(int i = 0; i < nRows; i ++) {
+                    for(int j = 0; j < nCols; j ++) {
+                        //TODO
+                    }
+                }
+
+                return true;
+            } 
         }
 
         // OPERATORS
@@ -131,5 +162,28 @@ namespace myApp.Math {
             s += "}\n";
             return s;
         }
+
+        // Static
+        public static Matrix GetUnity(int Size) {
+            return new Matrix(0,0);
+        }
+
+        public static Matrix GetEmpty(int Size) {
+            return new Matrix(0,0);
+        }
+
+
+        public static Matrix Parse(string s) {
+            if(s.Length == 0) {
+                throw new FormatException("");
+            }
+            return new Matrix(0,0);
+        }
+
+        public static bool TryParse(string s, out Matrix m){
+            m = new Matrix(0,0);
+            return false;
+        } 
+
     }
 }
