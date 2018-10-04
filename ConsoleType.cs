@@ -19,7 +19,7 @@ namespace myApp {
                 case ConsoleKey.D1: execRunnable(new CommonInfo()); break;  
                 case ConsoleKey.D2: execRunnable(new SelectInfoFromList()); break;
                 case ConsoleKey.D3: execRunnable(new InputTypeName()); break;   
-                case ConsoleKey.D4: showRunMessage();  break; 
+                case ConsoleKey.D4: execRunnable(new ChangeConsoleView());  break; 
                 case ConsoleKey.D0: 
                     Console.Clear();
                     Stop();   
