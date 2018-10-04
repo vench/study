@@ -14,13 +14,11 @@ namespace myApp
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-        
-            //Console.WriteLine("Press any key to exit.");
-           
-           // char s = Console.ReadKey().KeyChar;
-            ConsoleType ct = new ConsoleType();
+         
+            //ConsoleType ct = new ConsoleType();
+            MatrixRun ct = new MatrixRun();
             ct.Run();
-        
+           
         }
 
     }
