@@ -45,9 +45,12 @@ namespace myApp.Math {
             get { return nCols; }
         }
 
-        public int Size { 
+        public int? Size { 
             get {
-                return nCols * nRows;
+                if(nRows != nCols) {
+                    return null;
+                }
+                return nRows;
             }
          }
  
@@ -92,14 +95,14 @@ namespace myApp.Math {
             get{ 
                 if(!IsSquared) {
                     return false;
-                }    
-
+                }
                 for(int i = 0; i < nRows; i ++) {
-                    for(int j = 0; j < nCols; j ++) {
-                        //TODO
+                    for(int j = 0; j < nCols; j ++) { 
+                        if(i != j && this[i, j] != this[j,i]) {
+                            return false;    
+                        }
                     }
                 }
-
                 return true;
             } 
         }
@@ -107,23 +110,52 @@ namespace myApp.Math {
         // OPERATORS
 
         public static Matrix operator+(Matrix m1,Matrix m2) {
-            return m1;
+            if(m1.nCols != m2.nCols || m1.nRows != m2.nRows) {
+                throw new Exception("Matrix of different sizes");
+            }
+            Matrix m = m1.Clone();
+            for(int i = 0; i < m.data.Length; i ++) {
+                   m.data[i] += m2.data[i]; 
+            }
+            return m;
         }
 
         public static Matrix operator-(Matrix m1, Matrix m2) {
-            return m1;
+            if(m1.nCols != m2.nCols || m1.nRows != m2.nRows) {
+                throw new Exception("Matrix of different sizes");
+            }
+            Matrix m = m1.Clone();
+            for(int i = 0; i < m.data.Length; i ++) {
+                   m.data[i] -= m2.data[i]; 
+            }
+            return m;
         }
 
         public static Matrix operator*(Matrix m1, double d) {
-            return m1;
+            Matrix m = m1.Clone();
+            for(int i = 0; i < m.data.Length; i ++) {
+                   m.data[i] *= d; 
+            }
+            return m;
         }
 
         public static Matrix operator*(Matrix m1, Matrix m2) {
-            return m1;
+            if(m1.nCols != m2.nRows) {
+                throw new Exception("Error matrix dimension");
+            }
+            Matrix m = new Matrix(m1.nRows, m2.nCols);
+            for(int i = 0; i < m1.Rows; i ++) {
+                for(int j = 0; j < m2.nCols; j ++) {                    
+                    for(int n = 0; n < m1.nCols; n ++) {
+                       m[i,j] += m1[i,n] * m2[n,j];
+                    }                    
+                }
+            }
+            return m;
         }
  
         public static explicit operator Matrix(double[,] arr) {
-            return new Matrix(1,1);
+            return new Matrix(arr);
         }
 
 
@@ -138,14 +170,32 @@ namespace myApp.Math {
         }
 
         public Matrix Transpose() {
-            return this;
+            Matrix m = new Matrix(nCols, nRows);
+            for(int i = 0; i < nRows; i ++) {
+                for(int j = 0; j < nCols; j ++) {
+                    m[j,i] = this[i,j];
+                }
+            }
+            return m;
          }
 
         // вычисления следа матрицы
         public double Trace() {
-            return 0.0;
+            double d = 0.0;
+            for(int i = 0; i < Size; i ++) {
+                d += this[i,i];
+            }
+            return d;
         }
 
+        public Matrix Clone() {
+            Matrix m = new Matrix(nRows, nCols);
+            data.CopyTo(m.data, 0);
+            return m;
+        }
+
+        /**
+         */
         public override string ToString() { 
             string s = "Matrix{\n";
             for(int i = 0; i < nRows; i ++) {
@@ -164,12 +214,17 @@ namespace myApp.Math {
         }
 
         // Static
+        //единичной
         public static Matrix GetUnity(int Size) {
-            return new Matrix(0,0);
+            Matrix m =  new Matrix(Size,Size);
+            for(int i = 0; i < Size; i ++) {
+                m[i,i] = 1;
+            }
+            return m;
         }
 
         public static Matrix GetEmpty(int Size) {
-            return new Matrix(0,0);
+            return new Matrix(Size,Size);
         }
 
 
@@ -177,13 +232,39 @@ namespace myApp.Math {
             if(s.Length == 0) {
                 throw new FormatException("");
             }
-            return new Matrix(0,0);
+            string[] rows = s.Split(",");
+            Matrix m = new Matrix(rows.Length, rows[0].Trim().Split(" ").Length);
+            for(int i = 0; i < m.nRows; i ++) {
+                string[] cols = rows[i].Trim().Split(" ");
+                for(int j = 0; j < m.nCols; j ++) {
+                    int n;
+                    if(! int.TryParse(cols[j], out n)) {
+                        n = 0;
+                    }
+                    m[i,j] = n;
+                }
+            }
+            return m;
         }
 
         public static bool TryParse(string s, out Matrix m){
-            m = new Matrix(0,0);
-            return false;
-        } 
-
+            if(s.Length == 0) {
+                m = null;
+                return false;
+            }
+            string[] rows = s.Split(",");
+            m = new Matrix(rows.Length, rows[0].Trim().Split(" ").Length);
+            for(int i = 0; i < m.nRows; i ++) {
+                string[] cols = rows[i].Trim().Split(" ");
+                for(int j = 0; j < m.nCols; j ++) {
+                    int n;
+                    if(! int.TryParse(cols[j], out n)) {
+                        n = 0;
+                    }
+                    m[i,j] = n;
+                }
+            } 
+            return true;
+        }  
     }
 }
