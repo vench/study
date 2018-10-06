@@ -7,51 +7,121 @@ namespace myApp {
     class MatrixRun : AbRunnable
     {
      
-        List<Matrix> list = new List<Matrix>();
+        Dictionary<string,Matrix> context;
 
-        protected override void run()
-        {
-            
-            Console.Clear();
+        protected override void beforeRun() {
             Console.WriteLine( @"
-            Работа с матрицами
-            
-            -------------------------------
-            1 - Ввод матрицы
-            2 - Операции
-            3 - Вывод результатов
-            0 - Выход
-            -------------------------------
-
-            Список матриц:
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Программа работа с матрицами
+Для справки введите help   
+Для выхода введите exit или нажмите Ctrl + C          
             ");
 
-            for(int i = 0; i < list.Count; i ++ ) {
-                Console.WriteLine("\tm{0}", i);
+            context = new Dictionary<string, Matrix>();
+        }
+
+        protected override void run()
+        {  
+
+            var line = Console.ReadLine();
+            ClearCurrentConsoleLine(); 
+
+            switch(line.Trim().ToLower()){    
+                case "help": case "?":
+                    showHelpInfo();
+                    break;
+                
+                case "exit":  
+                    Stop();   
+                    break;  
+
+                default:
+                    tryInterpret(line);
+                    break;     
+            }
+        }  
+
+        private string readToken(ref int i, ref string input, Func<char,bool> compare) {
+            string token = "";
+            while(i < input.Length && compare(input[i])) {
+                token += input[i];
+                i ++;
+            }
+            i --;
+            return token;
+        }
+
+        private void tryInterpret(string line) {
+            List<AbToken> tokens = new List<AbToken>();
+            for(int i = 0; i < line.Length; i ++) {
+                if(isChar(line[i])) {
+                    var t =  new VariableToken(readToken(ref i, ref line, isChar), context);
+                    tokens.Add(t);
+                } else if(isOperator(line[i])) {
+                    var t =  new OperatorToken(readToken(ref i, ref line, isOperator), context);
+                    tokens.Add(t);
+                } else if(isDiagonal(line[i])) {
+                    var t =  new DiagonalToken(readToken(ref i, ref line, isDiagonal));
+                    tokens.Add(t);                    
+                } else if(line[i] == '(') {
+                    string token = "";
+                    i ++;
+                    while(i < line.Length &&  line[i] != ')') {
+                        token += line[i];
+                        i ++;
+                    }
+                    i --;
+
+                    var t = new MatrixToken(token);
+                    tokens.Add(t);
+                }  
             }
 
-            var key = Console.ReadKey();
-            switch(key.Key){
-                case ConsoleKey.D1: inputMatrix(); break;  
-                case ConsoleKey.D2:  break;
-                case ConsoleKey.D3:  break;   
-                
-                case ConsoleKey.D0: 
-                    Console.Clear();
-                    Stop();   
-                    break;   
+            //eval
+            if(tokens.Count > 0) {
+                var ar = tokens.ToArray();
+                for (int i = 0; i < ar.Length - 2; i+= 3) {
+                    var left = ar[i];
+                    var center = ar[i+1];
+                    var rignt = ar[i+2];
+
+                    if(center is OperatorToken) { 
+                        var test =  center.Eval(left, rignt); 
+                        Console.WriteLine(test);
+                    } else {
+                        Console.WriteLine(left.Eval());
+                    }
+
+                }
             }
-        }    
+
+        }  
+
+        private bool isDiagonal(char c) {             
+            return Char.IsDigit(c); 
+        }
+
+        private bool isOperator(char c) {
+            switch(c) {
+                case '*': case '+': case '-':case '=':   
+                return true;
+            }
+            return false;
+        }
+
+        private bool isChar(char c) { 
+            return Char.IsLetter(c);
+        }
 
         private void inputMatrix() {
-            Console.Clear();
+           /* Console.Clear();
             Console.WriteLine(@"
                 Введите матрицу m{0}:
                 -------------------------------
                 ", list.Count);
             var line = Console.ReadLine();
             Matrix m = Matrix.Parse(line);
-            list.Add(m);
+            list.Add(m); */
         }
 
 
@@ -105,6 +175,35 @@ namespace myApp {
             Console.WriteLine(mp);
 
             Stop();
+        }
+
+        private void showHelpInfo() {
+            Console.WriteLine(@"
+Список доступных команд:
+
+Ввод матрицы:
+NameMatrix=(0 1 2, 3 4 5)
+
+Операция над матрицей:
+(0 1 2, 3 4 5)*1
+
+Операция над матрицей в переменной:
+NameMatrix*1
+
+Операция над матрицей двумя матрицами:
+NameMatrix*NameMatrix1
+
+Вывод матрицы:
+NameMatrix
+");
+        }
+
+        private void ClearCurrentConsoleLine() {
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            int currentLineCursor = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.Write(new string(' ', Console.WindowWidth)); 
+            Console.SetCursorPosition(0, currentLineCursor);
         }
     }
 }

@@ -1,3 +1,0 @@
-namespace myApp {
-    struct MyStruct{}
-}

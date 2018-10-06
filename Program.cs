@@ -13,9 +13,7 @@ namespace myApp
         
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-         
-            //ConsoleType ct = new ConsoleType();
+             
             MatrixRun ct = new MatrixRun();
             ct.Run();
            
