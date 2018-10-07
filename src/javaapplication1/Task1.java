@@ -5,6 +5,19 @@
  */
 package javaapplication1;
  
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javaapplication1.math.Matrix;
+import javaapplication1.math.MatrixException;
 
 /**
  *
@@ -12,55 +25,55 @@ package javaapplication1;
  */
 public class Task1 extends AbTask {
     
+    
+    final private static String FILE_NAME = "matrix.txt";
+    
     /**
      * 
      * @return 
      */
     @Override
     public String getTitle() {
-        return "Напишите программу, которая вводит три int числа, "
-                + "сортирует их по возрастанию и выводит на экран. "
-                + "\nИспользуйте не больше трёх простых if. "
-                + "\nМассивы и прочие коллекции, а также else, &&, || и другие усложняющие конструкции не применять.";
+        return "Работа с классом Matrix";
     }
     
     @Override
     public void run() {
-       int[] ar = new int[3];
-       for(int i = 0; i < ar.length; i ++) {
-           System.out.println("Введите пожалуйста число №" + i + ": ");
-           ar[i] = readInt();
-       }
-       
-       System.out.println("Вы ввели:"); 
-       printArray(ar);
-       sort(ar);
-       System.out.println("После сортировки:"); 
-       printArray(ar); 
-    }
-    
-    
-    private void printArray(int[] ar) {
-       System.out.print("[");
-       for(int i = 0; i < ar.length; i ++) {
-           if(i > 0) {
-               System.out.print(", ");
-           }
-           System.out.print(ar[i]);
-       }
-       System.out.print("]\n"); 
-    }
-    
-    private void sort(int[] ar) {
-        for(int i = 0; i < ar.length; i ++) {
-            for(int j = i + 1; j < ar.length; j ++) {
-                if(ar[i] > ar[j]) {
-                    int tmp = ar[i];
-                    ar[i] = ar[j];
-                    ar[j] = tmp; 
-                }
+        try {
+            // ADD Matrix
+            Matrix A = new Matrix(5, 5);
+            Matrix B = new Matrix(5, 5);
+            for(int i = 0; i < 5; i ++) {
+                A.set(i, i, 1);
+                B.set(0, i, 2);
+                B.set(i, 0, 2);
             }
+            
+            System.out.println(A.output());
+            Matrix M = A.add(B);
+            System.out.println(M.output());
+            
+            //  Save 
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+              new FileOutputStream(FILE_NAME), "utf-8"))) {
+                M.write(writer);
+            } catch (Exception ex) {
+                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // Load
+            try (Reader reader = new BufferedReader(new InputStreamReader(
+              new FileInputStream(FILE_NAME), "utf-8"))) {
+                Matrix.read(reader);
+            } catch (Exception ex) {
+                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        } catch (MatrixException ex) {
+            Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
     }
     
     
