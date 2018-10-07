@@ -9,7 +9,7 @@ namespace myApp {
         }
 
         public override object Eval( AbToken left, AbToken right) {
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Метод недоступен");
         } 
     }    
 }

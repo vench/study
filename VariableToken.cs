@@ -17,11 +17,11 @@ namespace myApp {
             if(context.ContainsKey(this.token)) {
                 return context[this.token];
             }
-            throw new System.Exception("Variable not declare");
+            throw new System.Exception("Переменная {" + this.token + "} не объявлена");
         }
 
         public override object Eval( AbToken left, AbToken right) {
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Метод недоступен");
         } 
 
     }

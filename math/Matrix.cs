@@ -141,7 +141,7 @@ namespace myApp.Math {
 
         public static Matrix operator*(Matrix m1, Matrix m2) {
             if(m1.nCols != m2.nRows) {
-                throw new Exception("Error matrix dimension");
+                throw new Exception("Ошибка размера матриц: " + m1.nCols + " != " + m2.nRows );
             }
             Matrix m = new Matrix(m1.nRows, m2.nCols);
             for(int i = 0; i < m1.Rows; i ++) {
@@ -197,9 +197,9 @@ namespace myApp.Math {
         /**
          */
         public override string ToString() { 
-            string s = "Matrix{\n";
+            string s = "M:(\n";
             for(int i = 0; i < nRows; i ++) {
-                s += "\t";
+                s += "  ";
                 for(int j = 0; j < nCols; j ++) {
                     if(j > 0) {
                         s += "  ";   
@@ -209,7 +209,7 @@ namespace myApp.Math {
                 }
                 s += "\n";
             }
-            s += "}\n";
+            s += ")\n";
             return s;
         }
 
@@ -230,15 +230,15 @@ namespace myApp.Math {
 
         public static Matrix Parse(string s) {
             if(s.Length == 0) {
-                throw new FormatException("");
+                throw new FormatException("Матрица задана как пустая строка");
             }
             string[] rows = s.Split(",");
             Matrix m = new Matrix(rows.Length, rows[0].Trim().Split(" ").Length);
             for(int i = 0; i < m.nRows; i ++) {
                 string[] cols = rows[i].Trim().Split(" ");
                 for(int j = 0; j < m.nCols; j ++) {
-                    int n;
-                    if(! int.TryParse(cols[j], out n)) {
+                    double n;
+                    if(! double.TryParse(cols[j], out n)) {
                         n = 0;
                     }
                     m[i,j] = n;
@@ -257,8 +257,8 @@ namespace myApp.Math {
             for(int i = 0; i < m.nRows; i ++) {
                 string[] cols = rows[i].Trim().Split(" ");
                 for(int j = 0; j < m.nCols; j ++) {
-                    int n;
-                    if(! int.TryParse(cols[j], out n)) {
+                    double n;
+                    if(! double.TryParse(cols[j], out n)) {
                         n = 0;
                     }
                     m[i,j] = n;

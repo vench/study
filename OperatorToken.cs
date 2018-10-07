@@ -14,21 +14,24 @@ namespace myApp {
     
 
         public override object Eval() {
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Метод недоступен");
         }
 
         public override object Eval( AbToken left, AbToken right) {
             
-            var b = right.Eval();
-
+            if (this.token == ".") { 
+                return EvalMethod( left.Eval(), right.getToken());
+            }
+            
+            var b = right.Eval();             
+            
             if(this.token == "=" && b is Math.Matrix) {
                 context[left.getToken()] = (Math.Matrix)b;
                 return b;
-            }
-
+            } 
+            
             var a = left.Eval();
             
-
             if(a is Math.Matrix && b is Math.Matrix) {
                 return EvalVal((Math.Matrix)a, (Math.Matrix)b);
             }
@@ -42,7 +45,18 @@ namespace myApp {
                 return EvalVal((int)a, (int)b);
             }            
 
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Операция недопустима для данных объектов");
+        }
+
+        private object EvalMethod(object a, string method) {
+            if( a is Math.Matrix) {
+                switch(method) {
+                    case "T":
+                        return ((Math.Matrix)a).Transpose();
+                }
+                    
+            }
+            return a;
         }
 
         private object EvalVal(int a, int b) {
@@ -54,7 +68,7 @@ namespace myApp {
                  case "*":
                     return a * b;
             }
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Операция недопустима для данных объектов");
         } 
 
         private object EvalVal(Math.Matrix a, int b) {
@@ -62,7 +76,7 @@ namespace myApp {
                  case "*":
                     return a * b;
             }
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Операция недопустима для данных объектов");
         }    
 
         private object EvalVal(Math.Matrix a, Math.Matrix b) {
@@ -74,7 +88,7 @@ namespace myApp {
                  case "*":
                     return a * b;
             }
-            throw new System.Exception("Operation not found");
+            throw new System.Exception("Операция недопустима для данных объектов");
         }
 
     }
