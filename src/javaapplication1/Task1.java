@@ -17,6 +17,7 @@ import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javaapplication1.math.Matrix;
+import javaapplication1.math.Vector;
 import javaapplication1.math.MatrixException;
 
 /**
@@ -27,6 +28,7 @@ public class Task1 extends AbTask {
     
     
     final private static String FILE_NAME = "matrix.txt";
+    final private static String FILE_NAME2 = "vector.txt";
     
     /**
      * 
@@ -54,26 +56,61 @@ public class Task1 extends AbTask {
             System.out.println(M.output());
             
             //  Save 
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-              new FileOutputStream(FILE_NAME), "utf-8"))) {
-                M.write(writer);
-            } catch (Exception ex) {
-                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            save(M, FILE_NAME);
             
             // Load
-            try (Reader reader = new BufferedReader(new InputStreamReader(
-              new FileInputStream(FILE_NAME), "utf-8"))) {
-                Matrix.read(reader);
-            } catch (Exception ex) {
-                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+            Matrix M1 = load(FILE_NAME);
+            System.out.println(M1.output());
+            
+            
+            // Vector
+            Vector v = new Vector(10);
+            System.out.println(v.output());
+            for(int i = 0; i < 10; i ++) {
+                v.set(i, 1./(i + 1));
             }
             
+            System.out.println(v.output());
+            
+            //  Save 
+            save(v, FILE_NAME2);
+            
+            // Load
+            Matrix v1 = load(FILE_NAME2);
+            System.out.println(v1.output());  
+            
+            // Cos
+            Vector vv1 = new Vector( new double[]{1, 2} ); 
+            Vector vv2 = new Vector( new double[]{1, 2} );
+            Vector vv3 = new Vector( new double[]{2, 0} );
+            
+            System.out.println(vv1.cos(vv2)); // -> 1
+            System.out.println(vv1.cos(vv3)); // -> .45
             
         } catch (MatrixException ex) {
             Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
         }
       
+    }
+    
+    
+    private void save(Matrix M, String fileName) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+              new FileOutputStream(fileName), "utf-8"))) {
+                M.write(writer);
+            } catch (Exception ex) {
+                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    private Matrix load(String fileName) {
+        try (Reader reader = new BufferedReader(new InputStreamReader(
+              new FileInputStream(fileName), "utf-8"))) {
+                return Matrix.read(reader); 
+            } catch (Exception ex) {
+                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return null;
     }
     
     

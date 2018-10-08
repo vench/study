@@ -55,7 +55,7 @@ public class Matrix {
      * @param j
      * @param value 
      */
-    public void set(int i, int j, double value) {
+    public void set(int i, int j, double value) { 
         this.data[i * nCols + j] = value; 
     }
     
@@ -123,18 +123,41 @@ public class Matrix {
      * @param r
      * @return 
      * @throws java.io.IOException 
+     * @throws javaapplication1.math.MatrixException 
      */
-    public static Matrix read(Reader r) throws IOException {
+    public static Matrix read(Reader r) throws IOException, MatrixException {
         CharBuffer cb = CharBuffer.allocate(18);
         StringBuilder bf = new StringBuilder();
         while(r.read(cb) > 0) {
             cb.flip();
             bf.append(cb);
         } 
-        //TODO parse
-        System.out.println(">>>"); 
-        System.out.println(bf.toString());
-        return null;
+       
+        int start = bf.lastIndexOf("[")+1;
+        int end = bf.lastIndexOf("]"); 
+        String[] size = bf.substring(start, end).split("x");
+        if(size.length != 2) {
+            throw new MatrixException("Error parse format");
+        }
+        
+        int nRows = Integer.parseInt(size[0]);
+        int nCols = Integer.parseInt(size[1]);
+        Matrix m = new Matrix(nRows, nCols);
+       
+        start = bf.lastIndexOf("(")+1;
+        end = bf.lastIndexOf(")");
+        String[] data = bf.substring(start, end).split(" ");
+        
+        int i = 0;
+        for (String item : data) {
+            String s = item.trim();
+            if(s.isEmpty()){
+                continue;
+            }
+            m.data[i ++] = Double.parseDouble(s);
+        } 
+        
+        return m;
     }
     
     /**
@@ -152,7 +175,15 @@ public class Matrix {
      * @return 
      */
     public boolean equal(Matrix m) {
-        return false;
+        if(this.nCols != m.nCols || this.nRows != m.nRows) {
+            return false;
+        }
+        for(int i = 0; i < data.length; i ++) {
+            if(data[i] != m.data[i]) {
+                return false;
+            }    
+        }
+        return true;
     }
     
     /**
@@ -170,5 +201,13 @@ public class Matrix {
             Logger.getLogger(Matrix.class.getName()).log(Level.SEVERE, null, ex);
         }
         throw new CloneNotSupportedException("Error create Matrix");
+    }
+    
+    public int getCols() {
+        return nCols;
+    }
+    
+    public int getRows() {
+        return nRows;
     }
 }
