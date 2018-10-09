@@ -15,19 +15,19 @@ package javaapplication1.math;
 public class Vector extends Matrix {
     
     public Vector(int size) throws MatrixException {
-        super(1, size);
+        super(size, 1);
     }
     
     public Vector(double[] ar) throws MatrixException {
-        super(new double[][]{ar});
+        super(transpose(new double[][]{ar}));
     }
     
     public void set(int j, double value) {
-        super.set(0, j, value);
+        super.set(j, 0, value);
     }
     
     public double get(int j) {
-        return super.get(0, j);
+        return super.get( j, 0);
     }
     
     /**
@@ -52,7 +52,7 @@ public class Vector extends Matrix {
             return 0.0;
         }
         double p = 0.0, a = 0.0, b = 0.0;
-        for(int i = 0; i < getCols(); i ++ ) {
+        for(int i = 0; i < getRows(); i ++ ) {
             p += (get(i) * v.get(i));
             a += get(i) * get(i);
             b += v.get(i) * v.get(i);
@@ -60,5 +60,23 @@ public class Vector extends Matrix {
         
         return p / (Math.sqrt(a) * Math.sqrt(b));
     }
+    
+    /**
+     * 
+     * @param ar
+     * @return 
+     */
+    public static double[][] transpose(double[][] ar) {
+        int nRows = ar.length;
+        int nCols = nRows > 0 ? ar[0].length : 0;
+        double[][] m = new double[nCols][nRows];
+        for(int i = 0; i < nRows; i ++) {
+                for(int j = 0; j < nCols; j ++) {
+                    m[j][i] = ar[i][j];
+                }
+        }
+        return m;
+    }
+    
 }
 

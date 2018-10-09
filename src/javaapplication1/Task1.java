@@ -72,6 +72,10 @@ public class Task1 extends AbTask {
             
             System.out.println(v.output());
             
+            Vector vvv1 = new Vector(new double[]{1,2,3});
+            Vector vvv2 = new Vector(new double[]{3,4,5});
+            System.out.println(vvv1.add(vvv2).output()); //[4,6,8]
+            
             //  Save 
             save(v, FILE_NAME2);
             
