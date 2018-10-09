@@ -4,7 +4,12 @@
  * and open the template in the editor.
  */
 package javaapplication1;
- 
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -19,16 +24,19 @@ import java.util.logging.Logger;
 import javaapplication1.math.Matrix;
 import javaapplication1.math.Vector;
 import javaapplication1.math.MatrixException;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.event.ComponentAdapter;
 
 /**
  *
  * @author vench
  */
 public class Task1 extends AbTask {
-    
-    
-    final private static String FILE_NAME = "matrix.txt";
-    final private static String FILE_NAME2 = "vector.txt";
+     
     
     /**
      * 
@@ -36,86 +44,84 @@ public class Task1 extends AbTask {
      */
     @Override
     public String getTitle() {
-        return "Работа с классом Matrix";
+        return "Рисуем c awt";
     }
     
     @Override
     public void run() {
-        try {
-            // ADD Matrix
-            Matrix A = new Matrix(5, 5);
-            Matrix B = new Matrix(5, 5);
-            for(int i = 0; i < 5; i ++) {
-                A.set(i, i, 1);
-                B.set(0, i, 2);
-                B.set(i, 0, 2);
-            }
-            
-            System.out.println(A.output());
-            Matrix M = A.add(B);
-            System.out.println(M.output());
-            
-            //  Save 
-            save(M, FILE_NAME);
-            
-            // Load
-            Matrix M1 = load(FILE_NAME);
-            System.out.println(M1.output());
-            
-            
-            // Vector
-            Vector v = new Vector(10);
-            System.out.println(v.output());
-            for(int i = 0; i < 10; i ++) {
-                v.set(i, 1./(i + 1));
-            }
-            
-            System.out.println(v.output());
-            
-            Vector vvv1 = new Vector(new double[]{1,2,3});
-            Vector vvv2 = new Vector(new double[]{3,4,5});
-            System.out.println(vvv1.add(vvv2).output()); //[4,6,8]
-            
-            //  Save 
-            save(v, FILE_NAME2);
-            
-            // Load
-            Matrix v1 = load(FILE_NAME2);
-            System.out.println(v1.output());  
-            
-            // Cos
-            Vector vv1 = new Vector( new double[]{1, 2} ); 
-            Vector vv2 = new Vector( new double[]{1, 2} );
-            Vector vv3 = new Vector( new double[]{2, 0} );
-            
-            System.out.println(vv1.cos(vv2)); // -> 1
-            System.out.println(vv1.cos(vv3)); // -> .45
-            
-        } catch (MatrixException ex) {
-            Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         Frame f = new Frame("Main window");
+         f.setBounds(100, 100, 640, 480); 
+ 
+         f.addComponentListener(new ComponentAdapter() {
+             public void componentResized(ComponentEvent ce) { 
+        drawFrame(f);
+    }
+             
+             public void componentShown(ComponentEvent ce) { 
+        drawFrame(f);
+    }
+
+});
+    
+         f.addWindowListener(new WindowAdapter(){
+         
+             public void windowClosing(WindowEvent we) { 
+                 f.setVisible(false); 
+                 System.exit(0); 
+    }
+         
+         });
+         f.setVisible(true);
+         
       
     }
     
     
-    private void save(Matrix M, String fileName) {
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-              new FileOutputStream(fileName), "utf-8"))) {
-                M.write(writer);
-            } catch (Exception ex) {
-                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    
+    /**
+     * 
+     * @param f 
+     */
+    private void drawFrame(Frame f) {
+        
+        Graphics2D g2 = (Graphics2D)f.getGraphics(); 
+                
+        int w = f.getWidth();
+        int h = f.getHeight();
+        g2.clearRect(0, 0, w, h);
+        g2.setColor(Color.blue);
+        g2.fillRect(0, 0, w, h);
+                 
+        for (int i = 0; i < 12; i ++) {
+            g2.setColor(getRandomColor()); 
+            g2.setStroke(new BasicStroke(randomInt(3,7))); 
+            
+            double r = Math.random();
+                        
+            int rw = randomInt(0, w);
+            int rh = randomInt(0, h);
+            int rx = randomInt(0, w-rw);
+            int ry = randomInt(0, h-rh);
+            
+            if(r > 0.66) {
+                g2.drawLine(rx, ry, rw, rh);
+            } else if(r > 0.33) {
+                g2.drawOval(rx, ry, rw, rh);
+            } else {
+                g2.drawRect(rx, ry, rw, rh);
+            }            
+        }         
     }
     
-    private Matrix load(String fileName) {
-        try (Reader reader = new BufferedReader(new InputStreamReader(
-              new FileInputStream(fileName), "utf-8"))) {
-                return Matrix.read(reader); 
-            } catch (Exception ex) {
-                Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        return null;
+    private int randomInt(int min, int max) {
+        return (int)(Math.random() * (max - min + 1)) + min;
     }
     
+    private Color getRandomColor() {
+        int r = randomInt(0, 255);
+        int g = randomInt(0, 255);
+        int b = randomInt(0, 255);
+        return new Color(r, g, b);
+    }
     
 }
