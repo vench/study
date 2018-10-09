@@ -20,16 +20,17 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javaapplication1.math.Matrix;
-import javaapplication1.math.Vector;
-import javaapplication1.math.MatrixException;
+import java.util.logging.Logger; 
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
+import java.awt.Container;
+import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
@@ -49,79 +50,28 @@ public class Task1 extends AbTask {
     
     @Override
     public void run() {
-         Frame f = new Frame("Main window");
-         f.setBounds(100, 100, 640, 480); 
- 
-         f.addComponentListener(new ComponentAdapter() {
-             public void componentResized(ComponentEvent ce) { 
-        drawFrame(f);
-    }
-             
-             public void componentShown(ComponentEvent ce) { 
-        drawFrame(f);
-    }
-
-});
-    
-         f.addWindowListener(new WindowAdapter(){
-         
-             public void windowClosing(WindowEvent we) { 
-                 f.setVisible(false); 
-                 System.exit(0); 
-    }
-         
-         });
-         f.setVisible(true);
+        JFrame f = new JFrame("DemoFrame"); 
+        f.setSize(new Dimension(640, 480));
+        f.setLocation(200, 160);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        f.setResizable (false);
+        init(f);
+        f.setVisible(true);
          
       
     }
     
     
-    
-    /**
-     * 
-     * @param f 
-     */
-    private void drawFrame(Frame f) {
-        
-        Graphics2D g2 = (Graphics2D)f.getGraphics(); 
-                
-        int w = f.getWidth();
-        int h = f.getHeight();
-        g2.clearRect(0, 0, w, h);
-        g2.setColor(Color.blue);
-        g2.fillRect(0, 0, w, h);
-                 
-        for (int i = 0; i < 12; i ++) {
-            g2.setColor(getRandomColor()); 
-            g2.setStroke(new BasicStroke(randomInt(3,7))); 
-            
-            double r = Math.random();
-                        
-            int rw = randomInt(0, w);
-            int rh = randomInt(0, h);
-            int rx = randomInt(0, w-rw);
-            int ry = randomInt(0, h-rh);
-            
-            if(r > 0.66) {
-                g2.drawLine(rx, ry, rw, rh);
-            } else if(r > 0.33) {
-                g2.drawOval(rx, ry, rw, rh);
-            } else {
-                g2.drawRect(rx, ry, rw, rh);
-            }            
-        }         
+    private void init(JFrame f) {
+        Container contentPane = f.getContentPane();
+        contentPane.setLayout(null);
+        JButton button = new JButton("Demo");
+        button.setBounds (200, 100, 200, 30);
+        contentPane.add(button);
     }
+     
     
-    private int randomInt(int min, int max) {
-        return (int)(Math.random() * (max - min + 1)) + min;
-    }
     
-    private Color getRandomColor() {
-        int r = randomInt(0, 255);
-        int g = randomInt(0, 255);
-        int b = randomInt(0, 255);
-        return new Color(r, g, b);
-    }
+    
     
 }
