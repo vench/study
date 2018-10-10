@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 
 /**
@@ -13,10 +15,9 @@ namespace myApp
         
         static void Main(string[] args)
         {
-             
-            MatrixRun ct = new MatrixRun();
-            ct.Run();
-           
+              
+            Application.Run (new MyForm ());
+            
         }
 
     }
