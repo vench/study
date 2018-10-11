@@ -7,7 +7,9 @@
   </PropertyGroup>
  
   <ItemGroup>
-  <PackageReference Include="System.Windows.Forms" Version="*"/>
+  <Reference Include="System.Windows.Forms">
+      <HintPath>/usr/lib/mono/4.5-api/System.Windows.Forms.dll</HintPath>
+    </Reference> 
 </ItemGroup>
 
 </Project>
