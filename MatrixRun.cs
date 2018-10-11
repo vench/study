@@ -89,18 +89,24 @@ namespace myApp {
             //eval
             if(tokens.Count > 2) {
                 object result = null; 
+                string valName = CURENT_VAL; 
                 var ar = tokens.ToArray();
                 for (int i = 0; i < ar.Length - 2; i+= 2) {
                     var left = ar[i];
                     var center = ar[i+1];
-                    var rignt = ar[i+2];
+                    var rignt = ar[i+2];                    
 
                     if(center is OperatorToken) { 
                         result =  center.Eval(left, rignt);  
 
-                        if(result is Matrix) {
-                            context[CURENT_VAL] = (Matrix)result;
-                            ar[i+2] = new VariableToken(CURENT_VAL, context);
+                        if(result is Matrix) { 
+                            
+                            if(left is VariableToken && center.getToken() == "=") {
+                                valName = left.getToken();
+                            }
+
+                            context[valName] = (Matrix)result;
+                            ar[i+2] = new VariableToken(valName, context);
                             continue;
                         } 
 
