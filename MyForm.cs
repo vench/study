@@ -16,7 +16,7 @@ namespace myApp {
     class MyForm : Form {
 
 
-        enum actions  {DOT, CLEAR, DEFAULT};
+        enum actions  {None, Curved, Filled, Polygone};
 
         const int MIN_WIDTH = 640;
         const int MIN_HEIGHT = 480;
@@ -26,7 +26,10 @@ namespace myApp {
         private actions mode;
 
         private Rectangle rectOfDraw;
+
+        private bool allowDot;
  
+        private SettingsForm settingsForm;
 
         public MyForm()
         {
@@ -49,28 +52,44 @@ namespace myApp {
         private void Form1_Paint(object sender,PaintEventArgs e) {
             Console.WriteLine("Form1_Paint");
 
-            Graphics g = e.Graphics; 
-              
-           // g.Clear(Color.White);
+            Graphics g = e.Graphics;  
             var p = new Pen(Color.Black, 1);
             rectOfDraw = new Rectangle(120, 10, this.Width - 140, this.Height - 50); 
             g.DrawRectangle(p, rectOfDraw); 
-/**//*
-            foreach(var point in listPoints) {
-                Console.WriteLine("Draw point");
-                e.Graphics.DrawRectangle(p, point.X, point.Y, 10, 10);
-            }*/
-            if(listPoints.Count > 0) {
+
+            if(allowDot) {
+                g.DrawString("Редим рисования точек", 
+                    SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
+            }
+
+            // POINTS
+
+            foreach(var point in listPoints) { 
+                e.Graphics.FillEllipse(Brushes.Blue, new Rectangle((int)point.X, (int)point.Y, 10, 10));
+            } 
+            
+            if(listPoints.Count >= 3) {
 
                 switch(mode) {
-                    case actions.DOT:
+                    case actions.Curved:
+                        g.DrawCurve(Pens.Blue, listPoints.ToArray());
                         break;
-                    case actions.DEFAULT:
-
+                    case actions.Filled: 
+                        g.FillClosedCurve(Brushes.Blue, listPoints.ToArray());
+                        break;
+                    case actions.Polygone:
+                        g.DrawPolygon(Pens.Blue, listPoints.ToArray());
+                        //g.DrawClosedCurve(Pens.Blue, listPoints.ToArray());
+                        break;
+                        
+                    case actions.None: 
                         break;    
                 }
-                Console.WriteLine(listPoints);
-                g.FillClosedCurve(Brushes.ForestGreen, listPoints.ToArray());
+               
+                //g.FillClosedCurve(Brushes.ForestGreen, listPoints.ToArray());
+                //g.DrawClosedCurve();
+                 
+                
             }
                 
         }
@@ -90,6 +109,9 @@ namespace myApp {
  
 
         private void Form1_Click(object sender, EventArgs e) {
+            if(!allowDot) {
+                return;
+            }
             if(e is MouseEventArgs) {
                 var me = (MouseEventArgs)e;
                 if(rectOfDraw.Contains(me.Location.X, me.Location.Y)) {
@@ -106,21 +128,49 @@ namespace myApp {
             if(sender is Button) {
                 var b = (Button)sender;
                 switch(b.Text) {
-                    case "Точки":
-                        mode = actions.DOT;
+                    case "Точки": 
+                        allowDot = !allowDot; 
+                        Refresh();
+                        break;
+                    case "Параметры":
+                        if (settingsForm == null || settingsForm.Disposing) {
+                            settingsForm = new SettingsForm();
+                            settingsForm.FormClosed += new FormClosedEventHandler(Settings_FromClose);
+                        }                        
+                        settingsForm.Show();
+                        break;    
+                    case "Кривая":
+                        mode = actions.Curved;
+                        Refresh();
+                        break;      
+                    case "Ломаная":
+                        mode = actions.Polygone;
+                        Refresh();
+                        break;
+                    case "Безье":
+                        mode = actions.Curved;
+                        Refresh();
+                        break;
+                    case "Заполненная":
+                        mode = actions.Filled;
                         Refresh();
                         break;
                     case "Очистить":
-                        listPoints.Clear(); 
-                        mode = actions.CLEAR;
+                        listPoints.Clear();  
                         Refresh();
                         break;    
                     default:
-                        mode = actions.DEFAULT;
+                        mode = actions.None;
                         break;
                 }
                 //MessageBox.Show(b.Text);
             }            
         }
+    
+        private void Settings_FromClose(Object sender, FormClosedEventArgs e) {
+            settingsForm = null;
+        }
     }
+
+
 }
