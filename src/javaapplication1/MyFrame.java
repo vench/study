@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -48,13 +49,20 @@ public class MyFrame extends Frame{
             int rx = randomInt(0, w-rw);
             int ry = randomInt(0, h-rh);
             
+            
+            Shape s = null;
             if(r > 0.66) {
-                g2.draw(new Line2D.Double(rx, ry,rw, rh));
+                s = new Line2D.Double(rx, ry,rw, rh);
             } else if(r > 0.33) {
-                g2.draw(new Ellipse2D.Double(rx, ry,rw, rh));
+                s = new Ellipse2D.Double(rx, ry,rw, rh);
             } else {
-                g2.draw(new Rectangle2D.Double(rx, ry,rw, rh));
-            }            
+                s = new Rectangle2D.Double(rx, ry,rw, rh);
+            }     
+            
+            if(s != null){
+                g2.draw(s);
+            } 
+            
         }        
     }
     
