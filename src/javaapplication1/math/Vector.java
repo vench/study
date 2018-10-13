@@ -78,5 +78,27 @@ public class Vector extends Matrix {
         return m;
     }
     
+    /**
+     * 
+     * @param m
+     * @return
+     * @throws MatrixException 
+     */
+    public Vector matrixToVec(Matrix m) throws MatrixException {
+        Vector v = new Vector(m.nRows * m.nCols);
+        v.data = m.data;
+        return v;
+    }
+    
+    /**
+     * 
+     * @param m
+     * @return
+     * @throws MatrixException 
+     */ 
+    public Vector add(Vector m) throws MatrixException {
+        return matrixToVec(super.add(m));
+    }
+    
 }
 

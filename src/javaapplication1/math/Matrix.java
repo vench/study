@@ -18,9 +18,9 @@ import java.util.logging.Logger;
  */
 public class Matrix {
     
-    private double[] data;
-    private int nRows;
-    private int nCols;
+    protected double[] data;
+    protected int nRows;
+    protected int nCols;
     
     /**
      * 
