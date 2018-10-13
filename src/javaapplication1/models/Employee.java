@@ -46,7 +46,7 @@ public class Employee {
      * @param position 
      */
     public Employee( String name, String position) {
-         this(name, position, "WORKER".equals(position.toLowerCase()) ? 5000 : 6000);        
+         this(name, position, "WORKER".equals(position.toUpperCase()) ? 5000 : 6000);        
     }
     
     
