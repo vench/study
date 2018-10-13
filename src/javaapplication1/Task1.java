@@ -26,17 +26,34 @@ public class Task1 extends AbTask {
     
     @Override
     public void run() {
-       int[] ar = new int[3];
-       for(int i = 0; i < ar.length; i ++) {
-           System.out.println("Введите пожалуйста число №" + i + ": ");
-           ar[i] = readInt();
+       System.out.println("Введите пожалуйста число № 1: "); 
+       int a = readInt();
+       System.out.println("Введите пожалуйста число № 2: "); 
+       int b = readInt();
+       System.out.println("Введите пожалуйста число № 3: "); 
+       int c = readInt();
+       
+       System.out.printf("Вы ввели: %d, %d, %d\n", a, b, c); 
+       
+       if(a > b) {
+           int tmp = b;
+           b = a; 
+           a = tmp;
+       }
+       if(a > c) {
+           int tmp = c;
+           c = a; 
+           a = tmp;
+       }
+       if(b > c) {
+           int tmp = c;
+           c = b; 
+           b = tmp;
        }
        
-       System.out.println("Вы ввели:"); 
-       printArray(ar);
-       sort(ar);
-       System.out.println("После сортировки:"); 
-       printArray(ar); 
+       
+       System.out.printf("Ответ: %d, %d, %d\n", a, b, c); 
+       
     }
     
     
@@ -60,7 +77,7 @@ public class Task1 extends AbTask {
                     ar[j] = tmp; 
                 }
             }
-        }
+        }    
     }
     
     

@@ -14,10 +14,10 @@ public class Employee {
     
     private static int IdCounter = 0;
     
-    int idNumber;
-    String name;
-    EmployeePosition position;
-    int salary;
+    private int idNumber;
+    private String name;
+    private String position;
+    private int salary;
 
     /**
      * 
@@ -25,7 +25,7 @@ public class Employee {
      * @param position
      * @param salary 
      */
-    public Employee( String name, EmployeePosition position, int salary) {
+    public Employee( String name, String position, int salary) {
         this.idNumber = ++ IdCounter;
         this.name = name;
         this.position = position;
@@ -37,7 +37,7 @@ public class Employee {
      * @param name 
      */
     public Employee( String name) {
-        this(name, EmployeePosition.WORKER, 5000);
+        this(name, "WORKER", 5000);
     }
     
     /**
@@ -45,14 +45,14 @@ public class Employee {
      * @param name
      * @param position 
      */
-    public Employee( String name, EmployeePosition position) {
-         this(name, position, position == EmployeePosition.WORKER ? 5000 : 6000);        
+    public Employee( String name, String position) {
+         this(name, position, "WORKER".equals(position.toLowerCase()) ? 5000 : 6000);        
     }
     
     
     @Override
     public String toString() {
-        return "Employee{ID:"+idNumber+", Name: "+name+", Position: "+position.getName()+", Salary: "+salary+"}";
+        return "Employee{ID:"+idNumber+", Name: "+name+", Position: "+position+", Salary: "+salary+"}";
     }
     
     
@@ -72,6 +72,6 @@ public class Employee {
             }
         }
         
-        System.out.printf("Суммарная зарплата %d, должность(position): %s\n", sum, max.position.getName());
+        System.out.printf("Суммарная зарплата %d, должность(position): %s\n", sum, max.position);
     }
 }

@@ -6,8 +6,7 @@
 package javaapplication1;
 
 
-import javaapplication1.models.Employee;
-import javaapplication1.models.EmployeePosition;
+import javaapplication1.models.Employee; 
 
 /**
  *
@@ -28,14 +27,14 @@ public class Task3 implements Task {
         Employee[] list = {
             new Employee("Вася"),
             new Employee("Инна"),
-            new Employee("Женя", EmployeePosition.PROGRAMMER),
-            new Employee("Аня", EmployeePosition.WORKER),
-            new Employee("Юля", EmployeePosition.PROGRAMMER, 10000),
-            new Employee("Петя", EmployeePosition.PROGRAMMER),
-            new Employee("Дима", EmployeePosition.PROGRAMMER),
-            new Employee("Гоша", EmployeePosition.WORKER),
-            new Employee("Поля", EmployeePosition.PROGRAMMER),
-            new Employee("Глаша", EmployeePosition.PROGRAMMER, 9000)
+            new Employee("Женя", "PROGRAMMER"),
+            new Employee("Аня", "WORKER"),
+            new Employee("Юля", "PROGRAMMER", 10000),
+            new Employee("Петя", "PROGRAMMER"),
+            new Employee("Дима", "PROGRAMMER"),
+            new Employee("Гоша", "WORKER"),
+            new Employee("Поля", "PROGRAMMER"),
+            new Employee("Глаша", "PROGRAMMER", 9000)
         }; 
     
         Employee.printArray(list);

@@ -21,7 +21,7 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) {
         
-        Task[] t1 = {/*new Task1(), new Task2(),*/ new Task3(), new Task4()};
+        Task[] t1 = {new Task1(), /*new Task2(),*/ new Task3(), new Task4()};
         
         for (Task t11 : t1) {  
             System.out.println("============================================");
