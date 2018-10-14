@@ -22,7 +22,8 @@ public class Teacher extends AbPerson {
         this.degree = degree;
     }
     
+    @Override
     public String listData() {
-        return "Teacher: name " + name + ", degree " + degree;
+        return "Teacher> name: " + name + ", degree: " + degree;
     }
 }

@@ -20,13 +20,13 @@ import javax.swing.JTextField;
  *
  * @author vench
  */
-public class JFrameFaculty extends JFrame {
+public class JFrameStudent extends JFrame {
     
-    private final List<AbPerson> showList;
+     private final List<AbPerson> showList;
     
     
-    public JFrameFaculty(List<AbPerson> showList) {
-        super("Faculty Data");
+    public JFrameStudent(List<AbPerson> showList) {
+        super("Student Data");
         this.showList = showList;
         
         setSize(new Dimension(340, 180));
@@ -53,7 +53,7 @@ public class JFrameFaculty extends JFrame {
         
         
         //
-        JLabel label2 = new JLabel("Degre");
+        JLabel label2 = new JLabel("Age");
         label2.setBounds(180, 10, 150, 30);
         contentPane.add(label2);
         
@@ -61,6 +61,7 @@ public class JFrameFaculty extends JFrame {
         text2.setBounds(180, 40, 150, 30);
         contentPane.add(text2);
         
+        //
         JLabel label3 = new JLabel("");
         label3.setVisible(false);
         label3.setBounds(10, 110, 200, 50);
@@ -76,17 +77,23 @@ public class JFrameFaculty extends JFrame {
                 return;
             }
             if("".equals(text2.getText())) {
-                label3.setText("Degre is empty");
+                label3.setText("Age is empty");
                 label3.setForeground(Color.red);
                 label3.setVisible(true);
                 return;
             } 
-            
-            showList.add(new Teacher(text1.getText(), text2.getText()));
+            try {
+            int age = Integer.parseInt(text2.getText());
+            showList.add(new Student(text1.getText(), age));
             
             label3.setText("Accepted");
             label3.setForeground(Color.green);
             label3.setVisible(true);
+            } catch(NumberFormatException e) {
+                label3.setText("Age is not number");
+                label3.setForeground(Color.red);
+                label3.setVisible(true);
+            }
         });
         contentPane.add(button);
         
@@ -105,9 +112,5 @@ public class JFrameFaculty extends JFrame {
             setVisible(false);
         });
         contentPane.add(button2);
-        
-        
-        
-        //   
     }
 }

@@ -24,6 +24,6 @@ public class Student extends AbPerson {
     
     @Override
     public String listData() {
-        return "Student: name " + name + ", age " + age;
+        return "Student> name: " + name + ", age: " + age;
     }
 }

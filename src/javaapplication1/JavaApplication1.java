@@ -5,6 +5,8 @@
  */
 package javaapplication1;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author vench
@@ -16,14 +18,8 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) {
         
-        Task[] t1 = {new Task1()};
-        
-        for (Task t11 : t1) {  
-            System.out.println("============================================");
-            System.out.println(t11.getTitle());
-            System.out.println("============================================");
-            t11.run();
-        }
+        JFrame f = new JFrameMain("DS&A. Assignment 1");  
+        f.setVisible(true); 
     }
     
     

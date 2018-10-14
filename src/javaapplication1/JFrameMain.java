@@ -29,6 +29,10 @@ public class JFrameMain extends JFrame {
     
     private List<AbPerson> showList;
     
+    private JFrameFaculty frameFaculty;
+    
+    private JFrameStudent frameStudent;
+    
     public JFrameMain(String title) {
         super(title); 
         
@@ -47,12 +51,17 @@ public class JFrameMain extends JFrame {
         
         ActionListener actionListener = (ActionEvent ae) -> {
             switch(ae.getActionCommand()) {
-                case LABEL_FACULTY_DATA:
-                    showList.add(new Teacher("xxxx"));
-                    (new JFrameFaculty()).setVisible(true);
+                case LABEL_FACULTY_DATA: 
+                    if(frameFaculty == null) {
+                        frameFaculty = new JFrameFaculty(showList);
+                    }
+                    frameFaculty.setVisible(true);
                     break;
                 case LABEL_STUDENT_DATA:
-                    showList.add(new Student("xxxx"));
+                    if(frameStudent == null) {
+                        frameStudent = new JFrameStudent(showList);
+                    }
+                    frameStudent.setVisible(true);
                     break;
                 case LABEL_PRINT_LIST:
                     jList.setListData(showList.toArray());
@@ -85,7 +94,21 @@ public class JFrameMain extends JFrame {
         JScrollPane listScroller = new JScrollPane(jList);
         listScroller.setBounds(10, 50, 450, 220); 
         contentPane.add(listScroller); 
+         
     }
+    
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        if(frameFaculty != null) {
+            frameFaculty.dispose();
+        }
+        if(frameStudent != null) {
+            frameStudent.dispose();
+        }
+    }
+    
     
     
 }
