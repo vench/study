@@ -12,6 +12,12 @@ namespace myApp {
 
         private SettingsData settingsData;
 
+        private ColorDialog colorDialog;
+
+        private Button buttonPointColor;
+
+        private Button buttonLineColor;
+
         public SettingsForm(SettingsData settingsData) {
             this.settingsData = settingsData;
             initializeComponent();
@@ -26,6 +32,7 @@ namespace myApp {
 
         private void initializeComponent() {
             //TODO
+            colorDialog = new ColorDialog(); 
 
             Label l1 = new Label();
             l1.Text = "толщина линий";
@@ -48,7 +55,21 @@ namespace myApp {
             Label l3 = new Label();
             l3.Text = "цвет точек и линий";
             l3.SetBounds(10, 120, 120, 25);
-            Controls.Add (l3);
+            Controls.Add (l3); 
+            buttonPointColor = new Button ();
+            buttonPointColor.Text = "точки";
+            buttonPointColor.SetBounds(10, 140, 100, 25);
+            buttonPointColor.Click += new EventHandler (Button_Click1);
+            buttonPointColor.ForeColor = settingsData.PointColor; 
+            Controls.Add (buttonPointColor);
+
+            buttonLineColor = new Button ();
+            buttonLineColor.Text = "точки";
+            buttonLineColor.SetBounds(10, 160, 100, 25);
+            buttonLineColor.Click += new EventHandler (Button_Click2);
+            buttonLineColor.ForeColor = settingsData.LineColor; 
+            Controls.Add (buttonLineColor);
+          
  
 
             Label l4 = new Label();
@@ -71,10 +92,30 @@ namespace myApp {
             int n;
             if(int.TryParse(textBoxPointSize.Text, out n)){
                 settingsData.PointSize = n;
+            } 
+            if(int.TryParse(textBoxLineSize.Text, out n)){
+                settingsData.LineSize = n;
             }
-            
+            settingsData.PointColor = buttonPointColor.ForeColor;
+            settingsData.LineColor = buttonLineColor.ForeColor;
 
             Close();
+        }
+
+
+
+        private void Button_Click2(object sender, EventArgs e) {
+            colorDialog.Color = settingsData.LineColor; 
+            if(colorDialog.ShowDialog() == DialogResult.OK) {
+                buttonLineColor.ForeColor = colorDialog.Color;
+            }
+        }
+
+        private void Button_Click1(object sender, EventArgs e) {
+            colorDialog.Color = settingsData.PointColor; 
+            if(colorDialog.ShowDialog() == DialogResult.OK) {
+                buttonPointColor.ForeColor = colorDialog.Color;
+            }
         }
 
     }

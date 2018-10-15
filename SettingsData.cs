@@ -16,11 +16,21 @@ namespace myApp {
 
         private int lineSize = 1;
 
+        private Color lineColor;
+
 
         public SettingsData() {
             //TODO
         }
 
+        public Color LineColor {
+            get {
+                return lineColor;
+            }
+            set {
+                lineColor = value;
+            }
+        }
 
         public int LineSize{
             get {

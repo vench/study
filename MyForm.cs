@@ -21,7 +21,9 @@ namespace myApp {
         const int MIN_WIDTH = 640;
         const int MIN_HEIGHT = 480;
 
-        List<PointF> listPoints;
+        private PointF[] listPoints;
+
+        private int sizePoints;
 
         private actions mode;
 
@@ -33,11 +35,14 @@ namespace myApp {
 
         private SettingsData settingsData;
 
+        private Timer timer = new Timer();
+
         public MyForm()
         {
 
             settingsData = new SettingsData();    
-            listPoints = new  List<PointF>();   
+            listPoints = new  PointF[10];  
+            sizePoints = 0;
             
             // SET EVENTS
             Paint += new PaintEventHandler(Form1_Paint);
@@ -50,6 +55,12 @@ namespace myApp {
             MaximumSize = new System.Drawing.Size(SystemInformation.VirtualScreen.Width,SystemInformation.VirtualScreen.Height);
             MinimumSize = new System.Drawing.Size(MIN_WIDTH, MIN_HEIGHT);
             StartPosition = FormStartPosition.CenterScreen;
+
+
+            // TIMER
+            timer.Interval = 500;
+            timer.Enabled = false;
+            timer.Tick += new EventHandler(timer1_Tick);
         }
 
         private void Form1_Paint(object sender,PaintEventArgs e) {
@@ -66,29 +77,29 @@ namespace myApp {
             }
 
             // POINTS
-
-            foreach(var point in listPoints) { 
+            var takeList = listPoints.Take(sizePoints); 
+            foreach(var point in takeList) {  
                 e.Graphics.FillEllipse(settingsData.PointBrush, 
                         new Rectangle((int)point.X, (int)point.Y, settingsData.PointSize, settingsData.PointSize));
             } 
             
-            if(listPoints.Count >= 3) {
+            if(sizePoints >= 3) {
 
                 switch(mode) {
                     case actions.Curved:
-                        g.DrawClosedCurve(Pens.Blue, listPoints.ToArray());
+                        g.DrawClosedCurve(Pens.Blue, takeList.ToArray());
                         break;
                     case actions.Filled:                      
-                        g.FillClosedCurve(Brushes.Blue, listPoints.ToArray());
+                        g.FillClosedCurve(Brushes.Blue, takeList.ToArray());
                         break;
                     case actions.Polygone:
                         //TODO
                        // g.DrawPolygon(Pens.Blue, listPoints.ToArray()); 
-                        g.DrawCurve(Pens.Blue, listPoints.ToArray());
+                        g.DrawCurve(Pens.Blue, takeList.ToArray());
                         break;
                     case actions.Bize:
                         //TODO  
-                        g.DrawBeziers(Pens.Blue, listPoints.ToArray());
+                        g.DrawBeziers(Pens.Blue, takeList.ToArray());
                         break;   
                     case actions.None: 
                         break;    
@@ -116,9 +127,14 @@ namespace myApp {
             }
             if(e is MouseEventArgs) {
                 var me = (MouseEventArgs)e;
-                if(rectOfDraw.Contains(me.Location.X, me.Location.Y)) {
-                    Console.WriteLine("Click to rect");
-                    listPoints.Add(new PointF(me.X, me.Y)); //me.Location
+                if(rectOfDraw.Contains(me.Location.X, me.Location.Y)) { 
+                    listPoints[sizePoints] = new PointF(me.X, me.Y);
+                    sizePoints ++;
+                    if(sizePoints >= listPoints.Length) {
+                        var tmp = new PointF[listPoints.Length * 2];
+                        listPoints.CopyTo(tmp, 0);
+                        listPoints = tmp;
+                    }
                 }
                 Console.WriteLine(me.Location);
                 Refresh();
@@ -158,10 +174,15 @@ namespace myApp {
                         Refresh();
                         break;
                     case "Очистить":
-                        listPoints.Clear();  
+                        listPoints = new PointF[10];
+                        sizePoints = 0; 
                         mode = actions.None;
                         Refresh();
                         break;    
+                    case "Движение": 
+                        timer.Enabled = !timer.Enabled;
+                        break;
+
                     default:
                         mode = actions.None;
                         break;
@@ -173,6 +194,21 @@ namespace myApp {
         private void Settings_FromClose(Object sender, FormClosedEventArgs e) {
             settingsForm = null;
         }
+
+         private void timer1_Tick(object sender, EventArgs e) {
+             System.Console.WriteLine("timer1_Tick");
+
+             if(sizePoints == 0) {
+                 return;
+             }
+
+
+            for(int i = 0; i < sizePoints; i ++) {
+                listPoints[i].Y += 1;
+            }
+ 
+             Refresh();
+         }
     }
 
 
