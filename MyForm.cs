@@ -16,7 +16,7 @@ namespace myApp {
     class MyForm : Form {
 
 
-        enum actions  {None, Curved, Filled, Polygone};
+        enum actions  {None, Bize, Curved, Filled, Polygone};
 
         const int MIN_WIDTH = 640;
         const int MIN_HEIGHT = 480;
@@ -31,9 +31,12 @@ namespace myApp {
  
         private SettingsForm settingsForm;
 
+        private SettingsData settingsData;
+
         public MyForm()
         {
 
+            settingsData = new SettingsData();    
             listPoints = new  List<PointF>();   
             
             // SET EVENTS
@@ -53,7 +56,7 @@ namespace myApp {
             Console.WriteLine("Form1_Paint");
 
             Graphics g = e.Graphics;  
-            var p = new Pen(Color.Black, 1);
+            var p = new Pen(settingsData.FontColor, 1);
             rectOfDraw = new Rectangle(120, 10, this.Width - 140, this.Height - 50); 
             g.DrawRectangle(p, rectOfDraw); 
 
@@ -65,33 +68,32 @@ namespace myApp {
             // POINTS
 
             foreach(var point in listPoints) { 
-                e.Graphics.FillEllipse(Brushes.Blue, new Rectangle((int)point.X, (int)point.Y, 10, 10));
+                e.Graphics.FillEllipse(settingsData.PointBrush, 
+                        new Rectangle((int)point.X, (int)point.Y, settingsData.PointSize, settingsData.PointSize));
             } 
             
             if(listPoints.Count >= 3) {
 
                 switch(mode) {
                     case actions.Curved:
-                        g.DrawCurve(Pens.Blue, listPoints.ToArray());
+                        g.DrawClosedCurve(Pens.Blue, listPoints.ToArray());
                         break;
-                    case actions.Filled: 
+                    case actions.Filled:                      
                         g.FillClosedCurve(Brushes.Blue, listPoints.ToArray());
                         break;
                     case actions.Polygone:
-                        g.DrawPolygon(Pens.Blue, listPoints.ToArray());
-                        //g.DrawClosedCurve(Pens.Blue, listPoints.ToArray());
+                        //TODO
+                       // g.DrawPolygon(Pens.Blue, listPoints.ToArray()); 
+                        g.DrawCurve(Pens.Blue, listPoints.ToArray());
                         break;
-                        
+                    case actions.Bize:
+                        //TODO  
+                        g.DrawBeziers(Pens.Blue, listPoints.ToArray());
+                        break;   
                     case actions.None: 
                         break;    
-                }
-               
-                //g.FillClosedCurve(Brushes.ForestGreen, listPoints.ToArray());
-                //g.DrawClosedCurve();
-                 
-                
-            }
-                
+                }  
+            } 
         }
 
         private void initializeComponent() {
@@ -134,7 +136,7 @@ namespace myApp {
                         break;
                     case "Параметры":
                         if (settingsForm == null || settingsForm.Disposing) {
-                            settingsForm = new SettingsForm();
+                            settingsForm = new SettingsForm(settingsData);
                             settingsForm.FormClosed += new FormClosedEventHandler(Settings_FromClose);
                         }                        
                         settingsForm.Show();
@@ -148,7 +150,7 @@ namespace myApp {
                         Refresh();
                         break;
                     case "Безье":
-                        mode = actions.Curved;
+                        mode = actions.Bize;
                         Refresh();
                         break;
                     case "Заполненная":
@@ -157,6 +159,7 @@ namespace myApp {
                         break;
                     case "Очистить":
                         listPoints.Clear();  
+                        mode = actions.None;
                         Refresh();
                         break;    
                     default:
