@@ -21,7 +21,7 @@ namespace myApp {
         const int MIN_WIDTH = 640;
         const int MIN_HEIGHT = 480;
 
-        private PointF[] listPoints;
+        private MyPoint[] listPoints;
 
         private int sizePoints;
 
@@ -37,11 +37,13 @@ namespace myApp {
 
         private Timer timer = new Timer();
 
+
+
         public MyForm()
         {
 
             settingsData = new SettingsData();    
-            listPoints = new  PointF[10];  
+            listPoints = new  MyPoint[10];  
             sizePoints = 0;
             
             // SET EVENTS
@@ -58,7 +60,7 @@ namespace myApp {
 
 
             // TIMER
-            timer.Interval = 500;
+            timer.Interval = 100;
             timer.Enabled = false;
             timer.Tick += new EventHandler(timer1_Tick);
         }
@@ -72,34 +74,37 @@ namespace myApp {
             g.DrawRectangle(p, rectOfDraw); 
 
             if(allowDot) {
-                g.DrawString("Редим рисования точек", 
+                g.DrawString("Режим рисования точек", 
                     SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
             }
 
             // POINTS
             var takeList = listPoints.Take(sizePoints); 
+            PointF[] arPoints = new PointF[sizePoints];
+            int n = 0;
             foreach(var point in takeList) {  
                 e.Graphics.FillEllipse(settingsData.PointBrush, 
                         new Rectangle((int)point.X, (int)point.Y, settingsData.PointSize, settingsData.PointSize));
+                arPoints[n ++] = point.Point;
             } 
             
             if(sizePoints >= 3) {
 
                 switch(mode) {
                     case actions.Curved:
-                        g.DrawClosedCurve(Pens.Blue, takeList.ToArray());
+                        g.DrawClosedCurve(Pens.Blue, arPoints);
                         break;
                     case actions.Filled:                      
-                        g.FillClosedCurve(Brushes.Blue, takeList.ToArray());
+                        g.FillClosedCurve(Brushes.Blue, arPoints);
                         break;
                     case actions.Polygone:
                         //TODO
-                       // g.DrawPolygon(Pens.Blue, listPoints.ToArray()); 
-                        g.DrawCurve(Pens.Blue, takeList.ToArray());
+                       // g.DrawPolygon(Pens.Blue, arPoints); 
+                        g.DrawCurve(Pens.Blue, arPoints);
                         break;
                     case actions.Bize:
                         //TODO  
-                        g.DrawBeziers(Pens.Blue, takeList.ToArray());
+                        g.DrawBeziers(Pens.Blue, arPoints);
                         break;   
                     case actions.None: 
                         break;    
@@ -128,10 +133,10 @@ namespace myApp {
             if(e is MouseEventArgs) {
                 var me = (MouseEventArgs)e;
                 if(rectOfDraw.Contains(me.Location.X, me.Location.Y)) { 
-                    listPoints[sizePoints] = new PointF(me.X, me.Y);
+                    listPoints[sizePoints] = new MyPoint(me.X, me.Y);
                     sizePoints ++;
                     if(sizePoints >= listPoints.Length) {
-                        var tmp = new PointF[listPoints.Length * 2];
+                        var tmp = new MyPoint[listPoints.Length * 2];
                         listPoints.CopyTo(tmp, 0);
                         listPoints = tmp;
                     }
@@ -148,6 +153,7 @@ namespace myApp {
                 switch(b.Text) {
                     case "Точки": 
                         allowDot = !allowDot; 
+                        timer.Enabled = false;
                         Refresh();
                         break;
                     case "Параметры":
@@ -174,13 +180,14 @@ namespace myApp {
                         Refresh();
                         break;
                     case "Очистить":
-                        listPoints = new PointF[10];
+                        listPoints = new MyPoint[10];
                         sizePoints = 0; 
                         mode = actions.None;
                         Refresh();
                         break;    
                     case "Движение": 
                         timer.Enabled = !timer.Enabled;
+                        allowDot = false;
                         break;
 
                     default:
@@ -193,22 +200,56 @@ namespace myApp {
     
         private void Settings_FromClose(Object sender, FormClosedEventArgs e) {
             settingsForm = null;
+            Refresh();
         }
 
          private void timer1_Tick(object sender, EventArgs e) {
-             System.Console.WriteLine("timer1_Tick");
+             //System.Console.WriteLine("timer1_Tick");
 
              if(sizePoints == 0) {
                  return;
              }
+  
 
-
-            for(int i = 0; i < sizePoints; i ++) {
-                listPoints[i].Y += 1;
-            }
+            if(!settingsData.PointRandomDirection) {
+                
+                int speed  =settingsData.PointSpeed;
+                
+                for(int i = 0; i < sizePoints; i ++) {
+                    //
+                    var point = listPoints[i].Point;
+                    float x = point.X + (settingsData.PointDirectionX * speed);
+                    float y = point.Y + (settingsData.PointDirectionY * speed);
+                    if(rectOfDraw.Contains((int)x, (int)point.Y)) {
+                        //point.X = x;
+                    } else {
+                        settingsData.PointDirectionX = -1 * settingsData.PointDirectionX;
+                    }
+        
+                    if(rectOfDraw.Contains((int)point.X, (int)y)) {
+                        //point.Y = y;
+                    } else {
+                        settingsData.PointDirectionY = -1 * settingsData.PointDirectionY;
+                    }
+                    //listPoints[i].Point = point;
+                }
+                for(int i = 0; i < sizePoints; i ++) { 
+                    var point = listPoints[i].Point;
+                    point.X = point.X + (settingsData.PointDirectionX * speed);
+                    point.Y = point.Y + (settingsData.PointDirectionY * speed);
+                    listPoints[i].Point = point;
+                }    
+            } else { 
+                for(int i = 0; i < sizePoints; i ++) {
+                   listPoints[i].Speed = settingsData.PointSpeed;
+                   listPoints[i].updatePoint(rectOfDraw);
+                }
+            } 
  
              Refresh();
          }
+
+        
     }
 
 

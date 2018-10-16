@@ -18,9 +18,52 @@ namespace myApp {
 
         private Color lineColor;
 
+        private int pointSpeed = 15;
+
+        private bool pointRandomDirection;
+
+        private int pointDirectionX =1;
+
+        private int pointDirectionY =1;
 
         public SettingsData() {
             //TODO
+        }
+
+        public int PointDirectionX {
+            set {
+                pointDirectionX = value;
+            }
+            get {
+                return pointDirectionX;
+            }
+        }
+
+        public int PointDirectionY {
+            set {
+                pointDirectionY = value;
+            }
+            get {
+                return pointDirectionY;
+            }
+        }
+
+        public bool PointRandomDirection {
+            get {
+                return pointRandomDirection;
+            }
+            set {
+                pointRandomDirection = value;
+            }
+        }
+
+        public int PointSpeed {
+            set {
+                pointSpeed = value;
+            }
+            get {
+                return pointSpeed;
+            }
         }
 
         public Color LineColor {

@@ -18,6 +18,8 @@ namespace myApp {
 
         private Button buttonLineColor;
 
+        private CheckBox typePointMode;
+
         public SettingsForm(SettingsData settingsData) {
             this.settingsData = settingsData;
             initializeComponent();
@@ -54,7 +56,7 @@ namespace myApp {
 
             Label l3 = new Label();
             l3.Text = "цвет точек и линий";
-            l3.SetBounds(10, 120, 120, 25);
+            l3.SetBounds(10, 100, 120, 25);
             Controls.Add (l3); 
             buttonPointColor = new Button ();
             buttonPointColor.Text = "точки";
@@ -65,7 +67,7 @@ namespace myApp {
 
             buttonLineColor = new Button ();
             buttonLineColor.Text = "точки";
-            buttonLineColor.SetBounds(10, 160, 100, 25);
+            buttonLineColor.SetBounds(10, 140, 100, 25);
             buttonLineColor.Click += new EventHandler (Button_Click2);
             buttonLineColor.ForeColor = settingsData.LineColor; 
             Controls.Add (buttonLineColor);
@@ -73,10 +75,13 @@ namespace myApp {
  
 
             Label l4 = new Label();
-            l4.Text = "характер движения";
-            l4.SetBounds(180, 120, 120, 25);
+            l4.Text = "Случайное движение";
+            l4.SetBounds(180, 100, 120, 25);
             Controls.Add (l4);
-            //случайный или с сохранением фигуры, 
+            typePointMode =  new CheckBox();
+            typePointMode.SetBounds(180, 140, 120, 35);
+            typePointMode.Checked = settingsData.PointRandomDirection;
+            Controls.Add(typePointMode);
  
             Button b = new Button ();
             b.Text = "Сохранить";
@@ -98,6 +103,7 @@ namespace myApp {
             }
             settingsData.PointColor = buttonPointColor.ForeColor;
             settingsData.LineColor = buttonLineColor.ForeColor;
+            settingsData.PointRandomDirection = typePointMode.Checked;
 
             Close();
         }
