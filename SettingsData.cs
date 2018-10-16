@@ -5,8 +5,7 @@ namespace myApp {
     class SettingsData {
 
         private int penSize;
-
-        private Color fontColor;
+ 
 
         private Color pointColor;
 
@@ -16,7 +15,7 @@ namespace myApp {
 
         private int lineSize = 1;
 
-        private Color lineColor;
+        private Color lineColor = Color.Black;
 
         private int pointSpeed = 15;
 
@@ -26,6 +25,9 @@ namespace myApp {
 
         private int pointDirectionY =1;
 
+        private Brush lineBrush;
+
+        private Pen linePen;
         public SettingsData() {
             //TODO
         }
@@ -68,9 +70,14 @@ namespace myApp {
 
         public Color LineColor {
             get {
+               // System.Console.WriteLine(lineColor);
                 return lineColor;
             }
             set {
+                if(lineColor != value) {
+                    lineBrush = null;
+                    linePen = null;
+                }
                 lineColor = value;
             }
         }
@@ -80,6 +87,9 @@ namespace myApp {
                 return lineSize;
             }
             set {
+                if(lineSize != value) { 
+                    linePen = null;
+                }
                 lineSize = value;
             }
         }
@@ -92,6 +102,25 @@ namespace myApp {
                 pointSize = value;
             }
         }    
+
+
+        public Pen LinePen {
+            get {
+                if(linePen == null) {
+                    linePen = new Pen(LineColor, LineSize);
+                }
+                return linePen;
+            }
+        }
+
+        public Brush LineBrush{
+            get {
+                if(lineBrush == null) {
+                    lineBrush = new SolidBrush(LineColor);
+                }
+                return lineBrush;
+            }    
+        }
 
         public Brush PointBrush {
             get {
@@ -117,18 +146,7 @@ namespace myApp {
             }
         }
 
-
-        public Color FontColor {
-            get {
-                if(fontColor == null) {
-                    fontColor = Color.Black;
-                }
-                return fontColor;
-            }
-            set {
-                fontColor = value;
-            }
-        }
+ 
 
         public int PenSize {
             get { 

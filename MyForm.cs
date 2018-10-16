@@ -43,8 +43,7 @@ namespace myApp {
         {
 
             settingsData = new SettingsData();    
-            listPoints = new  MyPoint[10];  
-            sizePoints = 0;
+            actionClearPoints();
             
             // SET EVENTS
             Paint += new PaintEventHandler(Form1_Paint);
@@ -63,18 +62,25 @@ namespace myApp {
             timer.Interval = 100;
             timer.Enabled = false;
             timer.Tick += new EventHandler(timer1_Tick);
+
+            // KeyEvents
+            KeyPreview = true;
+            KeyUp += new KeyEventHandler(Form1_KeyDown);
         }
 
         private void Form1_Paint(object sender,PaintEventArgs e) {
-            Console.WriteLine("Form1_Paint");
+           // Console.WriteLine("Form1_Paint");
 
-            Graphics g = e.Graphics;  
-            var p = new Pen(settingsData.FontColor, 1);
+            Graphics g = e.Graphics;   
             rectOfDraw = new Rectangle(120, 10, this.Width - 140, this.Height - 50); 
-            g.DrawRectangle(p, rectOfDraw); 
+            g.DrawRectangle(Pens.Black, rectOfDraw); 
 
             if(allowDot) {
                 g.DrawString("Режим рисования точек", 
+                    SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
+            }
+            if(timer.Enabled) {
+                g.DrawString("Скорость точек: " + settingsData.PointSpeed, 
                     SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
             }
 
@@ -82,9 +88,10 @@ namespace myApp {
             var takeList = listPoints.Take(sizePoints); 
             PointF[] arPoints = new PointF[sizePoints];
             int n = 0;
+            int ps = settingsData.PointSize / 2;
             foreach(var point in takeList) {  
                 e.Graphics.FillEllipse(settingsData.PointBrush, 
-                        new Rectangle((int)point.X, (int)point.Y, settingsData.PointSize, settingsData.PointSize));
+                        new Rectangle((int)point.X-ps, (int)point.Y-ps, settingsData.PointSize, settingsData.PointSize));
                 arPoints[n ++] = point.Point;
             } 
             
@@ -92,19 +99,19 @@ namespace myApp {
 
                 switch(mode) {
                     case actions.Curved:
-                        g.DrawClosedCurve(Pens.Blue, arPoints);
+                        g.DrawClosedCurve(settingsData.LinePen, arPoints);
                         break;
                     case actions.Filled:                      
-                        g.FillClosedCurve(Brushes.Blue, arPoints);
+                        g.FillClosedCurve(settingsData.LineBrush, arPoints);
                         break;
                     case actions.Polygone:
                         //TODO
                        // g.DrawPolygon(Pens.Blue, arPoints); 
-                        g.DrawCurve(Pens.Blue, arPoints);
+                        g.DrawCurve(settingsData.LinePen, arPoints);
                         break;
                     case actions.Bize:
                         //TODO  
-                        g.DrawBeziers(Pens.Blue, arPoints);
+                        g.DrawBeziers(settingsData.LinePen, arPoints);
                         break;   
                     case actions.None: 
                         break;    
@@ -179,15 +186,11 @@ namespace myApp {
                         mode = actions.Filled;
                         Refresh();
                         break;
-                    case "Очистить":
-                        listPoints = new MyPoint[10];
-                        sizePoints = 0; 
-                        mode = actions.None;
-                        Refresh();
+                    case "Очистить":                        
+                        actionClearPoints();
                         break;    
                     case "Движение": 
-                        timer.Enabled = !timer.Enabled;
-                        allowDot = false;
+                        actionTimerSwitch();
                         break;
 
                     default:
@@ -197,19 +200,32 @@ namespace myApp {
                 //MessageBox.Show(b.Text);
             }            
         }
+
+        private void actionClearPoints() {
+            timer.Enabled = false;
+            allowDot = false;
+            listPoints = new MyPoint[10];
+            sizePoints = 0; 
+            mode = actions.None; 
+            Refresh();
+        }
+
+        private void actionTimerSwitch() {
+            timer.Enabled = !timer.Enabled;
+            allowDot = false;
+            Refresh();
+        }
     
         private void Settings_FromClose(Object sender, FormClosedEventArgs e) {
             settingsForm = null;
             Refresh();
         }
 
-         private void timer1_Tick(object sender, EventArgs e) {
-             //System.Console.WriteLine("timer1_Tick");
+         private void timer1_Tick(object sender, EventArgs e) { 
 
              if(sizePoints == 0) {
                  return;
-             }
-  
+             } 
 
             if(!settingsData.PointRandomDirection) {
                 
@@ -220,18 +236,13 @@ namespace myApp {
                     var point = listPoints[i].Point;
                     float x = point.X + (settingsData.PointDirectionX * speed);
                     float y = point.Y + (settingsData.PointDirectionY * speed);
-                    if(rectOfDraw.Contains((int)x, (int)point.Y)) {
-                        //point.X = x;
-                    } else {
+                    if(!rectOfDraw.Contains((int)x, (int)point.Y)) {
                         settingsData.PointDirectionX = -1 * settingsData.PointDirectionX;
-                    }
+                    }  
         
-                    if(rectOfDraw.Contains((int)point.X, (int)y)) {
-                        //point.Y = y;
-                    } else {
+                    if(!rectOfDraw.Contains((int)point.X, (int)y)) { 
                         settingsData.PointDirectionY = -1 * settingsData.PointDirectionY;
-                    }
-                    //listPoints[i].Point = point;
+                    } 
                 }
                 for(int i = 0; i < sizePoints; i ++) { 
                     var point = listPoints[i].Point;
@@ -247,6 +258,28 @@ namespace myApp {
             } 
  
              Refresh();
+         }
+
+
+         private void Form1_KeyDown(object sender, KeyEventArgs e) {
+             System.Console.WriteLine(e.KeyCode);
+             switch (e.KeyCode)
+             {                 
+                 case Keys.Space:
+                     actionTimerSwitch();
+                    break; 
+                 case Keys.Escape:
+                    actionClearPoints();
+                    break;   
+                case Keys.Up:
+                    settingsData.PointSpeed ++;
+                    break;   
+                case Keys.Down:
+                    settingsData.PointSpeed --;
+                    break;  
+             }
+
+             e.Handled = true;
          }
 
         

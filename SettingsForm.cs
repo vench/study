@@ -19,6 +19,7 @@ namespace myApp {
         private Button buttonLineColor;
 
         private CheckBox typePointMode;
+        private TextBox textBoxPointSpeed;
 
         public SettingsForm(SettingsData settingsData) {
             this.settingsData = settingsData;
@@ -56,11 +57,11 @@ namespace myApp {
 
             Label l3 = new Label();
             l3.Text = "цвет точек и линий";
-            l3.SetBounds(10, 100, 120, 25);
+            l3.SetBounds(10, 80, 120, 25);
             Controls.Add (l3); 
             buttonPointColor = new Button ();
             buttonPointColor.Text = "точки";
-            buttonPointColor.SetBounds(10, 140, 100, 25);
+            buttonPointColor.SetBounds(10, 110, 100, 25);
             buttonPointColor.Click += new EventHandler (Button_Click1);
             buttonPointColor.ForeColor = settingsData.PointColor; 
             Controls.Add (buttonPointColor);
@@ -76,16 +77,27 @@ namespace myApp {
 
             Label l4 = new Label();
             l4.Text = "Случайное движение";
-            l4.SetBounds(180, 100, 120, 25);
+            l4.SetBounds(180, 80, 120, 25);
             Controls.Add (l4);
             typePointMode =  new CheckBox();
-            typePointMode.SetBounds(180, 140, 120, 35);
+            typePointMode.SetBounds(180, 110, 120, 35);
             typePointMode.Checked = settingsData.PointRandomDirection;
             Controls.Add(typePointMode);
+
+            Label l5 = new Label();
+            l5.Text = "Скорость точки";
+            l5.SetBounds(180, 150, 120, 25);
+            Controls.Add (l5);
+            textBoxPointSpeed = new TextBox();
+            textBoxPointSpeed.Text = settingsData.PointSpeed + "";
+            textBoxPointSpeed.SetBounds(180, 180, 120, 25);
+            Controls.Add (textBoxPointSpeed);
  
+
+            //
             Button b = new Button ();
             b.Text = "Сохранить";
-            b.SetBounds(10, 200, 100, 25);
+            b.SetBounds(10, 220, 100, 25);
             b.Click += new EventHandler (Button_Click);
             Controls.Add (b);
         }
@@ -100,6 +112,9 @@ namespace myApp {
             } 
             if(int.TryParse(textBoxLineSize.Text, out n)){
                 settingsData.LineSize = n;
+            }
+            if(int.TryParse(textBoxPointSpeed.Text, out n)) {
+                settingsData.PointSpeed = n;    
             }
             settingsData.PointColor = buttonPointColor.ForeColor;
             settingsData.LineColor = buttonLineColor.ForeColor;
