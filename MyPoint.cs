@@ -33,11 +33,17 @@ namespace myApp {
             get {
                 return point.X;
             }
+            set {
+                point.X = value;
+            }
         }
 
         public float Y {
             get {
                 return point.Y;
+            }
+            set {
+                point.Y = value;
             }
         }
 
@@ -51,11 +57,15 @@ namespace myApp {
             }
         }
 
+        public Rectangle getRectangle(int size) {
+              return new Rectangle((int)X-size/2, (int)Y-size/2, size, size);            
+        }
 
         public void updatePoint(Rectangle r) {
-
-            float x = point.X + (directionX * speed);
-            float y = point.Y + (directionY * speed);
+            var rnd = new System.Random((int)(X + Y));
+            var sp = rnd.Next(speed/ 2, speed*2);
+            float x = point.X + (directionX * sp);
+            float y = point.Y + (directionY * sp);
             if(r.Contains((int)x, (int)point.Y)) {
                 point.X = x;
             } else {

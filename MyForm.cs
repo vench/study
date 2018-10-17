@@ -9,35 +9,24 @@ namespace myApp {
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms; 
-    ///usr/lib/mono/gac/System.Windows.Forms/4.0.0.0__b77a5c561934e089/System.Windows.Forms.dll
     //msbuild /property:Configuration=myApp.csproj
     //mono *.exe
 
     class MyForm : Form {
 
-
         enum actions  {None, Bize, Curved, Filled, Polygone};
 
         const int MIN_WIDTH = 640;
         const int MIN_HEIGHT = 480;
-
         private MyPoint[] listPoints;
-
         private int sizePoints;
-
+        private int pointActiveIndex =-1;
         private actions mode;
-
         private Rectangle rectOfDraw;
-
         private bool allowDot;
- 
         private SettingsForm settingsForm;
-
         private SettingsData settingsData;
-
         private Timer timer = new Timer();
-
-
 
         public MyForm()
         {
@@ -47,16 +36,10 @@ namespace myApp {
             
             // SET EVENTS
             Paint += new PaintEventHandler(Form1_Paint);
-            this.Click += new EventHandler (Form1_Click); 
-
-            initializeComponent();
-
-            Text = "Рисуем линии";
-            SetBounds(0,0, MIN_WIDTH, MIN_HEIGHT);
-            MaximumSize = new System.Drawing.Size(SystemInformation.VirtualScreen.Width,SystemInformation.VirtualScreen.Height);
-            MinimumSize = new System.Drawing.Size(MIN_WIDTH, MIN_HEIGHT);
-            StartPosition = FormStartPosition.CenterScreen;
-
+            Click += new EventHandler (Form1_Click); 
+            MouseDown += new MouseEventHandler (Form1_MouseDown);
+            MouseUp += new MouseEventHandler (Form1_MouseUp);
+            MouseMove += new MouseEventHandler (Form1_MouseMove);
 
             // TIMER
             timer.Interval = 100;
@@ -66,6 +49,15 @@ namespace myApp {
             // KeyEvents
             KeyPreview = true;
             KeyUp += new KeyEventHandler(Form1_KeyDown);
+
+            // INIT
+            initializeComponent();
+
+            Text = "Рисуем линии";
+            SetBounds(0,0, MIN_WIDTH, MIN_HEIGHT);
+            MaximumSize = new System.Drawing.Size(SystemInformation.VirtualScreen.Width,SystemInformation.VirtualScreen.Height);
+            MinimumSize = new System.Drawing.Size(MIN_WIDTH, MIN_HEIGHT);
+            StartPosition = FormStartPosition.CenterScreen;            
         }
 
         private void Form1_Paint(object sender,PaintEventArgs e) {
@@ -84,19 +76,21 @@ namespace myApp {
                     SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
             }
 
-            // POINTS
-            var takeList = listPoints.Take(sizePoints); 
-            PointF[] arPoints = new PointF[sizePoints];
-            int n = 0;
+            // POINTS 
+            PointF[] arPoints = new PointF[sizePoints];            
             int ps = settingsData.PointSize / 2;
-            foreach(var point in takeList) {  
+            for(int i = 0; i < sizePoints; i ++) { 
+                if(pointActiveIndex == i) {
+                    e.Graphics.FillEllipse(Brushes.Red, 
+                         listPoints[i].getRectangle(settingsData.PointSize+2));
+                }  
                 e.Graphics.FillEllipse(settingsData.PointBrush, 
-                        new Rectangle((int)point.X-ps, (int)point.Y-ps, settingsData.PointSize, settingsData.PointSize));
-                arPoints[n ++] = point.Point;
+                         listPoints[i].getRectangle(settingsData.PointSize));
+                       
+                arPoints[i] = listPoints[i].Point;
             } 
             
-            if(sizePoints >= 3) {
-
+            if(sizePoints > 1) {
                 switch(mode) {
                     case actions.Curved:
                         g.DrawClosedCurve(settingsData.LinePen, arPoints);
@@ -131,7 +125,6 @@ namespace myApp {
                 Controls.Add (b);
             } 
         }
- 
 
         private void Form1_Click(object sender, EventArgs e) {
             if(!allowDot) {
@@ -192,12 +185,10 @@ namespace myApp {
                     case "Движение": 
                         actionTimerSwitch();
                         break;
-
                     default:
                         mode = actions.None;
                         break;
-                }
-                //MessageBox.Show(b.Text);
+                } 
             }            
         }
 
@@ -209,26 +200,22 @@ namespace myApp {
             mode = actions.None; 
             Refresh();
         }
-
         private void actionTimerSwitch() {
             timer.Enabled = !timer.Enabled;
             allowDot = false;
             Refresh();
         }
-    
+
         private void Settings_FromClose(Object sender, FormClosedEventArgs e) {
             settingsForm = null;
             Refresh();
         }
-
          private void timer1_Tick(object sender, EventArgs e) { 
+            if(sizePoints == 0) {
+                return;
+            } 
 
-             if(sizePoints == 0) {
-                 return;
-             } 
-
-            if(!settingsData.PointRandomDirection) {
-                
+            if(!settingsData.PointRandomDirection) {                
                 int speed  =settingsData.PointSpeed;
                 
                 for(int i = 0; i < sizePoints; i ++) {
@@ -259,8 +246,6 @@ namespace myApp {
  
              Refresh();
          }
-
-
          private void Form1_KeyDown(object sender, KeyEventArgs e) {
              System.Console.WriteLine(e.KeyCode);
              switch (e.KeyCode)
@@ -272,18 +257,97 @@ namespace myApp {
                     actionClearPoints();
                     break;   
                 case Keys.Up:
-                    settingsData.PointSpeed ++;
+                    if(timer.Enabled) {
+                        settingsData.PointSpeed ++;
+                    } else {
+                        pointsMoveTo(0, -1);
+                    } 
                     break;   
                 case Keys.Down:
-                    settingsData.PointSpeed --;
-                    break;  
-             }
+                    if(timer.Enabled) {
+                        settingsData.PointSpeed --;
+                    }  else {
+                        pointsMoveTo(0, 1);
+                    }
+                    break;
+                case Keys.Left:
+                    if(timer.Enabled) {
+                        settingsData.PointSpeed --;
+                    } else {
+                        pointsMoveTo(-1, 0);
+                    }                  
+                    break;   
+                case Keys.Right:
+                    if(timer.Enabled) {
+                        settingsData.PointSpeed ++;
+                    }  else {
+                        pointsMoveTo(1, 0);
+                    }
+                    break;    
+                case Keys.Oemplus:
+                    if(timer.Enabled) {
+                        settingsData.PointSpeed ++;
+                    }  
+                    break; 
+                case Keys.OemMinus:
+                    if(timer.Enabled) {
+                        settingsData.PointSpeed --;
+                    }  
+                    break;   
+            }
 
-             e.Handled = true;
+            e.Handled = true;
          }
+        
 
+        private void pointsMoveTo(int x, int y) {
+            if(sizePoints == 0) {
+                return;
+            }
+
+            if(pointActiveIndex >= 0) {
+                listPoints[pointActiveIndex].X += x;
+                listPoints[pointActiveIndex].Y += y;
+            } else {
+                for(int i = 0; i < sizePoints; i ++) {
+                    listPoints[i].X += x;
+                    listPoints[i].Y += y;
+                }
+            }           
+
+            Refresh();
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e) {
+            if(allowDot || sizePoints == 0) {
+                return;
+            }  
+
+            timer.Enabled = false;
+ 
+            for(int i = 0; i < sizePoints; i ++) {
+                var r = listPoints[i].getRectangle(settingsData.PointSize );
+                if(r.Contains(e.Location.X, e.Location.Y)) {
+                    pointActiveIndex = i; 
+                    Refresh();
+                    return;
+                }
+            }
+            pointActiveIndex = -1;
+        }
+        private void Form1_MouseUp(object sender, MouseEventArgs e) {
+           // System.Console.WriteLine("Form1_MouseUp");
+            pointActiveIndex = -1;
+        }
+        private void Form1_MouseMove(object sender, MouseEventArgs e) {
+            
+            if(pointActiveIndex  >= 0) {
+                listPoints[pointActiveIndex].X = e.X;
+                listPoints[pointActiveIndex].Y = e.Y;
+                Refresh();
+            }
+        } 
         
     }
-
 
 }
