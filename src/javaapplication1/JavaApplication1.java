@@ -5,7 +5,9 @@
  */
 package javaapplication1;
 
-import javax.swing.JFrame;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,8 +20,12 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) {
         
-        JFrame f = new JFrameMain("DS&A. Assignment 1");  
-        f.setVisible(true); 
+        DataBase db = new DataBase();
+        
+        for(int i = 0; i < 12; i ++) { 
+            (new Writer( "Writer " + i, db)).start();
+            (new Reader( "Reader " + i, db)).start();
+        }
     }
     
     
