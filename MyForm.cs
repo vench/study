@@ -105,7 +105,9 @@ namespace myApp {
                         break;
                     case actions.Bize:
                         //TODO  
-                        g.DrawBeziers(settingsData.LinePen, arPoints);
+                        if(arPoints.Length == 4) {
+                            g.DrawBeziers(settingsData.LinePen, arPoints);
+                        }                        
                         break;   
                     case actions.None: 
                         break;    
