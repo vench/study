@@ -13,360 +13,261 @@ namespace myApp {
     //mono *.exe
 
     class MyForm : Form {
-
-        enum actions  {None, Bize, Curved, Filled, Polygone};
-
-        const int MIN_WIDTH = 640;
-        const int MIN_HEIGHT = 480;
-        private MyPoint[] listPoints;
-        private int sizePoints;
-        private int pointActiveIndex =-1;
-        private actions mode;
-        private Rectangle rectOfDraw;
-        private bool allowDot;
-        private SettingsForm settingsForm;
-        private SettingsData settingsData;
-        private Timer timer = new Timer();
-
+         
         public MyForm()
         {
-
-            settingsData = new SettingsData();    
-            actionClearPoints();
-            
-            // SET EVENTS
-            Paint += new PaintEventHandler(Form1_Paint);
-            Click += new EventHandler (Form1_Click); 
-            MouseDown += new MouseEventHandler (Form1_MouseDown);
-            MouseUp += new MouseEventHandler (Form1_MouseUp);
-            MouseMove += new MouseEventHandler (Form1_MouseMove);
-
-            // TIMER
-            timer.Interval = 100;
-            timer.Enabled = false;
-            timer.Tick += new EventHandler(timer1_Tick);
-
-            // KeyEvents
-            KeyPreview = true;
-            KeyUp += new KeyEventHandler(Form1_KeyDown);
-
             // INIT
             initializeComponent();
 
-            Text = "Рисуем линии";
-            SetBounds(0,0, MIN_WIDTH, MIN_HEIGHT);
+            Text = "Мой словарь";
+            SetBounds(0,0, 800, 600);
             MaximumSize = new System.Drawing.Size(SystemInformation.VirtualScreen.Width,SystemInformation.VirtualScreen.Height);
-            MinimumSize = new System.Drawing.Size(MIN_WIDTH, MIN_HEIGHT);
+            MinimumSize = new System.Drawing.Size(800, 600);
             StartPosition = FormStartPosition.CenterScreen;            
         }
+ 
 
-        private void Form1_Paint(object sender,PaintEventArgs e) {
-           // Console.WriteLine("Form1_Paint");
 
-            Graphics g = e.Graphics;   
-            rectOfDraw = new Rectangle(120, 10, this.Width - 140, this.Height - 50); 
-            g.DrawRectangle(Pens.Black, rectOfDraw); 
 
-            if(allowDot) {
-                g.DrawString("Режим рисования точек", 
-                    SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
-            }
-            if(timer.Enabled) {
-                g.DrawString("Скорость точек: " + settingsData.PointSpeed, 
-                    SystemFonts.DefaultFont, Brushes.Black, new PointF(130,15));
-            }
-
-            // POINTS 
-            PointF[] arPoints = new PointF[sizePoints];            
-            int ps = settingsData.PointSize / 2;
-            for(int i = 0; i < sizePoints; i ++) { 
-                if(pointActiveIndex == i) {
-                    e.Graphics.FillEllipse(Brushes.Red, 
-                         listPoints[i].getRectangle(settingsData.PointSize+2));
-                }  
-                e.Graphics.FillEllipse(settingsData.PointBrush, 
-                         listPoints[i].getRectangle(settingsData.PointSize));
-                       
-                arPoints[i] = listPoints[i].Point;
-            } 
-            
-            if(sizePoints > 1) {
-                switch(mode) {
-                    case actions.Curved:
-                        g.DrawClosedCurve(settingsData.LinePen, arPoints);
-                        break;
-                    case actions.Filled:                      
-                        g.FillClosedCurve(settingsData.LineBrush, arPoints);
-                        break;
-                    case actions.Polygone:
-                        //TODO
-                       // g.DrawPolygon(Pens.Blue, arPoints); 
-                        g.DrawCurve(settingsData.LinePen, arPoints);
-                        break;
-                    case actions.Bize:
-                        //TODO  
-                        if(arPoints.Length == 4) {
-                            g.DrawBeziers(settingsData.LinePen, arPoints);
-                        }                        
-                        break;   
-                    case actions.None: 
-                        break;    
-                }  
-            } 
-        }
+private FlowLayoutPanel flowLayoutPanel3;
+	private Label label2;
+	private Button button11;
+	private Button button12;
+	private Button button13;
+	private Button button14;
+	private Button button15;
+	private FlowLayoutPanel flowLayoutPanel1;
+	private Label label1;
+	private Button button1;
+	private Button button2;
+	private Button button3;
+	private Button button4;
+	private Button button5;
 
         private void initializeComponent() {
  
-            string[] list = new string[]{"Точки", "Параметры", "Кривая", "Ломаная", "Безье", "Заполненная", "Движение", "Очистить"};
+            Button b1 = new Button ();
+            b1.Text = "Запустить тест";
+            b1.SetBounds(10, 10, 100, 25);
+            // b1.Click += new EventHandler (Button_Click);
+            Controls.Add (b1);
 
-            for(int i = 0; i < list.Length; i ++){
-                Button b = new Button ();
-                b.Text = list[i];
-                b.SetBounds(10, 10 + i * 35, 100, 25);
-                b.Click += new EventHandler (Button_Click);
-                Controls.Add (b);
-            } 
+            DataGridView dataGrid = new DataGridView();
+            dataGrid.SetBounds(10, 50, 100, 100);
+            //dataGrid.Parent = someTabPage;
+            dataGrid.Dock = DockStyle.Fill;
+            dataGrid.RowCount = 5;
+            dataGrid.ColumnCount = 2;
+            //dataGrid.Parent = GetTable();
+           // Controls.Add(dataGrid);
+
+            ScrollBar vScrollBar1 = new VScrollBar();
+            vScrollBar1.SetBounds(0, 50, 800, 300);
+            vScrollBar1.Dock = DockStyle.Right;
+            //vScrollBar1.Scroll += (sender, e) => { panel1.VerticalScroll.Value = vScrollBar1.Value; };
+            //Controls.Add(vScrollBar1);
+            //vScrollBar1.Controls.Add(dataGrid);
+
+
+            //
+
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+		this.label2 = new System.Windows.Forms.Label();
+		this.button11 = new System.Windows.Forms.Button();
+		this.button12 = new System.Windows.Forms.Button();
+		this.button13 = new System.Windows.Forms.Button();
+		this.button14 = new System.Windows.Forms.Button();
+		this.button15 = new System.Windows.Forms.Button();
+		this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+		this.label1 = new System.Windows.Forms.Label();
+		this.button1 = new System.Windows.Forms.Button();
+		this.button2 = new System.Windows.Forms.Button();
+		this.button3 = new System.Windows.Forms.Button();
+		this.button4 = new System.Windows.Forms.Button();
+		this.button5 = new System.Windows.Forms.Button();
+		this.flowLayoutPanel3.SuspendLayout();
+		this.flowLayoutPanel1.SuspendLayout();
+		this.SuspendLayout();
+		// 
+		// flowLayoutPanel3
+		// 
+		this.flowLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+					| System.Windows.Forms.AnchorStyles.Left)
+					| System.Windows.Forms.AnchorStyles.Right)));
+		this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+		this.flowLayoutPanel3.Controls.Add(this.label2);
+		this.flowLayoutPanel3.Controls.Add(this.button11);
+		this.flowLayoutPanel3.Controls.Add(this.button12);
+		this.flowLayoutPanel3.Controls.Add(this.button13);
+		this.flowLayoutPanel3.Controls.Add(this.button14);
+		this.flowLayoutPanel3.Controls.Add(this.button15);
+		this.flowLayoutPanel3.Location = new System.Drawing.Point(12, 12);
+		this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+		this.flowLayoutPanel3.Size = new System.Drawing.Size(631, 100);
+		this.flowLayoutPanel3.TabIndex = 2;
+		// 
+		// label2
+		// 
+		this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
+		this.label2.AutoSize = true;
+		this.label2.Location = new System.Drawing.Point(3, 28);
+		this.label2.Name = "label2";
+		this.label2.Size = new System.Drawing.Size(138, 14);
+		this.label2.TabIndex = 10;
+		this.label2.Text = "FlowDirection=LeftToRight";
+		// 
+		// button11
+		// 
+		this.button11.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+		this.button11.AutoSize = true;
+		this.button11.Location = new System.Drawing.Point(147, 44);
+		this.button11.Name = "button11";
+		this.button11.Size = new System.Drawing.Size(86, 23);
+		this.button11.TabIndex = 5;
+		this.button11.Text = "Anchor=Bottom";
+		// 
+		// button12
+		// 
+		this.button12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+		this.button12.AutoSize = true;
+		this.button12.Location = new System.Drawing.Point(239, 3);
+		this.button12.Name = "button12";
+		this.button12.Size = new System.Drawing.Size(111, 64);
+		this.button12.TabIndex = 6;
+		this.button12.Text = "Anchor=Top, Bottom";
+		// 
+		// button13
+		// 
+		this.button13.Anchor = System.Windows.Forms.AnchorStyles.None;
+		this.button13.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+		this.button13.Location = new System.Drawing.Point(356, 3);
+		this.button13.Name = "button13";
+		this.button13.Size = new System.Drawing.Size(75, 64);
+		this.button13.TabIndex = 7;
+		// 
+		// button14
+		// 
+		this.button14.Dock = System.Windows.Forms.DockStyle.Bottom;
+		this.button14.Location = new System.Drawing.Point(437, 44);
+		this.button14.Name = "button14";
+		this.button14.TabIndex = 8;
+		this.button14.Text = "Dock=Bottom";
+		// 
+		// button15
+		// 
+		this.button15.Dock = System.Windows.Forms.DockStyle.Fill;
+		this.button15.Location = new System.Drawing.Point(518, 3);
+		this.button15.Name = "button15";
+		this.button15.Size = new System.Drawing.Size(75, 64);
+		this.button15.TabIndex = 9;
+		this.button15.Text = "Dock=Fill";
+		// 
+		// flowLayoutPanel1
+		// 
+		this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+					| System.Windows.Forms.AnchorStyles.Right)));
+		this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+		this.flowLayoutPanel1.Controls.Add(this.label1);
+		this.flowLayoutPanel1.Controls.Add(this.button1);
+		this.flowLayoutPanel1.Controls.Add(this.button2);
+		this.flowLayoutPanel1.Controls.Add(this.button3);
+		this.flowLayoutPanel1.Controls.Add(this.button4);
+		this.flowLayoutPanel1.Controls.Add(this.button5);
+		this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+		this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 118);
+		this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+		this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 209);
+		this.flowLayoutPanel1.TabIndex = 3;
+		// 
+		// label1
+		// 
+		this.label1.AutoSize = true;
+		this.label1.Location = new System.Drawing.Point(3, 3);
+		this.label1.Name = "label1";
+		this.label1.Size = new System.Drawing.Size(128, 14);
+		this.label1.TabIndex = 11;
+		this.label1.Text = "FlowDirection=TopDown";
+		// 
+		// button1
+		// 
+		this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+		this.button1.Location = new System.Drawing.Point(74, 23);
+		this.button1.Name = "button1";
+		this.button1.TabIndex = 5;
+		this.button1.Text = "Anchor=Right";
+		// 
+		// button2
+		// 
+		this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+		this.button2.Location = new System.Drawing.Point(3, 52);
+		this.button2.Name = "button2";
+		this.button2.Size = new System.Drawing.Size(146, 23);
+		this.button2.TabIndex = 6;
+		this.button2.Text = "Anchor=Left, Right";
+		// 
+		// button3
+		// 
+		this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+		this.button3.Location = new System.Drawing.Point(3, 81);
+		this.button3.Name = "button3";
+		this.button3.Size = new System.Drawing.Size(146, 23);
+		this.button3.TabIndex = 7;
+		// 
+		// button4
+		// 
+		this.button4.Dock = System.Windows.Forms.DockStyle.Right;
+		this.button4.Location = new System.Drawing.Point(74, 110);
+		this.button4.Name = "button4";
+		this.button4.TabIndex = 8;
+		this.button4.Text = "Dock=Right";
+		// 
+		// button5
+		// 
+		this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
+		this.button5.Location = new System.Drawing.Point(3, 139);
+		this.button5.Name = "button5";
+		this.button5.Size = new System.Drawing.Size(146, 23);
+		this.button5.TabIndex = 9;
+		this.button5.Text = "Dock=Fill";
+		// 
+		// Form1
+		// 
+		this.ClientSize = new System.Drawing.Size(658, 341);
+		this.Controls.Add(this.flowLayoutPanel1);
+		this.Controls.Add(this.flowLayoutPanel3);
+		this.Name = "Form1";
+		this.Text = "Form1";
+		this.flowLayoutPanel3.ResumeLayout(false);
+		this.flowLayoutPanel3.PerformLayout();
+		this.flowLayoutPanel1.ResumeLayout(false);
+		this.flowLayoutPanel1.PerformLayout();
+		this.ResumeLayout(false);
         }
 
-        private void Form1_Click(object sender, EventArgs e) {
-            if(!allowDot) {
-                return;
-            }
-            if(e is MouseEventArgs) {
-                var me = (MouseEventArgs)e;
-                if(rectOfDraw.Contains(me.Location.X, me.Location.Y)) { 
-                    listPoints[sizePoints] = new MyPoint(me.X, me.Y);
-                    sizePoints ++;
-                    if(sizePoints >= listPoints.Length) {
-                        var tmp = new MyPoint[listPoints.Length * 2];
-                        listPoints.CopyTo(tmp, 0);
-                        listPoints = tmp;
-                    }
-                }
-                Console.WriteLine(me.Location);
-                Refresh();
-            } 
-        }
+        public static DataTable GetTable()
+    {
+        // Here we create a DataTable with four columns.
+        DataTable table = new DataTable();
+        table.Columns.Add("Dosage", typeof(int));
+        table.Columns.Add("Drug", typeof(string));
+        table.Columns.Add("Patient", typeof(string));
+        table.Columns.Add("Date", typeof(DateTime));
 
-        private void Button_Click(object sender, EventArgs e)
-        {
-            if(sender is Button) {
-                var b = (Button)sender;
-                switch(b.Text) {
-                    case "Точки": 
-                        allowDot = !allowDot; 
-                        timer.Enabled = false;
-                        Refresh();
-                        break;
-                    case "Параметры":
-                        if (settingsForm == null || settingsForm.Disposing) {
-                            settingsForm = new SettingsForm(settingsData);
-                            settingsForm.FormClosed += new FormClosedEventHandler(Settings_FromClose);
-                        }                        
-                        settingsForm.Show();
-                        break;    
-                    case "Кривая":
-                        allowDot = false;
-                        mode = actions.Curved;
-                        Refresh();
-                        break;      
-                    case "Ломаная":
-                        allowDot = false;
-                        mode = actions.Polygone;
-                        Refresh();
-                        break;
-                    case "Безье":
-                        allowDot = false;
-                        mode = actions.Bize;
-                        Refresh();
-                        break;
-                    case "Заполненная":
-                        allowDot = false;
-                        mode = actions.Filled;
-                        Refresh();
-                        break;
-                    case "Очистить":                        
-                        actionClearPoints();
-                        break;    
-                    case "Движение": 
-                        actionTimerSwitch();
-                        break;
-                    default:
-                        mode = actions.None;
-                        break;
-                } 
-            }            
-        }
-
-        private void actionClearPoints() {
-            timer.Enabled = false;
-            allowDot = false;
-            listPoints = new MyPoint[10];
-            sizePoints = 0; 
-            mode = actions.None; 
-            Refresh();
-        }
-        private void actionTimerSwitch() {
-            timer.Enabled = !timer.Enabled;
-            allowDot = false;
-            Refresh();
-        }
-
-        private void Settings_FromClose(Object sender, FormClosedEventArgs e) {
-            settingsForm = null;
-            Refresh();
-        }
-         private void timer1_Tick(object sender, EventArgs e) { 
-            if(sizePoints == 0) {
-                return;
-            } 
-
-            if(!settingsData.PointRandomDirection) {                
-                int speed  =settingsData.PointSpeed;
-                
-                for(int i = 0; i < sizePoints; i ++) {
-                    //
-                    var point = listPoints[i].Point;
-                    float x = point.X + (settingsData.PointDirectionX * speed);
-                    float y = point.Y + (settingsData.PointDirectionY * speed);
-                    if(!rectOfDraw.Contains((int)x, (int)point.Y)) {
-                        settingsData.PointDirectionX = -1 * settingsData.PointDirectionX;
-                    }  
-        
-                    if(!rectOfDraw.Contains((int)point.X, (int)y)) { 
-                        settingsData.PointDirectionY = -1 * settingsData.PointDirectionY;
-                    } 
-                }
-                for(int i = 0; i < sizePoints; i ++) { 
-                    var point = listPoints[i].Point;
-                    point.X = point.X + (settingsData.PointDirectionX * speed);
-                    point.Y = point.Y + (settingsData.PointDirectionY * speed);
-                    listPoints[i].Point = point;
-                }    
-            } else { 
-                for(int i = 0; i < sizePoints; i ++) {
-                   listPoints[i].Speed = settingsData.PointSpeed;
-                   listPoints[i].updatePoint(rectOfDraw);
-                }
-            } 
- 
-             Refresh();
-         }
-
-
-         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
-             if(Keys.Right == keyData || Keys.Left == keyData  || Keys.Down == keyData  || Keys.Up == keyData) { 
-                    return HandledKeys(keyData);
-             }
-             return base.ProcessCmdKey(ref msg, keyData);
-         }    
-         private void Form1_KeyDown(object sender, KeyEventArgs e) {
-            // System.Console.WriteLine(e.KeyCode);  
-            e.Handled = HandledKeys(e.KeyCode);  
-         }
-
-
-        private bool HandledKeys(Keys key) {
-            switch (key)
-             {                 
-                 case Keys.Space:
-                     actionTimerSwitch();
-                    return true; 
-                 case Keys.Escape:
-                    actionClearPoints();
-                    return true;  
-                case Keys.Up:
-                    if(timer.Enabled) {
-                        settingsData.PointSpeed ++;
-                    } else {
-                        pointsMoveTo(0, -1);
-                    } 
-                    return true;    
-                case Keys.Down:
-                    if(timer.Enabled) {
-                        settingsData.PointSpeed --;
-                    }  else {
-                        pointsMoveTo(0, 1);
-                    }
-                    return true; 
-                case Keys.Left:
-                    if(timer.Enabled) {
-                        settingsData.PointSpeed --;
-                    } else {
-                        pointsMoveTo(-1, 0);
-                    }                  
-                    return true;    
-                case Keys.Right:
-                    if(timer.Enabled) {
-                        settingsData.PointSpeed ++;
-                    }  else {
-                        pointsMoveTo(1, 0);
-                    }
-                    return true;    
-                case Keys.Oemplus:
-                    if(timer.Enabled) {
-                        settingsData.PointSpeed ++;
-                    }  
-                    return true;  
-                case Keys.OemMinus:
-                    if(timer.Enabled) {
-                        settingsData.PointSpeed --;
-                    }  
-                    return true;  
-            }
-
-            return false;
-        } 
-        
-
-        private void pointsMoveTo(int x, int y) {
-            if(sizePoints == 0) {
-                return;
-            }
-
-            if(pointActiveIndex >= 0) {
-                listPoints[pointActiveIndex].X += x;
-                listPoints[pointActiveIndex].Y += y;
-            } else {
-                for(int i = 0; i < sizePoints; i ++) {
-                    listPoints[i].X += x;
-                    listPoints[i].Y += y;
-                }
-            }           
-
-            Refresh();
-        }
-
-        private void Form1_MouseDown(object sender, MouseEventArgs e) {
-            if(allowDot || sizePoints == 0) {
-                return;
-            }  
-
-            timer.Enabled = false;
- 
-            for(int i = 0; i < sizePoints; i ++) {
-                var r = listPoints[i].getRectangle(settingsData.PointSize );
-                if(r.Contains(e.Location.X, e.Location.Y)) {
-                    pointActiveIndex = i; 
-                    Refresh();
-                    return;
-                }
-            }
-            pointActiveIndex = -1;
-        }
-        private void Form1_MouseUp(object sender, MouseEventArgs e) {
-           // System.Console.WriteLine("Form1_MouseUp");
-            pointActiveIndex = -1;
-        }
-        private void Form1_MouseMove(object sender, MouseEventArgs e) {
-            
-            if(pointActiveIndex  >= 0) {
-                listPoints[pointActiveIndex].X = e.X;
-                listPoints[pointActiveIndex].Y = e.Y;
-                Refresh();
-            }
-        } 
-        
+        // Here we add five DataRows.
+        table.Rows.Add(25, "Indocin", "David", DateTime.Now);
+        table.Rows.Add(50, "Enebrel", "Sam", DateTime.Now);
+        table.Rows.Add(10, "Hydralazine", "Christoff", DateTime.Now);
+        table.Rows.Add(21, "Combivent", "Janet", DateTime.Now);
+        table.Rows.Add(100, "Dilantin", "Melanie", DateTime.Now);
+        return table;
     }
+ 
+    }
+
+
+
+
+
+    
 
 }
