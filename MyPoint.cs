@@ -62,7 +62,7 @@ namespace myApp {
         }
 
         public void updatePoint(Rectangle r) {
-            var rnd = new System.Random((int)(X + Y));
+            var rnd = new System.Random(abs((int)(X + Y)));
             var sp = rnd.Next(speed/ 2, speed*2);
             float x = point.X + (directionX * sp);
             float y = point.Y + (directionY * sp);
@@ -79,6 +79,12 @@ namespace myApp {
             }
         }
 
+        public static int abs(int n) {
+            if(n < 0) {
+                return -n;
+            }
+            return n;
+        }
 
          public static PointF[] toArrayPoint(MyPoint[] input) {
              PointF[] ar = new PointF[input.Length];

@@ -164,18 +164,22 @@ namespace myApp {
                         settingsForm.Show();
                         break;    
                     case "Кривая":
+                        allowDot = false;
                         mode = actions.Curved;
                         Refresh();
                         break;      
                     case "Ломаная":
+                        allowDot = false;
                         mode = actions.Polygone;
                         Refresh();
                         break;
                     case "Безье":
+                        allowDot = false;
                         mode = actions.Bize;
                         Refresh();
                         break;
                     case "Заполненная":
+                        allowDot = false;
                         mode = actions.Filled;
                         Refresh();
                         break;
@@ -246,58 +250,71 @@ namespace myApp {
  
              Refresh();
          }
+
+
+         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+             if(Keys.Right == keyData || Keys.Left == keyData  || Keys.Down == keyData  || Keys.Up == keyData) { 
+                    return HandledKeys(keyData);
+             }
+             return base.ProcessCmdKey(ref msg, keyData);
+         }    
          private void Form1_KeyDown(object sender, KeyEventArgs e) {
-             System.Console.WriteLine(e.KeyCode);
-             switch (e.KeyCode)
+            // System.Console.WriteLine(e.KeyCode);  
+            e.Handled = HandledKeys(e.KeyCode);  
+         }
+
+
+        private bool HandledKeys(Keys key) {
+            switch (key)
              {                 
                  case Keys.Space:
                      actionTimerSwitch();
-                    break; 
+                    return true; 
                  case Keys.Escape:
                     actionClearPoints();
-                    break;   
+                    return true;  
                 case Keys.Up:
                     if(timer.Enabled) {
                         settingsData.PointSpeed ++;
                     } else {
                         pointsMoveTo(0, -1);
                     } 
-                    break;   
+                    return true;    
                 case Keys.Down:
                     if(timer.Enabled) {
                         settingsData.PointSpeed --;
                     }  else {
                         pointsMoveTo(0, 1);
                     }
-                    break;
+                    return true; 
                 case Keys.Left:
                     if(timer.Enabled) {
                         settingsData.PointSpeed --;
                     } else {
                         pointsMoveTo(-1, 0);
                     }                  
-                    break;   
+                    return true;    
                 case Keys.Right:
                     if(timer.Enabled) {
                         settingsData.PointSpeed ++;
                     }  else {
                         pointsMoveTo(1, 0);
                     }
-                    break;    
+                    return true;    
                 case Keys.Oemplus:
                     if(timer.Enabled) {
                         settingsData.PointSpeed ++;
                     }  
-                    break; 
+                    return true;  
                 case Keys.OemMinus:
                     if(timer.Enabled) {
                         settingsData.PointSpeed --;
                     }  
-                    break;   
+                    return true;  
             }
 
-            e.Handled = true;
-         }
+            return false;
+        } 
         
 
         private void pointsMoveTo(int x, int y) {
