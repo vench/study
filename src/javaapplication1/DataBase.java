@@ -5,7 +5,7 @@
  */
 package javaapplication1;
  
-import java.util.concurrent.Semaphore;
+//import java.util.concurrent.Semaphore;
 
 /**
  *
@@ -78,8 +78,9 @@ public class DataBase {
     /**
      * 
      * @param name 
+     * @throws java.lang.InterruptedException 
      */
-    public void endWrite(String name) {
+    public void endWrite(String name) throws InterruptedException {
         System.out.println("writer " + name + " commit write"); 
         writers --; 
         
