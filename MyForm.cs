@@ -9,259 +9,177 @@ namespace myApp {
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms; 
+    using myApp.Model;
     //msbuild /property:Configuration=myApp.csproj
     //mono *.exe
 
     class MyForm : Form {
          
+
+		 private Panel buttonPanel = new Panel();
+    private DataGridView songsDataGridView = new DataGridView();
+    private Button addNewRowButton = new Button();
+    private Button deleteRowButton = new Button();
+ 
+	private Button startTestButton = new Button();
+
+
+
         public MyForm()
-        {
-            // INIT
-            initializeComponent();
+        { 
+			this.Load += new EventHandler(Form1_Load);
 
             Text = "Мой словарь";
             SetBounds(0,0, 800, 600);
             MaximumSize = new System.Drawing.Size(SystemInformation.VirtualScreen.Width,SystemInformation.VirtualScreen.Height);
             MinimumSize = new System.Drawing.Size(800, 600);
-            StartPosition = FormStartPosition.CenterScreen;            
-        }
- 
-
-
-
-private FlowLayoutPanel flowLayoutPanel3;
-	private Label label2;
-	private Button button11;
-	private Button button12;
-	private Button button13;
-	private Button button14;
-	private Button button15;
-	private FlowLayoutPanel flowLayoutPanel1;
-	private Label label1;
-	private Button button1;
-	private Button button2;
-	private Button button3;
-	private Button button4;
-	private Button button5;
-
-        private void initializeComponent() {
- 
-            Button b1 = new Button ();
-            b1.Text = "Запустить тест";
-            b1.SetBounds(10, 10, 100, 25);
-            // b1.Click += new EventHandler (Button_Click);
-            Controls.Add (b1);
-
-            DataGridView dataGrid = new DataGridView();
-            dataGrid.SetBounds(10, 50, 100, 100);
-            //dataGrid.Parent = someTabPage;
-            dataGrid.Dock = DockStyle.Fill;
-            dataGrid.RowCount = 5;
-            dataGrid.ColumnCount = 2;
-            //dataGrid.Parent = GetTable();
-           // Controls.Add(dataGrid);
-
-            ScrollBar vScrollBar1 = new VScrollBar();
-            vScrollBar1.SetBounds(0, 50, 800, 300);
-            vScrollBar1.Dock = DockStyle.Right;
-            //vScrollBar1.Scroll += (sender, e) => { panel1.VerticalScroll.Value = vScrollBar1.Value; };
-            //Controls.Add(vScrollBar1);
-            //vScrollBar1.Controls.Add(dataGrid);
-
-
-            //
-
-            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-		this.label2 = new System.Windows.Forms.Label();
-		this.button11 = new System.Windows.Forms.Button();
-		this.button12 = new System.Windows.Forms.Button();
-		this.button13 = new System.Windows.Forms.Button();
-		this.button14 = new System.Windows.Forms.Button();
-		this.button15 = new System.Windows.Forms.Button();
-		this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-		this.label1 = new System.Windows.Forms.Label();
-		this.button1 = new System.Windows.Forms.Button();
-		this.button2 = new System.Windows.Forms.Button();
-		this.button3 = new System.Windows.Forms.Button();
-		this.button4 = new System.Windows.Forms.Button();
-		this.button5 = new System.Windows.Forms.Button();
-		this.flowLayoutPanel3.SuspendLayout();
-		this.flowLayoutPanel1.SuspendLayout();
-		this.SuspendLayout();
-		// 
-		// flowLayoutPanel3
-		// 
-		this.flowLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-					| System.Windows.Forms.AnchorStyles.Left)
-					| System.Windows.Forms.AnchorStyles.Right)));
-		this.flowLayoutPanel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-		this.flowLayoutPanel3.Controls.Add(this.label2);
-		this.flowLayoutPanel3.Controls.Add(this.button11);
-		this.flowLayoutPanel3.Controls.Add(this.button12);
-		this.flowLayoutPanel3.Controls.Add(this.button13);
-		this.flowLayoutPanel3.Controls.Add(this.button14);
-		this.flowLayoutPanel3.Controls.Add(this.button15);
-		this.flowLayoutPanel3.Location = new System.Drawing.Point(12, 12);
-		this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-		this.flowLayoutPanel3.Size = new System.Drawing.Size(631, 100);
-		this.flowLayoutPanel3.TabIndex = 2;
-		// 
-		// label2
-		// 
-		this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
-		this.label2.AutoSize = true;
-		this.label2.Location = new System.Drawing.Point(3, 28);
-		this.label2.Name = "label2";
-		this.label2.Size = new System.Drawing.Size(138, 14);
-		this.label2.TabIndex = 10;
-		this.label2.Text = "FlowDirection=LeftToRight";
-		// 
-		// button11
-		// 
-		this.button11.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-		this.button11.AutoSize = true;
-		this.button11.Location = new System.Drawing.Point(147, 44);
-		this.button11.Name = "button11";
-		this.button11.Size = new System.Drawing.Size(86, 23);
-		this.button11.TabIndex = 5;
-		this.button11.Text = "Anchor=Bottom";
-		// 
-		// button12
-		// 
-		this.button12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-		this.button12.AutoSize = true;
-		this.button12.Location = new System.Drawing.Point(239, 3);
-		this.button12.Name = "button12";
-		this.button12.Size = new System.Drawing.Size(111, 64);
-		this.button12.TabIndex = 6;
-		this.button12.Text = "Anchor=Top, Bottom";
-		// 
-		// button13
-		// 
-		this.button13.Anchor = System.Windows.Forms.AnchorStyles.None;
-		this.button13.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-		this.button13.Location = new System.Drawing.Point(356, 3);
-		this.button13.Name = "button13";
-		this.button13.Size = new System.Drawing.Size(75, 64);
-		this.button13.TabIndex = 7;
-		// 
-		// button14
-		// 
-		this.button14.Dock = System.Windows.Forms.DockStyle.Bottom;
-		this.button14.Location = new System.Drawing.Point(437, 44);
-		this.button14.Name = "button14";
-		this.button14.TabIndex = 8;
-		this.button14.Text = "Dock=Bottom";
-		// 
-		// button15
-		// 
-		this.button15.Dock = System.Windows.Forms.DockStyle.Fill;
-		this.button15.Location = new System.Drawing.Point(518, 3);
-		this.button15.Name = "button15";
-		this.button15.Size = new System.Drawing.Size(75, 64);
-		this.button15.TabIndex = 9;
-		this.button15.Text = "Dock=Fill";
-		// 
-		// flowLayoutPanel1
-		// 
-		this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-					| System.Windows.Forms.AnchorStyles.Right)));
-		this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-		this.flowLayoutPanel1.Controls.Add(this.label1);
-		this.flowLayoutPanel1.Controls.Add(this.button1);
-		this.flowLayoutPanel1.Controls.Add(this.button2);
-		this.flowLayoutPanel1.Controls.Add(this.button3);
-		this.flowLayoutPanel1.Controls.Add(this.button4);
-		this.flowLayoutPanel1.Controls.Add(this.button5);
-		this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-		this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 118);
-		this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-		this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 209);
-		this.flowLayoutPanel1.TabIndex = 3;
-		// 
-		// label1
-		// 
-		this.label1.AutoSize = true;
-		this.label1.Location = new System.Drawing.Point(3, 3);
-		this.label1.Name = "label1";
-		this.label1.Size = new System.Drawing.Size(128, 14);
-		this.label1.TabIndex = 11;
-		this.label1.Text = "FlowDirection=TopDown";
-		// 
-		// button1
-		// 
-		this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-		this.button1.Location = new System.Drawing.Point(74, 23);
-		this.button1.Name = "button1";
-		this.button1.TabIndex = 5;
-		this.button1.Text = "Anchor=Right";
-		// 
-		// button2
-		// 
-		this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-		this.button2.Location = new System.Drawing.Point(3, 52);
-		this.button2.Name = "button2";
-		this.button2.Size = new System.Drawing.Size(146, 23);
-		this.button2.TabIndex = 6;
-		this.button2.Text = "Anchor=Left, Right";
-		// 
-		// button3
-		// 
-		this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-		this.button3.Location = new System.Drawing.Point(3, 81);
-		this.button3.Name = "button3";
-		this.button3.Size = new System.Drawing.Size(146, 23);
-		this.button3.TabIndex = 7;
-		// 
-		// button4
-		// 
-		this.button4.Dock = System.Windows.Forms.DockStyle.Right;
-		this.button4.Location = new System.Drawing.Point(74, 110);
-		this.button4.Name = "button4";
-		this.button4.TabIndex = 8;
-		this.button4.Text = "Dock=Right";
-		// 
-		// button5
-		// 
-		this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
-		this.button5.Location = new System.Drawing.Point(3, 139);
-		this.button5.Name = "button5";
-		this.button5.Size = new System.Drawing.Size(146, 23);
-		this.button5.TabIndex = 9;
-		this.button5.Text = "Dock=Fill";
-		// 
-		// Form1
-		// 
-		this.ClientSize = new System.Drawing.Size(658, 341);
-		this.Controls.Add(this.flowLayoutPanel1);
-		this.Controls.Add(this.flowLayoutPanel3);
-		this.Name = "Form1";
-		this.Text = "Form1";
-		this.flowLayoutPanel3.ResumeLayout(false);
-		this.flowLayoutPanel3.PerformLayout();
-		this.flowLayoutPanel1.ResumeLayout(false);
-		this.flowLayoutPanel1.PerformLayout();
-		this.ResumeLayout(false);
+            StartPosition = FormStartPosition.CenterScreen;  
+			
+			          
         }
 
-        public static DataTable GetTable()
+
+    private void Form1_Load(System.Object sender, System.EventArgs e)
     {
-        // Here we create a DataTable with four columns.
-        DataTable table = new DataTable();
-        table.Columns.Add("Dosage", typeof(int));
-        table.Columns.Add("Drug", typeof(string));
-        table.Columns.Add("Patient", typeof(string));
-        table.Columns.Add("Date", typeof(DateTime));
-
-        // Here we add five DataRows.
-        table.Rows.Add(25, "Indocin", "David", DateTime.Now);
-        table.Rows.Add(50, "Enebrel", "Sam", DateTime.Now);
-        table.Rows.Add(10, "Hydralazine", "Christoff", DateTime.Now);
-        table.Rows.Add(21, "Combivent", "Janet", DateTime.Now);
-        table.Rows.Add(100, "Dilantin", "Melanie", DateTime.Now);
-        return table;
+        SetupLayout();
+        SetupDataGridView();
+        PopulateDataGridView();
     }
+
+
+	private void SetupDataGridView() {
+		this.Controls.Add(songsDataGridView);
+
+        songsDataGridView.ColumnCount = 4;
+
+        songsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+        songsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+        songsDataGridView.ColumnHeadersDefaultCellStyle.Font =
+            new Font(songsDataGridView.Font, FontStyle.Bold);
+
+        songsDataGridView.Name = "songsDataGridView";
+        songsDataGridView.Location = new Point(8, 8);
+        songsDataGridView.Size = new Size(800, 250);
+        songsDataGridView.AutoSizeRowsMode =
+            DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
+        songsDataGridView.ColumnHeadersBorderStyle =
+            DataGridViewHeaderBorderStyle.Single;
+        songsDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+        songsDataGridView.GridColor = Color.Black;
+        songsDataGridView.RowHeadersVisible = false;
+       // songsDataGridView.AutoSize = true;
+        //songsDataGridView.
+
+        songsDataGridView.Columns[0].Name = "Слово";
+        songsDataGridView.Columns[1].Name = "Переводы";
+        songsDataGridView.Columns[2].Name = "Прилогательное";
+        songsDataGridView.Columns[3].Name = "Существительное"; 
+        songsDataGridView.Columns[2].ValueType =  typeof(bool);
+        songsDataGridView.Columns[3].ValueType =  typeof(bool);
+       // songsDataGridView.Columns[4].DefaultCellStyle.Font =
+       //     new Font(songsDataGridView.DefaultCellStyle.Font, FontStyle.Italic);
+
+        songsDataGridView.SelectionMode =
+            DataGridViewSelectionMode.FullRowSelect;
+        songsDataGridView.MultiSelect = false;
+        songsDataGridView.Dock = DockStyle.Fill;
  
+        songsDataGridView.CellFormatting += new
+            DataGridViewCellFormattingEventHandler(
+            songsDataGridView_CellFormatting); 
+	}
+
+
+    private void songsDataGridView_CellFormatting(object sender,
+        System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
+    {
+        if (e != null)
+        {
+            if (this.songsDataGridView.Columns[e.ColumnIndex].Name == "Release Date")
+            {
+                if (e.Value != null)
+                {
+                    try
+                    {
+                        e.Value = DateTime.Parse(e.Value.ToString())
+                            .ToLongDateString();
+                        e.FormattingApplied = true;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("{0} is not a valid date.", e.Value.ToString());
+                    }
+                }
+            }
+        }
+    }
+
+	private void PopulateDataGridView()
+    {
+ 
+
+        Dictionary<string, Word> dic = new Dictionary<string, Word>();
+        dic.Add("test", new Word("Test"));
+        dic.Add("best", new Word("Best"));
+
+
+        songsDataGridView.Rows.Add(dic["test"].AsRow());
+        songsDataGridView.Rows.Add(dic["best"].AsRow());
+  
+
+    }
+
+
+	private void startTestButton_Click(object sender, EventArgs e) {
+		MessageBox.Show("Start test");
+	}
+
+	private void addNewRowButton_Click(object sender, EventArgs e)
+    {
+        this.songsDataGridView.Rows.Add();
+    }
+
+
+	private void deleteRowButton_Click(object sender, EventArgs e)
+    {
+        if (this.songsDataGridView.SelectedRows.Count > 0 &&
+            this.songsDataGridView.SelectedRows[0].Index !=
+            this.songsDataGridView.Rows.Count - 1)
+        {
+            this.songsDataGridView.Rows.RemoveAt(
+                this.songsDataGridView.SelectedRows[0].Index);
+        }
+    }
+
+	private void SetupLayout() {
+		this.Size = new Size(600, 500);
+
+        addNewRowButton.Text = "Add Row";
+        addNewRowButton.Location = new Point(10, 10);
+        addNewRowButton.Click += new EventHandler(addNewRowButton_Click);
+
+        deleteRowButton.Text = "Delete Row";
+        deleteRowButton.Location = new Point(100, 10);
+        deleteRowButton.Click += new EventHandler(deleteRowButton_Click);
+
+		
+		startTestButton.Text = "Start test";
+        startTestButton.Location = new Point(190, 10);
+        startTestButton.Click += new EventHandler(startTestButton_Click);
+
+		buttonPanel.Controls.Add(startTestButton);
+        buttonPanel.Controls.Add(addNewRowButton);
+        buttonPanel.Controls.Add(deleteRowButton);
+        buttonPanel.Height = 50;
+        buttonPanel.Dock = DockStyle.Bottom;
+
+        this.Controls.Add(this.buttonPanel);
+	}
+ 
+
+
+  
+    
     }
 
 
