@@ -19,8 +19,10 @@ public class JavaApplication1 {
         
         DataBase db = new DataBase();
         
-        for(int i = 0; i < 4; i ++) { 
-            (new Writer( "Writer " + i, db)).start();
+        for(int i = 0; i < 2; i ++) { 
+            (new Writer( "Writer " + i, db)).start(); 
+        }
+        for(int i = 0; i < 10; i ++) {
             (new Reader( "Reader " + i, db)).start();
         }
     }

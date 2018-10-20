@@ -14,7 +14,7 @@ package javaapplication1;
 public class DataBase {
      
     private int readers;
-    private int writers; 
+    private int writers;  
     
     private final Semaphore sem; 
     private final Semaphore sem1; 
@@ -33,9 +33,12 @@ public class DataBase {
     public  void startRead(String name) throws InterruptedException {
         
         // Ждем когда писатель перестал читать
-        sem.acquire();  
+        sem1.acquire();  
         readers ++;
-        sem.release(); 
+        if(readers == 1) {
+            sem.acquire();
+        }
+        sem1.release(); 
         System.out.println("reader " + name + " begin read , count readers: " + readers);  
     }
     
@@ -49,6 +52,9 @@ public class DataBase {
         
         sem1.acquire();
         readers --;
+        if(readers == 0) {
+            sem.release();
+        }
         sem1.release(); 
         
         System.out.println("reader " + name + " commit read, after dec count readers: " + readers);
@@ -60,19 +66,8 @@ public class DataBase {
      * @throws java.lang.InterruptedException 
      */
     public void startWrite(String name) throws InterruptedException { 
-        
-        // Ждем свою очередь
-        sem.acquire(); 
-        
-        // Ждем что все читатели перестали читать
-        boolean run = true;
-        while(run) {
-            sem1.acquire();
-            if(readers == 0) {
-                run = false;
-            }
-            sem1.release();
-        } 
+         
+        sem.acquire();  
         writers ++;
         System.out.println("writer " + name + " begin write");        
     }
@@ -84,9 +79,7 @@ public class DataBase {
      */
     public void endWrite(String name) throws InterruptedException {
         System.out.println("writer " + name + " commit write"); 
-        writers --; 
-        
-        // Освободим очередь
-        sem.release(1); 
+        writers --;  
+        sem.release(); 
     }
 }
