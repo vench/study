@@ -23,11 +23,14 @@ public class Reader extends Thread {
     @Override
     public void run() {
         try {
-            sleep(randomInt(500, 1000)); 
-            System.out.println("reader " + name + " whant read"); 
-            dataBase.startRead(name);
-            sleep(randomInt(500, 1000));
-            dataBase.endRead(name);
+            
+            while(true) {            
+                sleep(randomInt(500, 1000)); 
+                System.out.println("reader " + name + " whant read"); 
+                dataBase.startRead(name);
+                sleep(randomInt(500, 1000));
+                dataBase.endRead(name);
+            }
                         
         } catch (InterruptedException ex) {
             System.out.println("Error Reader: " + name);

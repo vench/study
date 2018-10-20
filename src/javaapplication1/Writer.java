@@ -23,12 +23,14 @@ public class Writer extends Thread {
     @Override
     public void run() {
         try {
-            sleep(randomInt(500, 1000)); 
-            System.out.println("writer " + name + " whant write");
-            dataBase.startWrite(name);
-            sleep(randomInt(500, 1000));
-            dataBase.endWrite(name);
+            while(true) { 
+                sleep(randomInt(500, 1000)); 
+                System.out.println("writer " + name + " whant write");
+                dataBase.startWrite(name);
+                sleep(randomInt(500, 1000));
+                dataBase.endWrite(name);
                         
+            }
         } catch (InterruptedException ex) {
             System.out.println("Error Reader: " + name);
             System.out.println(ex.getMessage());
