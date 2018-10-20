@@ -4,10 +4,7 @@
  * and open the template in the editor.
  */
 package javaapplication1;
-
-import java.util.concurrent.Semaphore;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+ 
 
 /**
  *
@@ -22,7 +19,7 @@ public class JavaApplication1 {
         
         DataBase db = new DataBase();
         
-        for(int i = 0; i < 12; i ++) { 
+        for(int i = 0; i < 4; i ++) { 
             (new Writer( "Writer " + i, db)).start();
             (new Reader( "Reader " + i, db)).start();
         }

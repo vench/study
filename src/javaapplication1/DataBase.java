@@ -4,43 +4,39 @@
  * and open the template in the editor.
  */
 package javaapplication1;
+ 
+import java.util.concurrent.Semaphore;
 
 /**
  *
  * @author vench
  */
 public class DataBase {
-    
+     
     private int readers;
+    private int writers; 
     
-    private int writers;
+    private final Semaphore sem; 
+    private final Semaphore sem1; 
+    
+    public DataBase() {
+        sem = new Semaphore(1); 
+        sem1 = new Semaphore(1); 
+    }
+    
     
     /**
      * 
      * @param name 
      * @throws java.lang.InterruptedException 
      */
-    public synchronized void startRead(String name) throws InterruptedException {
-        if(readers > 2) {
-            wait();
-        }
-        if( writers > 0) {
-            wait();
-        }
-        System.out.println("Start read: " + name + ", readers: " + readers);
+    public  void startRead(String name) throws InterruptedException {
         
+        // Ждем когда писатель перестал читать
+        sem.acquire();  
         readers ++;
-    }
-    
-    /**
-     * 
-     * @param name 
-     */
-    public synchronized void endRead(String name) {
-        System.out.println("End read: " + name);
-        
-        readers --;
-        notify();
+        sem.release(); 
+        System.out.println("reader " + name + " begin read");  
     }
     
     /**
@@ -48,21 +44,46 @@ public class DataBase {
      * @param name 
      * @throws java.lang.InterruptedException 
      */
-    public synchronized void startWrite(String name) throws InterruptedException {
-        if(writers > 0) {
-            wait();
-        }
-        System.out.println("Start write: " + name); 
+    public  void endRead(String name) throws InterruptedException {
+        System.out.println("reader " + name + " commit read");
+        
+        sem1.acquire();
+        readers --;
+        sem1.release(); 
+    }
+    
+    /**
+     * 
+     * @param name 
+     * @throws java.lang.InterruptedException 
+     */
+    public void startWrite(String name) throws InterruptedException { 
+        
+        // Ждем свою очередь
+        sem.acquire(); 
+        
+        // Ждем что все читатели перестали читать
+        boolean run = true;
+        while(run) {
+            sem1.acquire();
+            if(readers == 0) {
+                run = false;
+            }
+            sem1.release();
+        } 
         writers ++;
+        System.out.println("writer " + name + " begin write");        
     }
     
     /**
      * 
      * @param name 
      */
-    public synchronized void endWrite(String name) {
-        System.out.println("End write: " + name);
-        writers --;
-        notify();
+    public void endWrite(String name) {
+        System.out.println("writer " + name + " commit write"); 
+        writers --; 
+        
+        // Освободим очередь
+        sem.release(1); 
     }
 }

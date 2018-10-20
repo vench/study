@@ -24,6 +24,7 @@ public class Reader extends Thread {
     public void run() {
         try {
             sleep(randomInt(500, 1000)); 
+            System.out.println("reader " + name + " whant read"); 
             dataBase.startRead(name);
             sleep(randomInt(500, 1000));
             dataBase.endRead(name);

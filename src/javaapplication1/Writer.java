@@ -24,6 +24,7 @@ public class Writer extends Thread {
     public void run() {
         try {
             sleep(randomInt(500, 1000)); 
+            System.out.println("writer " + name + " whant write");
             dataBase.startWrite(name);
             sleep(randomInt(500, 1000));
             dataBase.endWrite(name);
