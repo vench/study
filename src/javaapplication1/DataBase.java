@@ -36,7 +36,7 @@ public class DataBase {
         sem.acquire();  
         readers ++;
         sem.release(); 
-        System.out.println("reader " + name + " begin read");  
+        System.out.println("reader " + name + " begin read , count readers: " + readers);  
     }
     
     /**
@@ -45,11 +45,13 @@ public class DataBase {
      * @throws java.lang.InterruptedException 
      */
     public  void endRead(String name) throws InterruptedException {
-        System.out.println("reader " + name + " commit read");
+        System.out.println("reader " + name + " commit read, before dec count readers: " + readers);
         
         sem1.acquire();
         readers --;
         sem1.release(); 
+        
+        System.out.println("reader " + name + " commit read, after dec count readers: " + readers);
     }
     
     /**
