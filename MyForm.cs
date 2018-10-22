@@ -9,7 +9,9 @@ namespace myApp {
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms; 
-    using myApp.Model;
+    using myApp.Model; 
+
+
     //msbuild /property:Configuration=myApp.csproj
     //mono *.exe
 
@@ -17,11 +19,13 @@ namespace myApp {
          
 
 		 private Panel buttonPanel = new Panel();
-    private DataGridView songsDataGridView = new DataGridView();
-    private Button addNewRowButton = new Button();
-    private Button deleteRowButton = new Button();
- 
-	private Button startTestButton = new Button();
+        private DataGridView wDataGridView = new DataGridView();
+        private Button addNewRowButton = new Button();
+        private Button deleteRowButton = new Button();
+        private Button saveDataButton = new Button();
+ 	    private Button startTestButton = new Button();
+
+        private DataProvider dataProvider;
 
 
 
@@ -35,56 +39,65 @@ namespace myApp {
             MinimumSize = new System.Drawing.Size(800, 600);
             StartPosition = FormStartPosition.CenterScreen;  
 			
-			          
+            dataProvider = new DataProvider();
+            dataProvider.DataLoad += new EventHandler(Form1_DataLoad);              
+        }
+
+        private void Form1_DataLoad(System.Object sender, System.EventArgs e) {
+            System.Console.WriteLine("Load: " + dataProvider.List.Count); 
+
+            foreach(var item in dataProvider.List) {
+               wDataGridView.Rows.Add(Word.AsRow(item)); 
+            }  
+        }
+
+        private void Form1_Load(System.Object sender, System.EventArgs e)
+        {
+            SetupLayout();
+            SetupDataGridView();
+            dataProvider.Load();
         }
 
 
-    private void Form1_Load(System.Object sender, System.EventArgs e)
-    {
-        SetupLayout();
-        SetupDataGridView();
-        PopulateDataGridView();
-    }
-
-
 	private void SetupDataGridView() {
-		this.Controls.Add(songsDataGridView);
+		this.Controls.Add(wDataGridView);
 
-        songsDataGridView.ColumnCount = 4;
+        wDataGridView.ColumnCount = 5;
 
-        songsDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
-        songsDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-        songsDataGridView.ColumnHeadersDefaultCellStyle.Font =
-            new Font(songsDataGridView.Font, FontStyle.Bold);
-
-        songsDataGridView.Name = "songsDataGridView";
-        songsDataGridView.Location = new Point(8, 8);
-        songsDataGridView.Size = new Size(800, 250);
-        songsDataGridView.AutoSizeRowsMode =
-            DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
-        songsDataGridView.ColumnHeadersBorderStyle =
-            DataGridViewHeaderBorderStyle.Single;
-        songsDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-        songsDataGridView.GridColor = Color.Black;
-        songsDataGridView.RowHeadersVisible = false;
-       // songsDataGridView.AutoSize = true;
-        //songsDataGridView.
-
-        songsDataGridView.Columns[0].Name = "Слово";
-        songsDataGridView.Columns[1].Name = "Переводы";
-        songsDataGridView.Columns[2].Name = "Прилогательное";
-        songsDataGridView.Columns[3].Name = "Существительное"; 
-        songsDataGridView.Columns[2].ValueType =  typeof(bool);
-        songsDataGridView.Columns[3].ValueType =  typeof(bool);
-       // songsDataGridView.Columns[4].DefaultCellStyle.Font =
-       //     new Font(songsDataGridView.DefaultCellStyle.Font, FontStyle.Italic);
-
-        songsDataGridView.SelectionMode =
-            DataGridViewSelectionMode.FullRowSelect;
-        songsDataGridView.MultiSelect = false;
-        songsDataGridView.Dock = DockStyle.Fill;
+        wDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+        wDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+        wDataGridView.ColumnHeadersDefaultCellStyle.Font =
+            new Font(wDataGridView.Font, FontStyle.Bold);
  
-        songsDataGridView.CellFormatting += new
+        wDataGridView.Location = new Point(0, 0);
+        wDataGridView.Size = new Size(800, 250);
+        wDataGridView.AutoSizeRowsMode =
+            DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
+        wDataGridView.ColumnHeadersBorderStyle =
+            DataGridViewHeaderBorderStyle.Single;
+        wDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+        wDataGridView.GridColor = Color.Black;
+        wDataGridView.RowHeadersVisible = false;
+        wDataGridView.AutoSize = true;
+        
+        wDataGridView.Columns[0].Width = 200;
+        wDataGridView.Columns[1].Width = 200;
+        wDataGridView.Columns[2].Width = 100;
+        wDataGridView.Columns[3].Width = 100;
+        wDataGridView.Columns[4].Width = 200;
+        wDataGridView.Columns[0].Name = "Слово";
+        wDataGridView.Columns[1].Name = "Переводы";
+        wDataGridView.Columns[2].Name = "Прилогательное";
+        wDataGridView.Columns[3].Name = "Существительное"; 
+        wDataGridView.Columns[2].ValueType =  typeof(bool);
+        wDataGridView.Columns[3].ValueType =  typeof(bool);
+        wDataGridView.Columns[4].Name = "Примечание";
+        wDataGridView.SelectionMode =
+            DataGridViewSelectionMode.FullRowSelect;
+        wDataGridView.MultiSelect = false;
+        wDataGridView.Dock = DockStyle.Fill;
+ 
+        wDataGridView.CellFormatting += new
             DataGridViewCellFormattingEventHandler(
             songsDataGridView_CellFormatting); 
 	}
@@ -93,12 +106,10 @@ namespace myApp {
     private void songsDataGridView_CellFormatting(object sender,
         System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
     {
-        if (e != null)
-        {
-            if (this.songsDataGridView.Columns[e.ColumnIndex].Name == "Release Date")
+        if (e != null)  {
+            if (wDataGridView.Columns[e.ColumnIndex].Name == "Release Date")
             {
-                if (e.Value != null)
-                {
+                if (e.Value != null) {
                     try
                     {
                         e.Value = DateTime.Parse(e.Value.ToString())
@@ -113,61 +124,70 @@ namespace myApp {
             }
         }
     }
-
-	private void PopulateDataGridView()
-    {
- 
-
-        Dictionary<string, Word> dic = new Dictionary<string, Word>();
-        dic.Add("test", new Word("Test"));
-        dic.Add("best", new Word("Best"));
-
-
-        songsDataGridView.Rows.Add(dic["test"].AsRow());
-        songsDataGridView.Rows.Add(dic["best"].AsRow());
-  
-
-    }
-
-
-	private void startTestButton_Click(object sender, EventArgs e) {
+    private void startTestButton_Click(object sender, EventArgs e) {
 		MessageBox.Show("Start test");
 	}
 
 	private void addNewRowButton_Click(object sender, EventArgs e)
     {
-        this.songsDataGridView.Rows.Add();
+        wDataGridView.Rows.Add();
     }
 
+    private void saveDataButton_Click(object sender, EventArgs e) {
+        List<Word> list = new List<Word>();
+        foreach (var row in wDataGridView.Rows.OfType<DataGridViewRow>())  {
+            bool IsAdjective, IsNoun;
+            Boolean.TryParse(row.Cells[2].FormattedValue.ToString(), out IsAdjective);
+            Boolean.TryParse(row.Cells[3].FormattedValue.ToString(), out IsNoun);
+
+            list.Add( new Word(
+                   row.Cells[0].FormattedValue.ToString(),
+                   row.Cells[1].FormattedValue.ToString(),
+                   row.Cells[4].FormattedValue.ToString(),
+                   IsAdjective,
+                   IsNoun
+                   ) 
+           );           
+        }   
+
+        dataProvider.List = list;
+        dataProvider.Save();
+        MessageBox.Show("Данные успешно сохранены");        
+    }
 
 	private void deleteRowButton_Click(object sender, EventArgs e)
     {
-        if (this.songsDataGridView.SelectedRows.Count > 0 &&
-            this.songsDataGridView.SelectedRows[0].Index !=
-            this.songsDataGridView.Rows.Count - 1)
+        if (wDataGridView.SelectedRows.Count > 0 &&
+            wDataGridView.SelectedRows[0].Index !=
+            wDataGridView.Rows.Count - 1)
         {
-            this.songsDataGridView.Rows.RemoveAt(
-                this.songsDataGridView.SelectedRows[0].Index);
+            wDataGridView.Rows.RemoveAt(
+                wDataGridView.SelectedRows[0].Index);
         }
     }
 
 	private void SetupLayout() {
 		this.Size = new Size(600, 500);
 
-        addNewRowButton.Text = "Add Row";
+        addNewRowButton.Text = "Добавить строку";
         addNewRowButton.Location = new Point(10, 10);
         addNewRowButton.Click += new EventHandler(addNewRowButton_Click);
 
-        deleteRowButton.Text = "Delete Row";
+        deleteRowButton.Text = "Удалить строку";
         deleteRowButton.Location = new Point(100, 10);
         deleteRowButton.Click += new EventHandler(deleteRowButton_Click);
 
+        saveDataButton.Text = "Сохранить словарь";
+        saveDataButton.Location = new Point(190, 10);
+        saveDataButton.Click += new EventHandler(saveDataButton_Click);
 		
-		startTestButton.Text = "Start test";
-        startTestButton.Location = new Point(190, 10);
+		startTestButton.Text = "Начать тест";
+        startTestButton.Location = new Point(410, 10);
+        startTestButton.Size = new Size(160, 30);
         startTestButton.Click += new EventHandler(startTestButton_Click);
 
-		buttonPanel.Controls.Add(startTestButton);
+		buttonPanel.Controls.Add(saveDataButton);
+        buttonPanel.Controls.Add(startTestButton);
         buttonPanel.Controls.Add(addNewRowButton);
         buttonPanel.Controls.Add(deleteRowButton);
         buttonPanel.Height = 50;

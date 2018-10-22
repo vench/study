@@ -1,3 +1,6 @@
 /bin
 /obj
 /.vscode
+dict.xml
+dict.bin
+data.xml
