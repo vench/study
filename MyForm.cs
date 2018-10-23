@@ -17,17 +17,16 @@ namespace myApp {
 
     class MyForm : Form {
          
-
-		 private Panel buttonPanel = new Panel();
+        private Panel buttonPanel = new Panel();
         private DataGridView wDataGridView = new DataGridView();
         private Button addNewRowButton = new Button();
         private Button deleteRowButton = new Button();
         private Button saveDataButton = new Button();
  	    private Button startTestButton = new Button();
+        private Button statButton = new Button();
 
+        private FormTest formTest;
         private DataProvider dataProvider;
-
-
 
         public MyForm()
         { 
@@ -124,8 +123,22 @@ namespace myApp {
             }
         }
     }
-    private void startTestButton_Click(object sender, EventArgs e) {
-		MessageBox.Show("Start test");
+
+
+    private void statButton_Click(object sender, EventArgs e) {
+        MessageBox.Show("Show stat");
+    }
+
+    private void test_FromClose(Object sender, FormClosedEventArgs e) {
+        formTest = null;
+    }
+
+    private void startTestButton_Click(object sender, EventArgs e) {	   
+        if (formTest == null || formTest.Disposing) {
+            formTest = new FormTest(dataProvider);
+            formTest.FormClosed += new FormClosedEventHandler(test_FromClose);
+        }  
+        formTest.Show();
 	}
 
 	private void addNewRowButton_Click(object sender, EventArgs e)
@@ -136,12 +149,17 @@ namespace myApp {
     private void saveDataButton_Click(object sender, EventArgs e) {
         List<Word> list = new List<Word>();
         foreach (var row in wDataGridView.Rows.OfType<DataGridViewRow>())  {
+            
+            string word = row.Cells[0].FormattedValue.ToString().Trim();
+            if(word.Length == 0) {
+                continue;
+            }
             bool IsAdjective, IsNoun;
             Boolean.TryParse(row.Cells[2].FormattedValue.ToString(), out IsAdjective);
             Boolean.TryParse(row.Cells[3].FormattedValue.ToString(), out IsNoun);
 
             list.Add( new Word(
-                   row.Cells[0].FormattedValue.ToString(),
+                   word,
                    row.Cells[1].FormattedValue.ToString(),
                    row.Cells[4].FormattedValue.ToString(),
                    IsAdjective,
@@ -183,9 +201,15 @@ namespace myApp {
 		
 		startTestButton.Text = "Начать тест";
         startTestButton.Location = new Point(410, 10);
-        startTestButton.Size = new Size(160, 30);
+        startTestButton.Size = new Size(160, 22);
         startTestButton.Click += new EventHandler(startTestButton_Click);
 
+        statButton.Text = "Статистика";
+        statButton.Location = new Point(600, 10);
+        statButton.Size = new Size(160, 22);
+        statButton.Click += new EventHandler(statButton_Click);
+
+        buttonPanel.Controls.Add(statButton);
 		buttonPanel.Controls.Add(saveDataButton);
         buttonPanel.Controls.Add(startTestButton);
         buttonPanel.Controls.Add(addNewRowButton);

@@ -13,13 +13,11 @@ namespace myApp.Model {
 
         private List<Word> list;
 
+        private bool useXml = true;
 
         public DataProvider() {
             list = new List<Word>();
-
-            // TODO remove
-            list.Add( new Word("Test", "Тест", "xx", true, true));
-            list.Add(new Word("Best", "Лучший,замечательный"));
+ 
 
         }
 
@@ -36,14 +34,20 @@ namespace myApp.Model {
 
 
         public void Save() {
+            if(useXml) {
                 saveXml();
+            }  else {
                 saveBin();
+            }            
         }
 
 
         public void Load() {
-            loadXml();
-            loadBin();
+            if(useXml) {
+                loadXml();
+            } else {
+                loadBin();
+            }
             OnDataLoad(EventArgs.Empty);
         }
 
@@ -59,7 +63,7 @@ namespace myApp.Model {
 
 
         private void saveBin() {
-            FileStream stream = new FileStream("dict.bin", FileMode.Create); 
+            FileStream stream = new FileStream(FILE_DATA_BIN, FileMode.Create); 
             BinaryFormatter fmt = new BinaryFormatter();
             fmt.Serialize(stream, list);
             stream.Close();
@@ -88,8 +92,10 @@ namespace myApp.Model {
             if(!File.Exists(FILE_DATA_BIN)) {
                 return;
             }
-            // TODO
-            
+            FileStream stream = new FileStream(FILE_DATA_BIN, FileMode.Open); 
+            BinaryFormatter fmt = new BinaryFormatter();
+            list = (List<Word>)fmt.Deserialize(stream); 
+            stream.Close();
         }
     }
 
