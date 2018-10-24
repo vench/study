@@ -26,6 +26,7 @@ namespace myApp {
         private Button statButton = new Button();
 
         private FormTest formTest;
+        private FormStat formStat;
         private DataProvider dataProvider;
 
         public MyForm()
@@ -125,14 +126,21 @@ namespace myApp {
     }
 
 
-    private void statButton_Click(object sender, EventArgs e) {
-        MessageBox.Show("Show stat");
+    private void statButton_Click(object sender, EventArgs e) { 
+        if (formStat == null || formStat.Disposing) {
+            formStat = new FormStat(dataProvider);
+            formStat.FormClosed += new FormClosedEventHandler(stat_FromClose);
+        }
+        formStat.Show();
     }
 
     private void test_FromClose(Object sender, FormClosedEventArgs e) {
         formTest = null;
     }
 
+    private void stat_FromClose(Object sender, FormClosedEventArgs e) {
+        formStat = null;
+    }
     private void startTestButton_Click(object sender, EventArgs e) {	   
         if (formTest == null || formTest.Disposing) {
             formTest = new FormTest(dataProvider);
@@ -217,7 +225,7 @@ namespace myApp {
         buttonPanel.Height = 50;
         buttonPanel.Dock = DockStyle.Bottom;
 
-        this.Controls.Add(this.buttonPanel);
+        Controls.Add(buttonPanel);
 	}
  
 

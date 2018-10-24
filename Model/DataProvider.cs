@@ -8,17 +8,16 @@ namespace myApp.Model {
 
     class DataProvider {
 
-        const string FILE_DATA_XML = "data.xml";
-        const string FILE_DATA_BIN = "data.bin";
+        const string FILE_DATA_XML = "data1.xml";
+        const string FILE_DATA_BIN = "data1.bin";
+ 
 
-        private List<Word> list;
+        private Wrapper wrapper;
 
         private bool useXml = true;
 
         public DataProvider() {
-            list = new List<Word>();
- 
-
+           wrapper = new Wrapper();
         }
 
         protected virtual void OnDataLoad(EventArgs e)
@@ -54,10 +53,19 @@ namespace myApp.Model {
 
         public List<Word> List {
             get {
-                return list;
+                return wrapper.ListWord;
             }
             set {
-                list = value;
+                wrapper.ListWord = value;
+            }
+        }
+
+        public List<Statistica> ListStat {
+            get {
+                return wrapper.ListStat;
+            }
+            set {
+                wrapper.ListStat = value;
             }
         }
 
@@ -65,15 +73,15 @@ namespace myApp.Model {
         private void saveBin() {
             FileStream stream = new FileStream(FILE_DATA_BIN, FileMode.Create); 
             BinaryFormatter fmt = new BinaryFormatter();
-            fmt.Serialize(stream, list);
+            fmt.Serialize(stream, wrapper);
             stream.Close();
         }
 
 
         private void saveXml() {             
-            var ser = new XmlSerializer(typeof( List<Word>));
+            var ser = new XmlSerializer(typeof( Wrapper));
             TextWriter stream = new StreamWriter(FILE_DATA_XML);
-            ser.Serialize(stream, list);
+            ser.Serialize(stream, wrapper);
             stream.Close();
         }
 
@@ -81,9 +89,9 @@ namespace myApp.Model {
             if(!File.Exists(FILE_DATA_XML)) {
                 return;
             }
-            var ser = new XmlSerializer(typeof( List<Word>));
+            var ser = new XmlSerializer(typeof( Wrapper));
             Stream stream = new FileStream(FILE_DATA_XML,FileMode.Open);
-            list = ( List<Word>)ser.Deserialize(stream);
+            wrapper = (Wrapper)ser.Deserialize(stream);
             stream.Close();
  
         }
@@ -94,7 +102,7 @@ namespace myApp.Model {
             }
             FileStream stream = new FileStream(FILE_DATA_BIN, FileMode.Open); 
             BinaryFormatter fmt = new BinaryFormatter();
-            list = (List<Word>)fmt.Deserialize(stream); 
+            wrapper = (Wrapper)fmt.Deserialize(stream); 
             stream.Close();
         }
     }

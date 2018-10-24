@@ -19,7 +19,8 @@ namespace myApp {
         private Panel answersPanel = new Panel();
         
         private ComboBox comboBoxAnswer = new ComboBox();
-
+        private Label nextAnswer = new Label();
+        private Button btnNextQuest = new Button();
         private Word currentWord;
 
         public FormTest(DataProvider dataProvider) {
@@ -37,11 +38,25 @@ namespace myApp {
             countQuestion = countControlQuestion 
                 = Math.Min(COUNT_QUESTION, dataProvider.List.Count);   
             dataProvider.List.Shuffle();  
+            
+            initComponents();
             updateForm();
+        }
 
+        private void initComponents() {
             answersPanel.Size = new Size(300,300);
             Controls.Add(answersPanel);
+        
+            btnNextQuest.Text = "Ответ";
+            btnNextQuest.SetBounds(10, 160, 200, 30);
+            btnNextQuest.Click += new EventHandler(newQuestButton_Click);
+        
+            comboBoxAnswer.SetBounds(10, 80, 200, 30);
+
+            nextAnswer.SetBounds(10, 10, 500, 90); 
+            nextAnswer.Font = new Font("Arial", 12,FontStyle.Bold);
         }
+
 
 
         private void updateForm() {
@@ -50,34 +65,32 @@ namespace myApp {
             if(hasNextQuestion()) {
                 currentWord = getNext();
                 var answersList = randomAnswersByWord(currentWord);
-                
-                Label lbwor = new Label();
-                lbwor.Text = "Осталось еще " + countQuestion  + 
-                    " вопросов\nПеревод для слова: " + currentWord.EnWord;
-                lbwor.SetBounds(10, 10, 300, 50);
-                answersPanel.Controls.Add(lbwor);
- 
-                comboBoxAnswer.SetBounds(10, 60, 200, 30);
-                comboBoxAnswer.Items.Clear(); 
+                             
+                nextAnswer.Text = "Осталось еще " + countQuestion  + 
+                    " вопросов\n\nПеревод для слова: " + currentWord.EnWord;
+     
+                comboBoxAnswer.SelectedIndex = -1;
+                comboBoxAnswer.Items.Clear();  
                 comboBoxAnswer.Items.AddRange(answersList.ToArray());
+                
                 answersPanel.Controls.Add(comboBoxAnswer);
-
-                Button btn = new Button();
-                btn.Text = "Ответ";
-                btn.SetBounds(10, 110, 200, 30);
-                btn.Click += new EventHandler(newQuestButton_Click);
-                answersPanel.Controls.Add(btn);
+                answersPanel.Controls.Add(nextAnswer);
+                answersPanel.Controls.Add(btnNextQuest);
 
             } else {
-                var result = camputeResult();
-                Label label = new Label();
-                label.SetBounds(10, 10, 300, 200);
-                label.Text = "Тест пройден. Спасибо!"+
-                "\nВаш результат: " + result + " верных ответа из " 
+                var result = camputeResult(); 
+                nextAnswer.Text = "Тест пройден. Спасибо!"+
+                "\n\nВаш результат:\n\n" + result + " верных ответа из " 
                 + countControlQuestion + ".";
-                answersPanel.Controls.Add(label);
+                answersPanel.Controls.Add(nextAnswer);
 
-                Console.WriteLine("Test end");    
+                Button btn = new Button();
+                btn.Text = "Продолжить";
+                btn.SetBounds(10, 110, 200, 30);
+                btn.Click += new EventHandler(exitButton_Click);
+                answersPanel.Controls.Add(btn);  
+
+                dataProvider.ListStat.Add(new Statistica(countControlQuestion, result)); 
             }
         }
 
@@ -93,6 +106,10 @@ namespace myApp {
             return result;
         }
 
+
+        private void exitButton_Click(object sender, EventArgs e) {
+            Close();
+        }
         private void newQuestButton_Click(object sender, EventArgs e) {
             var answ = comboBoxAnswer.SelectedItem != null ?
                  comboBoxAnswer.SelectedItem.ToString() + "" : "";
@@ -123,6 +140,7 @@ namespace myApp {
 
         private Word getNext() {
             countQuestion --;
+            Console.WriteLine(countQuestion);
             return dataProvider.List[countQuestion];
         }
 
