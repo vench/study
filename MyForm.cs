@@ -51,10 +51,8 @@ namespace myApp {
            dataProvider.ListCountries.Add(new Country("Франция")); 
            dataProvider.ListCountries.Add(new Country("Германия")); 
 
-          // var bindingList = new BindingList<Country>(dataProvider.ListCountries);
-          // var source = new BindingSource(bindingList, null);
-
-           wDataGridView.DataSource = dataProvider.ListCountries;//source;
+           var bindingList = new BindingList<Country>(dataProvider.ListCountries);
+           wDataGridView.DataSource = bindingList;
         }
 
         private void Form1_Load(System.Object sender, System.EventArgs e)
@@ -142,16 +140,13 @@ namespace myApp {
 	}
 
 	private void addNewRowButton_Click(object sender, EventArgs e)
-    {
-        
-        dataProvider.ListCountries.Add(new Country("Test"));
-        wDataGridView.DataSource = dataProvider.ListCountries;
-        Console.WriteLine(dataProvider.ListCountries.Count) ;
-        Refresh();
+    { 
+       var list = (BindingList<Country>)wDataGridView.DataSource;
+       list.Add(new Country(""));          
     }
 
     private void saveDataButton_Click(object sender, EventArgs e) {
-        List<Word> list = new List<Word>();
+       /* List<Word> list = new List<Word>();
         foreach (var row in wDataGridView.Rows.OfType<DataGridViewRow>())  {
             
             string word = row.Cells[0].FormattedValue.ToString().Trim();
@@ -171,10 +166,12 @@ namespace myApp {
                    ) 
            );           
         }   
-
-        dataProvider.List = list;
+ 
         dataProvider.Save();
-        MessageBox.Show("Данные успешно сохранены");        
+        MessageBox.Show("Данные успешно сохранены"); */
+
+        Console.WriteLine(dataProvider.ListCountries.Count);
+                
     }
 
 	private void deleteRowButton_Click(object sender, EventArgs e)
