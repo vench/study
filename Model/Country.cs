@@ -14,6 +14,8 @@ namespace myApp {
         
         private int size;
 
+        private string imageSrc;
+
         public Country() {}
 
         
@@ -68,6 +70,16 @@ namespace myApp {
             }
             set {
                 size = value;
+            }
+        }
+
+        [System.ComponentModel.DisplayName("Флаг")]
+        public string ImageSrc {
+            get {
+                return imageSrc;
+            }
+            set {
+                imageSrc = value;
             }
         }
     }

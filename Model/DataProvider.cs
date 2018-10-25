@@ -8,8 +8,8 @@ namespace myApp.Model {
 
     class DataProvider {
 
-        const string FILE_DATA_XML = "data1.xml";
-        const string FILE_DATA_BIN = "data1.bin";
+        const string FILE_DATA_XML = "data_1.xml";
+        const string FILE_DATA_BIN = "data_1.bin";
  
 
         private Wrapper wrapper;
@@ -48,26 +48,8 @@ namespace myApp.Model {
                 loadBin();
             }
             OnDataLoad(EventArgs.Empty);
-        }
-
-
-        public List<Word> List {
-            get {
-                return wrapper.ListWord;
-            }
-            set {
-                wrapper.ListWord = value;
-            }
-        }
-
-        public List<Statistica> ListStat {
-            get {
-                return wrapper.ListStat;
-            }
-            set {
-                wrapper.ListStat = value;
-            }
-        }
+        } 
+ 
 
         public List<Country> ListCountries {
             get {
