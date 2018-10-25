@@ -45,10 +45,16 @@ namespace myApp {
 
         private void Form1_DataLoad(System.Object sender, System.EventArgs e) {
             System.Console.WriteLine("Load: " + dataProvider.List.Count); 
+ 
+           
+           dataProvider.ListCountries.Add(new Country("Россия", "Москва", 146, 17125187));  
+           dataProvider.ListCountries.Add(new Country("Франция")); 
+           dataProvider.ListCountries.Add(new Country("Германия")); 
 
-            foreach(var item in dataProvider.List) {
-               wDataGridView.Rows.Add(Word.AsRow(item)); 
-            }  
+          // var bindingList = new BindingList<Country>(dataProvider.ListCountries);
+          // var source = new BindingSource(bindingList, null);
+
+           wDataGridView.DataSource = dataProvider.ListCountries;//source;
         }
 
         private void Form1_Load(System.Object sender, System.EventArgs e)
@@ -61,8 +67,7 @@ namespace myApp {
 
 	private void SetupDataGridView() {
 		this.Controls.Add(wDataGridView);
-
-        wDataGridView.ColumnCount = 5;
+ 
 
         wDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
         wDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
@@ -78,19 +83,7 @@ namespace myApp {
         wDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
         wDataGridView.GridColor = Color.Black;
         wDataGridView.RowHeadersVisible = false; 
-        
-        wDataGridView.Columns[0].Width = 200;
-        wDataGridView.Columns[1].Width = 200;
-        wDataGridView.Columns[2].Width = 100;
-        wDataGridView.Columns[3].Width = 100;
-        wDataGridView.Columns[4].Width = 200;
-        wDataGridView.Columns[0].Name = "Слово";
-        wDataGridView.Columns[1].Name = "Переводы";
-        wDataGridView.Columns[2].Name = "Прилогательное";
-        wDataGridView.Columns[3].Name = "Существительное"; 
-        wDataGridView.Columns[2].ValueType =  typeof(bool);
-        wDataGridView.Columns[3].ValueType =  typeof(bool);
-        wDataGridView.Columns[4].Name = "Примечание";
+          
         wDataGridView.SelectionMode =
             DataGridViewSelectionMode.FullRowSelect;
         wDataGridView.MultiSelect = false;
@@ -150,7 +143,11 @@ namespace myApp {
 
 	private void addNewRowButton_Click(object sender, EventArgs e)
     {
-        wDataGridView.Rows.Add();
+        
+        dataProvider.ListCountries.Add(new Country("Test"));
+        wDataGridView.DataSource = dataProvider.ListCountries;
+        Console.WriteLine(dataProvider.ListCountries.Count) ;
+        Refresh();
     }
 
     private void saveDataButton_Click(object sender, EventArgs e) {

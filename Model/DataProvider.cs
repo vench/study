@@ -69,6 +69,15 @@ namespace myApp.Model {
             }
         }
 
+        public List<Country> ListCountries {
+            get {
+                return wrapper.ListCountries;
+            } 
+            set {
+                wrapper.ListCountries = value;
+            }
+        }
+
 
         private void saveBin() {
             FileStream stream = new FileStream(FILE_DATA_BIN, FileMode.Create); 
