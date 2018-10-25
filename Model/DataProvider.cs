@@ -34,7 +34,7 @@ namespace myApp.Model {
 
         public void Save() {
             if(useXml) {
-                saveXml();
+                saveXml();                
             }  else {
                 saveBin();
             }            

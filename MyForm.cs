@@ -77,8 +77,7 @@ namespace myApp {
             DataGridViewHeaderBorderStyle.Single;
         wDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
         wDataGridView.GridColor = Color.Black;
-        wDataGridView.RowHeadersVisible = false;
-        wDataGridView.AutoSize = true;
+        wDataGridView.RowHeadersVisible = false; 
         
         wDataGridView.Columns[0].Width = 200;
         wDataGridView.Columns[1].Width = 200;
