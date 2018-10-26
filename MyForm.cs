@@ -10,20 +10,24 @@ namespace myApp {
     using System.Threading.Tasks;
     using System.Windows.Forms; 
     using myApp.Model; 
-
+    using System.Windows.Forms.DataVisualization.Charting;
 
     //msbuild /property:Configuration=myApp.csproj
     //mono *.exe
 
     class MyForm : Form {
-         
-        private Panel buttonPanel = new Panel();
+          
         private DataGridView wDataGridView = new DataGridView();
         private BindingNavigator wBindingNavigator = new BindingNavigator(true);
         
         private BindingSource wBindingNavigatorBindingSource = new BindingSource();
  
- 
+        private Chart chart = new Chart(); 
+
+        private PictureBox pictureBox = new PictureBox();
+
+        private PropertyGrid propertyGrid = new PropertyGrid();
+
         private DataProvider dataProvider;
 
 
@@ -43,41 +47,39 @@ namespace myApp {
 
         private void Form1_DataLoad(System.Object sender, System.EventArgs e) { 
            var bindingList = new BindingList<Country>(dataProvider.ListCountries);
-           wDataGridView.DataSource = bindingList;
+                     
+           wBindingNavigatorBindingSource.DataSource = bindingList;  
+           wDataGridView.DataSource = wBindingNavigatorBindingSource; 
 
-           
-           wBindingNavigatorBindingSource.DataSource = bindingList; 
+           chart.DataSource = wBindingNavigatorBindingSource;
         }
 
         private void Form1_Load(System.Object sender, System.EventArgs e)
-        {
-            SetupLayout();
+        { 
             SetupDataGridView();
             dataProvider.Load();
         }
 
 
-	private void SetupDataGridView() {
-
-        
+	private void SetupDataGridView() { 
 
         Controls.Add(wBindingNavigator);
-
 		Controls.Add(wDataGridView);
-
+        Controls.Add(propertyGrid);
+        Controls.Add(pictureBox);
+        Controls.Add(chart);
 
         wBindingNavigator.BindingSource = wBindingNavigatorBindingSource;
         wBindingNavigator.Items.Add( new ToolStripButton("Save", null, saveDataButton_Click));
      
-        
-
+        wDataGridView.SelectionChanged += new EventHandler(Data_Grid_changeSelect);
         wDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
         wDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
         wDataGridView.ColumnHeadersDefaultCellStyle.Font =
             new Font(wDataGridView.Font, FontStyle.Bold);
  
         wDataGridView.Location = new Point(0, wBindingNavigator.Height);
-        wDataGridView.Size = new Size(800, 250);
+        wDataGridView.Size = new Size(500, 250);
         wDataGridView.AutoSizeRowsMode =
             DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
         wDataGridView.ColumnHeadersBorderStyle =
@@ -85,29 +87,30 @@ namespace myApp {
         wDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
         wDataGridView.GridColor = Color.Black;
         wDataGridView.RowHeadersVisible = false; 
-          
+        wDataGridView.ReadOnly = true;  
         wDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        wDataGridView.MultiSelect = false;
-        //wDataGridView.Dock = DockStyle.Fill; 
+        wDataGridView.MultiSelect = false; 
 
-       // wBindingNavigator.Dock = DockStyle.Top;
-       // wDataGridView.Dock = DockStyle.Top;
-
-        
-	}
-
-
-    
- 
-
+        propertyGrid.Location  = new Point(wDataGridView.Right, wDataGridView.Bottom); 
+        pictureBox.Location = new Point(wDataGridView.Right, wDataGridView.Top);
      
+        //Series barSeries = new Series(); 
+        //barSeries.ChartType = SeriesChartType.Bar; 
+       // barSeries.ChartTypeName = "xx";
+       // chart.Series.Add(barSeries);
+        chart.Location = new Point(0, wDataGridView.Bottom);
 
+       // chart.Titles.Add("График");
+        
+       // this.chart
+    
+    } 
    
 
-	private void addNewRowButton_Click(object sender, EventArgs e)
+	private void Data_Grid_changeSelect(object sender, EventArgs e)
     { 
-       var list = (BindingList<Country>)wDataGridView.DataSource;
-       list.Add(new Country(""));          
+        propertyGrid.SelectedObject = wBindingNavigatorBindingSource.Current;
+        
     }
 
     private void saveDataButton_Click(object sender, EventArgs e) { 
@@ -115,27 +118,8 @@ namespace myApp {
         MessageBox.Show("Данные успешно сохранены"); 
     }
  
-
-	private void deleteRowButton_Click(object sender, EventArgs e)
-    {
-        if (wDataGridView.SelectedRows.Count > 0 &&
-            wDataGridView.SelectedRows[0].Index !=
-            wDataGridView.Rows.Count - 1)
-        {
-            wDataGridView.Rows.RemoveAt(
-                wDataGridView.SelectedRows[0].Index);
-        }
-    }
-
-	private void SetupLayout() {
-		this.Size = new Size(600, 500);
-
-          
-        buttonPanel.Height = 50;
-        buttonPanel.Dock = DockStyle.Bottom;
-
-        Controls.Add(buttonPanel);
-	}
+ 
+ 
  
 
 
