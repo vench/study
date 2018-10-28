@@ -10,7 +10,7 @@ namespace myApp {
     using System.Threading.Tasks;
     using System.Windows.Forms; 
     using myApp.Model; 
-    using System.Windows.Forms.DataVisualization.Charting;
+   // using System.Windows.Forms.DataVisualization.Charting;
 
     //msbuild /property:Configuration=myApp.csproj
     //mono *.exe
@@ -22,7 +22,7 @@ namespace myApp {
         
         private BindingSource wBindingNavigatorBindingSource = new BindingSource();
  
-        private Chart chart = new Chart(); 
+        private Chart chart = new Chart(500,300); 
 
         private PictureBox pictureBox = new PictureBox();
 
@@ -51,7 +51,33 @@ namespace myApp {
            wBindingNavigatorBindingSource.DataSource = bindingList;  
            wDataGridView.DataSource = wBindingNavigatorBindingSource; 
 
-           chart.DataSource = wBindingNavigatorBindingSource;
+          
+            ChangeChart();
+        }
+
+        private void ChangeChart() {
+            List<int> values = new List<int>();
+           List<string> ledends = new List<string>();
+           foreach(var item in dataProvider.ListCountries) {
+               if(item.Population > 0) {
+                   values.Add(item.Population);
+                   ledends.Add(item.Name);
+                   Console.WriteLine(item.Population);
+               }
+           }
+
+           //chart         
+              
+            chart.Values = values.ToArray();
+            chart.Labels = ledends.ToArray();
+            
+            chart.Refresh();
+            chart.Draw();
+        }
+
+        private void List_data_cahnge(System.Object sender, System.EventArgs e) {
+            Console.WriteLine("xxxx");
+            ChangeChart();
         }
 
         private void Form1_Load(System.Object sender, System.EventArgs e)
@@ -93,61 +119,26 @@ namespace myApp {
 
         propertyGrid.Location  = new Point(wDataGridView.Right, wDataGridView.Bottom); 
         pictureBox.Location = new Point(wDataGridView.Right, wDataGridView.Top);
-     
-        //Series barSeries = new Series(); 
-        //barSeries.ChartType = SeriesChartType.Bar; 
-       // barSeries.ChartTypeName = "xx";
-       // chart.Series.Add(barSeries);
-
-        double[] xData = new double[] {1,2,3,4,5 };
-        double[] yData = new double[] {6,7,3,4,5 };
+        propertyGrid.PropertyValueChanged  += new PropertyValueChangedEventHandler(List_data_cahnge);
+          
 
         chart.Location = new Point(0, wDataGridView.Bottom);
 
         pictureBox.Location = new Point(wDataGridView.Right, wDataGridView.Top);
         pictureBox.Size = new Size(propertyGrid.Width, wDataGridView.Height);
         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-        pictureBox.ImageLocation = "https://pbs.twimg.com/profile_images/2881220369/2b27ac38b43b17a8c5eacfc443ce3384_400x400.jpeg";
+        //pictureBox.ImageLocation = "https://pbs.twimg.com/profile_images/2881220369/2b27ac38b43b17a8c5eacfc443ce3384_400x400.jpeg";
         
-        //ChartArea area = new ChartArea("First");
-        
-       // chart.Series.Add("Series2");
-      //  chart.Series["Series2"].ChartType = SeriesChartType.Column;
-      //  chart.Series["Series2"].Points.AddY(20);
-       // chart.Series["Series2"].ChartArea = "ChartArea1";
-       // chart.ChartAreas.Add(area);
-        /* 
-            //Create a series using the data
-            Series barSeries = new Series();
-            barSeries.Points.DataBindXY(xData, yData);
-            //Set the chart type, Bar; horizontal bars
-            barSeries.ChartType = SeriesChartType.Bar;
-            //Assign it to the required area
-            barSeries.ChartArea = "First";
-            //Add the series to the chart
-            chart.Series.Add(barSeries);
-            //Vertical bar chart
-            //create another area and add it to the chart
-            ChartArea area2 = new ChartArea("Second");
-            chart.ChartAreas.Add(area2);
-            //Create the series using just the y data
-            Series barSeries2 = new Series();
-            barSeries2.Points.DataBindY(yData);
-            //Set the chart type, column; vertical bars
-            barSeries2.ChartType = SeriesChartType.Column;
-            barSeries2.ChartArea = "Second";
-            //Add the series to the chart
-            chart.Series.Add(barSeries2);
-       // chart.Titles.Add("График");
-        
-       // this.chart
-    */
+        chart.LegendY = "Популяция";
+        chart.LegendX = "Страна";
+        chart.Type = Chart.ChartType.Bars; 
     } 
    
 
 	private void Data_Grid_changeSelect(object sender, EventArgs e)
     { 
         propertyGrid.SelectedObject = wBindingNavigatorBindingSource.Current;
+        ChangeChart();
         var country = (Country)propertyGrid.SelectedObject;
         if(country == null) {
             return;

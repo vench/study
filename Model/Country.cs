@@ -44,6 +44,7 @@ namespace myApp {
         }
 
         [System.ComponentModel.DisplayName("Столица")]
+        [System.ComponentModel.Description("Столица страны")]
         public string Capital {
             get {
                 return capital;
@@ -53,7 +54,8 @@ namespace myApp {
             }
         }
 
-        [System.ComponentModel.DisplayName("Численность")]
+        [System.ComponentModel.DisplayName("Популяция")]
+        [System.ComponentModel.Description("Популяция населения в стране")]
         public int Population {
             get {
                 return population;
@@ -64,6 +66,7 @@ namespace myApp {
         }
 
         [System.ComponentModel.DisplayName("Размер")]
+        [System.ComponentModel.Description("Размер страны в квадратных километрах")]
         public int Size {
             get {
                 return size;
@@ -74,6 +77,8 @@ namespace myApp {
         }
 
         [System.ComponentModel.DisplayName("Флаг")]
+        [System.ComponentModel.Description("Национальный флаг")]
+        [System.ComponentModel.DefaultValue("./data/flag.png")]
         public string ImageSrc {
             get {
                 return imageSrc;
