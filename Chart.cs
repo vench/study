@@ -21,8 +21,8 @@ namespace myApp {
             this.Height = height;
             this.FrameWidth = 50;
             this.Type = ChartType.Lines;
-            this.AxisPen = new Pen( Color.Black ) { Width = 10 };
-            this.DataPen = new Pen( Color.Red ) { Width = 4 };
+            this.AxisPen = new Pen( Color.Black ) { Width = 1 };
+            this.DataPen = new Pen( Color.Red ) { Width = 10 };
             this.DataFont = new Font( FontFamily.GenericMonospace, 12 );
             this.LegendFont = new Font( FontFamily.GenericSansSerif, 12 );
             this.LabelsFont = new Font( FontFamily.GenericSansSerif, 9 );
@@ -105,8 +105,8 @@ namespace myApp {
                 this.grf.DrawString( tag,
                                      this.DataFont,
                                      this.DataPen.Brush,
-                                     new Point( nextPoint.X - tagWidth,
-                                                nextPoint.Y ) );
+                                     new Point( nextPoint.X - tagWidth /2,
+                                                nextPoint.Y - 20 ) );
 
                 if(labels.Count > i) {
                     this.grf.DrawString( labels[i],

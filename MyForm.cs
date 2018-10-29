@@ -22,7 +22,7 @@ namespace myApp {
         
         private BindingSource wBindingNavigatorBindingSource = new BindingSource();
  
-        private Chart chart = new Chart(500,300); 
+        private Chart chart = new Chart(1000,400); 
 
         private PictureBox pictureBox = new PictureBox();
 
@@ -40,12 +40,18 @@ namespace myApp {
             MaximumSize = new System.Drawing.Size(SystemInformation.VirtualScreen.Width,SystemInformation.VirtualScreen.Height);
             MinimumSize = new System.Drawing.Size(800, 600);
             StartPosition = FormStartPosition.CenterScreen;  
+
+            Resize += new EventHandler(Form_Resize);
 			
             dataProvider = new DataProvider();
             dataProvider.DataLoad += new EventHandler(Form1_DataLoad);              
         }
 
-        private void Form1_DataLoad(System.Object sender, System.EventArgs e) { 
+
+        private void Form_Resize(Object sender, EventArgs e) {
+            UpdateSize();
+        }
+        private void Form1_DataLoad(Object sender, EventArgs e) { 
            var bindingList = new BindingList<Country>(dataProvider.ListCountries);
                      
            wBindingNavigatorBindingSource.DataSource = bindingList;  
@@ -62,7 +68,7 @@ namespace myApp {
                if(item.Population > 0) {
                    values.Add(item.Population);
                    ledends.Add(item.Name);
-                   Console.WriteLine(item.Population);
+                //   Console.WriteLine(item.Population);
                }
            }
 
@@ -76,7 +82,7 @@ namespace myApp {
         }
 
         private void List_data_cahnge(System.Object sender, System.EventArgs e) {
-            Console.WriteLine("xxxx");
+            Console.WriteLine("List_data_cahnge");
             ChangeChart();
         }
 
@@ -104,8 +110,6 @@ namespace myApp {
         wDataGridView.ColumnHeadersDefaultCellStyle.Font =
             new Font(wDataGridView.Font, FontStyle.Bold);
  
-        wDataGridView.Location = new Point(0, wBindingNavigator.Height);
-        wDataGridView.Size = new Size(500, 250);
         wDataGridView.AutoSizeRowsMode =
             DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
         wDataGridView.ColumnHeadersBorderStyle =
@@ -117,22 +121,41 @@ namespace myApp {
         wDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         wDataGridView.MultiSelect = false; 
 
-        propertyGrid.Location  = new Point(wDataGridView.Right, wDataGridView.Bottom); 
-        pictureBox.Location = new Point(wDataGridView.Right, wDataGridView.Top);
         propertyGrid.PropertyValueChanged  += new PropertyValueChangedEventHandler(List_data_cahnge);
-          
+        propertyGrid.SelectedGridItemChanged  += new SelectedGridItemChangedEventHandler(List_data_cahnge); 
 
-        chart.Location = new Point(0, wDataGridView.Bottom);
+        //chart.Location = new Point(0, wDataGridView.Bottom);
 
-        pictureBox.Location = new Point(wDataGridView.Right, wDataGridView.Top);
-        pictureBox.Size = new Size(propertyGrid.Width, wDataGridView.Height);
+       // pictureBox.Location = new Point(wDataGridView.Right, wDataGridView.Top);
+      //  pictureBox.Size = new Size(propertyGrid.Width, wDataGridView.Height);
         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
         //pictureBox.ImageLocation = "https://pbs.twimg.com/profile_images/2881220369/2b27ac38b43b17a8c5eacfc443ce3384_400x400.jpeg";
         
         chart.LegendY = "Популяция";
         chart.LegendX = "Страна";
         chart.Type = Chart.ChartType.Bars; 
+    
+        UpdateSize();
     } 
+
+
+
+
+    private void UpdateSize() {
+        int w = (int)(this.Width * .95);
+        int h = (int)((this.Height - wBindingNavigator.Height) * .95);
+
+        wDataGridView.SetBounds(10, wBindingNavigator.Height, (int)(w * .70), (int)(h * .55));
+        pictureBox.SetBounds(wDataGridView.Right, wDataGridView.Top, w - wDataGridView.Width, wDataGridView.Height);
+        chart.SetBounds(10, wDataGridView.Bottom, wDataGridView.Width, h - wDataGridView.Height);
+        propertyGrid.SetBounds(wDataGridView.Right, wDataGridView.Bottom, pictureBox.Width, chart.Height);
+
+        if(dataProvider.ListCountries.Count > 0) {
+            ChangeChart();
+        }
+         
+        //Console.WriteLine(chart.Width + " " + wDataGridView.Width);
+    }
    
 
 	private void Data_Grid_changeSelect(object sender, EventArgs e)
