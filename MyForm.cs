@@ -29,6 +29,7 @@ namespace myApp {
         private PropertyGrid propertyGrid = new PropertyGrid();
 
         private DataProvider dataProvider;
+        private SearchForm searchForm;
 
 
         public MyForm()
@@ -102,8 +103,16 @@ namespace myApp {
         Controls.Add(chart);
 
         wBindingNavigator.BindingSource = wBindingNavigatorBindingSource;
-        wBindingNavigator.Items.Add( new ToolStripButton("Save", null, saveDataButton_Click));
-     
+        wBindingNavigator.Items.Add( new ToolStripButton("Сохранить", null, saveDataButton_Click));
+        wBindingNavigator.Items.Add( new ToolStripSeparator()  );
+       
+        /*ToolStripTextBox textBox = new ToolStripTextBox(); 
+        textBox.Size = new  Size(200, 25);
+        wBindingNavigator.Items.Add( textBox  );
+        */
+        wBindingNavigator.Items.Add( new ToolStripButton("Поиск", null, searchDataButton_Click));
+        
+
         wDataGridView.SelectionChanged += new EventHandler(Data_Grid_changeSelect);
         wDataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
         wDataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
@@ -179,7 +188,17 @@ namespace myApp {
     }
  
  
- 
+    private void searchForm_Close(Object sender, FormClosedEventArgs e) {
+        searchForm = null;
+
+    }
+    private void searchDataButton_Click(object sender, EventArgs e) {
+         if (searchForm == null || searchForm.Disposing) { 
+            searchForm = new SearchForm(dataProvider);
+            searchForm.FormClosed += new FormClosedEventHandler(searchForm_Close);
+        }
+        searchForm.Show();
+    }
  
 
 

@@ -6,15 +6,15 @@ namespace myApp {
     public class Country {
 
         
-        private string name;
+        private string name = "";
 
-        private string capital;
+        private string capital = "";
         
-        private int population;
+        private int population = 0;
         
-        private int size;
+        private int size = 0;
 
-        private string imageSrc;
+        private string imageSrc = "";
 
         public Country() {}
 

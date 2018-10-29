@@ -17,7 +17,8 @@ namespace myApp.Model {
         private bool useXml = true;
 
         public DataProvider() {
-           wrapper = new Wrapper();
+            Search = "";
+            wrapper = new Wrapper();
         }
 
         protected virtual void OnDataLoad(EventArgs e)
@@ -47,12 +48,27 @@ namespace myApp.Model {
             } else {
                 loadBin();
             }
-            OnDataLoad(EventArgs.Empty);
+            FireDataUpdate();  
         } 
+
+        public void FireDataUpdate() {
+            OnDataLoad(EventArgs.Empty);
+        }
  
+
+        public string Search { get; set; }
 
         public List<Country> ListCountries {
             get {
+                if(Search.Trim().Length > 0) {
+                    List<Country>  countries = new List<Country>();
+                    foreach(var item in wrapper.ListCountries) {
+                        if(item != null && item.Name.Contains(Search)) {
+                            countries.Add(item);
+                        }
+                    }    
+                    return countries;
+                }
                 return wrapper.ListCountries;
             } 
             set {
