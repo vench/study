@@ -22,7 +22,7 @@ namespace myApp {
         
         private BindingSource wBindingNavigatorBindingSource = new BindingSource();
  
-        private Chart chart = new Chart(1000,400); 
+        private Chart chart = new Chart(2000,600); 
 
         private PictureBox pictureBox = new PictureBox();
 
@@ -53,17 +53,18 @@ namespace myApp {
             UpdateSize();
         }
         private void Form1_DataLoad(Object sender, EventArgs e) { 
+           wDataGridView.ClearSelection() ;
+           //wBindingNavigatorBindingSource.Clear();
+
            var bindingList = new BindingList<Country>(dataProvider.ListCountries);
                      
            wBindingNavigatorBindingSource.DataSource = bindingList;  
-           wDataGridView.DataSource = wBindingNavigatorBindingSource; 
-
-          
-            ChangeChart();
+           wDataGridView.DataSource = wBindingNavigatorBindingSource;  
+           ChangeChart();
         }
 
         private void ChangeChart() {
-            List<int> values = new List<int>();
+           List<int> values = new List<int>();
            List<string> ledends = new List<string>();
            foreach(var item in dataProvider.ListCountries) {
                if(item.Population > 0) {
@@ -74,12 +75,16 @@ namespace myApp {
            }
 
            //chart         
-              
+           if(values.Count > 0) {
             chart.Values = values.ToArray();
             chart.Labels = ledends.ToArray();
             
             chart.Refresh();
             chart.Draw();
+            chart.Show();
+           } else {
+               chart.Hide();
+           } 
         }
 
         private void List_data_cahnge(System.Object sender, System.EventArgs e) {
