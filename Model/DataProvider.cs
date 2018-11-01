@@ -67,6 +67,7 @@ namespace myApp.Model {
                             countries.Add(item);
                         }
                     }    
+                    countries.Add(new Country());
                     return countries;
                 }
                 return wrapper.ListCountries;

@@ -54,12 +54,17 @@ namespace myApp {
         }
         private void Form1_DataLoad(Object sender, EventArgs e) { 
            wDataGridView.ClearSelection() ;
-           //wBindingNavigatorBindingSource.Clear();
+           Console.WriteLine("Form1_DataLoad ON");
+          // wBindingNavigatorBindingSource.Clear();
 
-           var bindingList = new BindingList<Country>(dataProvider.ListCountries);
+           //var bindingList = new BindingList<Country>(dataProvider.ListCountries);
+           wBindingNavigatorBindingSource.SuspendBinding();      
                      
-           wBindingNavigatorBindingSource.DataSource = bindingList;  
+                    
+           wBindingNavigatorBindingSource.DataSource = dataProvider.ListCountries;  
+           wBindingNavigatorBindingSource.ResumeBinding();
            wDataGridView.DataSource = wBindingNavigatorBindingSource;  
+            
            ChangeChart();
         }
 
