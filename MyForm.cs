@@ -136,7 +136,7 @@ namespace myApp {
         wDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
         wDataGridView.GridColor = Color.Black;
         wDataGridView.RowHeadersVisible = false; 
-        wDataGridView.ReadOnly = true;  
+       // wDataGridView.ReadOnly = true;  
         wDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         wDataGridView.MultiSelect = false; 
 
