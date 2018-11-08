@@ -112,7 +112,7 @@ namespace myApp {
                     this.grf.DrawString( labels[i],
                                         this.LabelsFont,
                                         this.LegendPen.Brush,
-                                        new Point( nextPoint.X - tagWidth,
+                                        new Point( nextPoint.X - tagWidth / 2,
                                                     this.FramedEndPosition.Y + 5) );
 
                 }
