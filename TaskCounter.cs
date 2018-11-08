@@ -38,15 +38,8 @@ namespace myApp {
         public TaskCounter() { }
 
         public bool Stop() {
-            if(IsRun) {
-
-                try {
-                    thread.Abort();
-                } catch (Exception e) {  
-                    Console.WriteLine(e);
-                }    
-               
-                thread = null;
+            if(IsRun) { 
+                tokenSource.Cancel();    
                 return true;
             }
             return false;
@@ -54,7 +47,7 @@ namespace myApp {
 
         public bool IsRun {
             get {
-                return (task != null && thread != null) ;
+                return (task != null && tokenSource != null) ;
             }
         }
 
@@ -131,7 +124,8 @@ namespace myApp {
                                     lastTimeParallel);
             }
 
-            thread = null;  
+            thread = null; 
+            tokenSource = null; 
             OnTaskComplited(EventArgs.Empty);                  
         }
 
@@ -149,9 +143,23 @@ namespace myApp {
             foreach(var file in files) {
                 Console.WriteLine(file);
                 try  {  
+
+                    if(tokenSource.IsCancellationRequested) {
+                        Console.WriteLine("IsCancellationRequested");
+                        return;
+                    }
+
+                    Thread.Sleep(1000);
+
                     using (StreamReader sr = new StreamReader(file)) { 
                  
                     while(!sr.EndOfStream) {
+
+                        if(tokenSource.IsCancellationRequested) {
+                            Console.WriteLine("IsCancellationRequested");
+                            return;
+                        }
+
                         string line = sr.ReadLine(); 
  
                         var words = line.Split(' '); 
@@ -189,10 +197,26 @@ namespace myApp {
                 index => {   
                 var fileName = files[index];
                 Console.WriteLine(fileName);
+
+                    if(tokenSource.IsCancellationRequested) {
+                        Console.WriteLine("IsCancellationRequested");
+                        return;
+                    }
+
+                    Thread.Sleep(1000);
+
                 try   {  
                     using (StreamReader sr = new StreamReader(fileName)) { 
                  
                     while(!sr.EndOfStream) {
+
+                        if(tokenSource.IsCancellationRequested) {
+                            Console.WriteLine("IsCancellationRequested");
+                            return;
+                        }
+
+                        
+
                         string line = sr.ReadLine(); 
  
                         var words = line.Split(' '); 
