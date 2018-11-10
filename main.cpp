@@ -2,56 +2,33 @@
 
 #include "all.h" 
  
-
-int    keys[256];      // Массив для процедуры обработки клавиатуры
-
-GLfloat rtri;           // Угол для треугольник
-GLfloat rquad;          // Угол для четырехугольника
-
+ 
+float speed = 4.;
+float angle = 0;
 
 void displayMe(void) {
 
-        GLUquadricObj *quadObj;
-        quadObj = gluNewQuadric(); // создаем новый объект
-                            // для создания сфер и цилиндров
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glLoadIdentity();
+        std::cout << "displayMe: " << angle << ", " << speed << std::endl; 
  
-        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         //
         glPushMatrix();
- glColor3d(1,0,0);
-  gluQuadricDrawStyle(quadObj, GLU_FILL); // устанавливаем
-                          // стиль: сплошной
- gluSphere(quadObj, 0.5, 10, 10); // рисуем сферу
-                                  // радиусом 0.5
- glTranslated(-2,0,0); // сдвигаемся влево
- glRotated(45, 1,0,0); // поворачиваем
- glColor3d(0,1,0);
- gluQuadricDrawStyle(quadObj, GLU_LINE); // устанавливаем
-                          // стиль: проволочный
- gluCylinder(quadObj, 0.5, 0.75, 1, 15, 15);
-glPopMatrix();
-gluDeleteQuadric(quadObj);
-//  
-// 
-  glBegin(GL_QUADS);
-   glColor3d(1,0,0);
-   glVertex2d(0,0);
-   glColor3d(0,1,0);
-   glVertex2d(0,0.3);
-   glColor3d(0,0,1);
-   glVertex2d(.3,0);
-   glColor3d(1,1,1);
-   glVertex2d(.3,.3);
-  glEnd(); 
+        meSolidCube(.1);
+        glPopMatrix();
+        //
+      
+        glPushMatrix();  
+       // glTranslated(0, 0, -20);
+       // glRotated(angle,0,0,1); 
+       glRotated(34,0,1,1);
+        glRotated(angle,1,0,0);
+       // glRotated(angle,0,1,0);
         
+        meSolidCube(.3); 
+         glPopMatrix();
+         
         glutSwapBuffers();
-        
-        
-       // glFlush();
 }
 
 void reshapeMe(int w, int h) {
@@ -64,11 +41,34 @@ void reshapeMe(int w, int h) {
 }
 
 void initOpenGl() {
-        glClearColor(1,0.5,1,0);
+        glClearColor(1,1,1,0);
         glShadeModel(GL_SMOOTH); //glShadeModel(GL_FLAT); 
         glPointSize(7);
         glEnable(GL_POINT_SMOOTH);
 }
+
+//
+
+void onKeyboardFunc(int key, int x, int y )
+{
+
+        if (key == GLUT_KEY_UP) {
+                angle+=speed;
+                if(angle > 360) {
+                        angle = 0;
+                        if (speed < 20) speed +=.5;
+                } 
+        } else if (key == GLUT_KEY_DOWN) {
+                angle-=speed;
+                if(angle <= 0) {
+                        angle = 360;
+                        if (speed > 0) speed -=.5;
+                }        
+        }
+    
+        
+        glutPostRedisplay();
+} 
 
 //
 int main(int argc, char** argv) {
@@ -77,11 +77,14 @@ int main(int argc, char** argv) {
         std::cout << "Start" << std::endl;
 
         glutInit(&argc, argv);
-        glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
         glutInitWindowSize(800, 600);
         glutInitWindowPosition(100,100);
         glutCreateWindow("Hello world");
+        glEnable(GL_DEPTH_TEST); // проверка на порядок !
         initOpenGl();
+        //glutKeyboardFunc(onKeyboardFunc);
+        glutSpecialFunc(onKeyboardFunc);
         glutReshapeFunc(reshapeMe);
         glutDisplayFunc(displayMe);
         glutMainLoop();
