@@ -1,39 +1,57 @@
 //  g++ testgl.cpp -o testgl -lglut -lGLU -lGL
 
 #include "all.h" 
+ 
 
+int    keys[256];      // Массив для процедуры обработки клавиатуры
+
+GLfloat rtri;           // Угол для треугольник
+GLfloat rquad;          // Угол для четырехугольника
 
 
 void displayMe(void) {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glColor3f(1,0,0);
-        glBegin(GL_POLYGON);
-        glVertex3f(0.5, 0.0, 0.5);
-        glVertex3f(0.5, 0.0, 0.0);
-        glVertex3f(0.0, 0.5, 0.0);
-        glVertex3f(0.0, 0.0, 0.5);
-        glEnd();
-        glColor3f(0.1,0.1,1);
-        glBegin(GL_POINTS);
-        glVertex2f(0.0, 0.0);
-        glVertex2f(0.0, .8);
-        glVertex2f(.8, 0.8);
-        glEnd(); 
+
+        GLUquadricObj *quadObj;
+        quadObj = gluNewQuadric(); // создаем новый объект
+                            // для создания сфер и цилиндров
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glLoadIdentity();
+ 
+        
         
         //
-        glBegin(GL_QUADS);
-        glColor3f(1.,1.,1.);
-        glVertex2f(0, -0.8);
-        glColor3f(0,0,1.);
-        glVertex2f(0, 0);
-        glColor3f(0,1.,0);
-        glVertex2f(-0.8, 0);
-        glColor3f(1.,0,0);
-        glVertex2f(-0.8, -0.8);
-        glEnd();
+        glPushMatrix();
+ glColor3d(1,0,0);
+  gluQuadricDrawStyle(quadObj, GLU_FILL); // устанавливаем
+                          // стиль: сплошной
+ gluSphere(quadObj, 0.5, 10, 10); // рисуем сферу
+                                  // радиусом 0.5
+ glTranslated(-2,0,0); // сдвигаемся влево
+ glRotated(45, 1,0,0); // поворачиваем
+ glColor3d(0,1,0);
+ gluQuadricDrawStyle(quadObj, GLU_LINE); // устанавливаем
+                          // стиль: проволочный
+ gluCylinder(quadObj, 0.5, 0.75, 1, 15, 15);
+glPopMatrix();
+gluDeleteQuadric(quadObj);
+//  
+// 
+  glBegin(GL_QUADS);
+   glColor3d(1,0,0);
+   glVertex2d(0,0);
+   glColor3d(0,1,0);
+   glVertex2d(0,0.3);
+   glColor3d(0,0,1);
+   glVertex2d(.3,0);
+   glColor3d(1,1,1);
+   glVertex2d(.3,.3);
+  glEnd(); 
         
         glutSwapBuffers();
-        glFlush();
+        
+        
+       // glFlush();
 }
 
 void reshapeMe(int w, int h) {
@@ -47,7 +65,7 @@ void reshapeMe(int w, int h) {
 
 void initOpenGl() {
         glClearColor(1,0.5,1,0);
-        glShadeModel(GL_FLAT);
+        glShadeModel(GL_SMOOTH); //glShadeModel(GL_FLAT); 
         glPointSize(7);
         glEnable(GL_POINT_SMOOTH);
 }
