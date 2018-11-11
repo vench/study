@@ -3,85 +3,70 @@
 #include "all.h" 
  
  
-#define Line(x1,y1,x2,y2) \
-        glBegin(GL_LINES);  \
-	glVertex2f((x1),(y1)); \
-	glVertex2f((x2),(y2)); \
-glEnd();
+float
+	ax=.1, ay=.2, // Углы поворота изображения вокруг осей X и Y
+	dx=0, dy=0, dz = -.10, // Сдвиги вдоль координат
+	speed = 1,
+	color[] = { 0.1f, 0.6f, 0.1f };
+short posX, posY; // Текущая позиция указателя мыши
+bool leftButton, twoSide; // Нажата левая кнопка мыши. Свет отражается от обеих поверхностей (лицевой и обратной)
 
+
+//cube
+float v[8][3] = { -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1 };
+float norm[6][3] = { 0, 0, -1, 0, 0, 1, -1, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1, 0 };
+int id[6][4] =
+	{
+		0, 1, 2, 3,	// Rear (CCW - counterclockwise)
+		4, 5, 6, 7,	// Front
+		0, 3, 5, 4,	// Left
+		7, 6, 2, 1,	// Right
+		0, 4, 7, 1,	// Top
+		5, 3, 2, 6,	// Bottom
+	};
+//
 void displayMe(void) {
  
-
-        glClearColor(1, 1, 1, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
- 
-        glColor3d(0,0,0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW); 	// Будем пользоваться услугами MM
+	glLoadIdentity();
+	glTranslatef(dx, dy, dz); // Смещение координат точек будущих примитивов
+	glRotatef(ay, 0, 1, 0); 	// Вращение координат точек примитивов
+	glRotatef(ax, 1, 0, 0);
 	
-	glEnable(GL_LINE_STIPPLE);
-	
-	
-	glColor3d(1,0,0);
-	
-	// 0
-	glLineStipple(10, 0x2727);
-	glBegin(GL_LINES); 
-	for(float i = -.95; i < 1.; i += 0.5) {
-	        glVertex2f(i, -.5 + cos(i*30));
-	}
-	glEnd();
-	//Line(-.95, -.5, .95, -.5);
-	
-	
-	glColor3d(0,0,0);
-	
-	//======== В 1-м ряду рисуем 3 линии с разной штриховкой (stipple)
-	glLineStipple(1, 0x0303);		// dot
-	Line(.05, .1, .35, .1);
-	glLineStipple(1, 0x00FF);		// dash
-	Line(.35, .1, .65, .1);
-	glLineStipple(1, 0x2727);		// dash/dot/dash
-	Line(.65, .1, .95, .1);
-	
-	//======== Во 2-м ряду то же, но шире в 6 раз
-	glLineWidth(6);
-	glLineStipple(1, 0x0303);		// dot
-	Line(.05, .2, .35, .2);
-	glLineStipple(1, 0x00FF);		// dash
-	Line(.35, .2, .65, .2);
-	glLineStipple(1, 0x2727);		// dash/dot/dash
-	Line(.65, .2, .95, .2);
-	
-		// В 3-м ряду 19 линий являются частями полосы (strip). Удвоенный узор не прерывается
-	glLineStipple(2, 0x2727);
- 
-	glBegin(GL_LINE_STRIP);
-	for (int i = 0; i < 19; i++)
-		glVertex2d(.05*(i+1),.3);
-	glEnd();
-
-	// В 4-м ряду 18 независимых, отдельных линий.
-	// Тот же узор, но он каждый раз начинается заново
-	for (int i = 0;  i < 18; i++)
+	glColor3fv(color);
+	/*glBegin(GL_QUADS);		// Выбор типа примитива
+	for (int i = 0; i < 6; i++)	// Долго готовились - быстро рисуем
 	{
-		Line(0.05*(i+1),.4, 0.05*(i+2), .4);
+		glNormal3fv(norm[i]);
+		for (int j = 0; j < 4; j++)
+			glVertex3fv(v[id[i][j]]);
 	}
-	//===== В 5-м ряду 1 линия с тем же узором
-	glLineStipple(6, 0x2727);
-	Line(.05, .5, .95, .5);
-
-	glDisable(GL_LINE_STIPPLE);
-	glFlush();
+	glEnd();
+	*/
+	meSolidCube(.6);
+	
+	glutSwapBuffers();
 }
 
 void reshapeMe(int w, int h) {
         std::cout << "Reshape" << std::endl; 
         
         glViewport(0,0,w,h); 
+        gluPerspective(45, double(w)/h, 0.6, 100);
 }
 
 void initOpenGl() {
         glClearColor(1, 1, 1, 0);
-	glShadeModel(GL_FLAT);  
+	glShadeModel(GL_SMOOTH); 
+	glEnable(GL_DEPTH_TEST);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_LIGHTING);	// "Рубильник в подвале"
+	glEnable(GL_LIGHT0);		// Источник света, размещенный в точке z = ∞
+	int nLights;
+	glGetIntegerv(GL_MAX_LIGHTS, &nLights);
+	std::cout << nLights << std::endl;
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 //
@@ -89,12 +74,48 @@ void initOpenGl() {
 void onKeyboardFunc(unsigned char key, int x, int y )
 {        
 	
-        glutPostRedisplay();
+        switch(key) 
+	{
+	case 27: exit(0); break;
+	case '2': glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (twoSide = !twoSide)); break;
+	}
+	glutPostRedisplay();
 } 
 
 void onSpecialKey(int key, int x, int y ){
        
 	 
+	glutPostRedisplay();
+}
+
+//
+void onMouse(int button, int state, int x, int y){
+//d +=0.1;
+	leftButton = button == GLUT_LEFT_BUTTON;
+	if (state == GLUT_DOWN)
+	{
+	}
+	else
+	{
+	}
+	posX = x;	// Запоминаем координаты мыши
+	posY = y;
+}
+
+void onMouseMove(int x, int y)
+{
+        
+	if (leftButton)
+	{
+		ay += speed * (x > posX ? -1 : 1);// Измените углы поворота пропорционально смещению мыши (разностей x – posX и y – posY)
+		ax += speed * (y > posY ? -1 : 1);
+	}
+	else
+	{
+		// Вычислите степень удаления или приближения и измените величину dz пропорционально смещению мыши
+	}
+	posX = x;	// Запоминаем новые координаты мыши
+	posY = y;
 	glutPostRedisplay();
 }
 
@@ -105,14 +126,16 @@ int main(int argc, char** argv) {
         std::cout << "Start" << std::endl;
 
         glutInit(&argc, argv);
-        glutInitDisplayMode(GLUT_SINGLE  );
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH  );
         glutInitWindowSize(800, 600);
         glutInitWindowPosition(100,100);
         glutCreateWindow("Hello world");
-       // glEnable(GL_DEPTH_TEST); // проверка на порядок !
+        glEnable(GL_DEPTH_TEST); // проверка на порядок !
         initOpenGl();
         glutKeyboardFunc(onKeyboardFunc);
         glutSpecialFunc(onSpecialKey);
+        glutMouseFunc(onMouse);
+	glutMotionFunc(onMouseMove);
         glutReshapeFunc(reshapeMe);
         glutDisplayFunc(displayMe);
         glutMainLoop();
