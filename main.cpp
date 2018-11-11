@@ -4,32 +4,41 @@
  
  
 float gx = 0.35f, gy = 0.58f, gw, gh;
+int gn = 6; 
+
+
+float ps = 1.;
+float points[3][2] = { {0, ps},{ps, -ps},{-ps, -ps}};
 
 void displayMe(void) {
 
+
+        std::cout << ((1 << gn)) << std::endl;
+
         glClearColor(1, 1, 1, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	glBegin(GL_POINTS);
-	glColor3f(1, 0, 0);
-	glVertex2f(-0.2f, -0.2f);
-	glVertex2f(0, -0.2f);
-	glVertex2f(0, -0.1f);
-	glVertex2f(0.2f, -0.2f);
-	glVertex2f(0, 0.4f);
-	glEnd();
-	glEnable(GL_SCISSOR_TEST); // Включаем ножницы
-	glClearColor(0.9f, 0.8f, 0.7f, 0); // Меняем цвет фона
-	glClear(GL_COLOR_BUFFER_BIT);
+ 
+	
 	glBegin(GL_POINTS);
 	glColor3f(0, 0, 1);
-	glVertex2f(-0.2f, 0.2f);
-	glVertex2f(0, 0.2f);
-	glVertex2f(0, 0.1f);
-	glVertex2f(0.2f, 0.2f);
-	glVertex2f(0, -0.4f);
+	for(int i = 0; i < 3; i ++){
+	        glVertex2f(points[i][0], points[i][1]); 
+	}
 	glEnd();
-	glDisable(GL_SCISSOR_TEST); // Выключаем ножницы
+	
+	glBegin(GL_POINTS);
+	glColor3f(1, 0, 0); 
+	
+        float a[2] = {points[2][0],points[2][1]};
+        for(int i = 0; i< (1 << gn); i ++) {
+                int x = rand() %3; 
+                glVertex2f(a[0], a[1]); 
+                a[0] = (a[0] + points[x][0]) / 2;
+                a[1] = (a[1] + points[x][1]) / 2;
+        }
+
+	glEnd();
+	
 	glutSwapBuffers();
 	glFlush();
 }
@@ -38,27 +47,29 @@ void reshapeMe(int w, int h) {
         std::cout << "Reshape" << std::endl;
         
         gw = w;
-	gh = h;
-	glScissor((int)(gx * w), (int)(gy * h), (int)(0.3f * w), (int)(0.3f * h));
+	gh = h; 
         
-        glViewport(0,0,w,h);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluOrtho2D(0, w, 0, h);
-        glLoadIdentity();
+        glViewport(0,0,w,h); 
 }
 
 void initOpenGl() {
         glClearColor(1, 1, 1, 0);
-	glShadeModel(GL_FLAT);
-	glPointSize(10);
-	glEnable(GL_POINT_SMOOTH);
+	glShadeModel(GL_FLAT);  
 }
 
 //
 
 void onKeyboardFunc(unsigned char key, int x, int y )
-{         
+{        
+	switch(key) {
+	        case '+': gn ++; break;
+	        case '-': gn --; break;
+	}  
+	if(gn > 20) {
+	        gn = 20;
+	}  else if(gn < 1) {
+	        gn = 1;
+	}
         glutPostRedisplay();
 } 
 
@@ -70,8 +81,7 @@ void onSpecialKey(int key, int x, int y ){
 	        case GLUT_KEY_DOWN: gy -= 0.005f; break;
 	        case GLUT_KEY_UP:  gy += 0.005f; break;
 	}
-	
-	glScissor((int)(gx * gw), (int)(gy * gh), (int)(0.3f * gw), (int)(0.3f * gh));
+	 
 	glutPostRedisplay();
 }
 
@@ -88,7 +98,7 @@ int main(int argc, char** argv) {
         glutCreateWindow("Hello world");
        // glEnable(GL_DEPTH_TEST); // проверка на порядок !
         initOpenGl();
-        //glutKeyboardFunc(onKeyboardFunc);
+        glutKeyboardFunc(onKeyboardFunc);
         glutSpecialFunc(onSpecialKey);
         glutReshapeFunc(reshapeMe);
         glutDisplayFunc(displayMe);
