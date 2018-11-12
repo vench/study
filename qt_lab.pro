@@ -16,3 +16,11 @@ SOURCES += main.cpp\
         spider.cpp
 
 HEADERS  += spider.h
+
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
+
+TRANSLATIONS += dict_ru.ts
+
+RESOURCES += \
+    rc.qrc
