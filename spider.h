@@ -2,6 +2,7 @@
 #define SPIDER_H
 
 #include <QWidget>
+#include <QDebug>
 
 class Spider : public QWidget
 {
@@ -10,6 +11,8 @@ class Spider : public QWidget
 public:
     Spider(QWidget *parent = 0);
     ~Spider();
+
+
 };
 
 #endif // SPIDER_H

@@ -3,6 +3,14 @@
 #include <QDebug>
 #include <QTranslator>
 #include <QObject>
+#include <QIcon>
+#include <QPixmap>
+#include <QBrush>
+#include <QDesktopWidget>
+#include <QBitmap>
+#include <QColorDialog>
+#include <QFileDialog>
+
 
 typedef unsigned int uint;
 
@@ -78,33 +86,110 @@ void task2(QWidget* w) {
 }
 
 void task3(QWidget* w) {
-    QString title = QString::fromUtf8("Привет мир!");
+    QString title = QObject::tr("Hello world!");
     w->setWindowTitle(title);
 
     qDebug() << QObject::tr("red") << QLocale::system().name();
 }
 
 void task4(QWidget* w) {
+    QIcon icon(":/icon.ico");
+    w->setWindowIcon(icon);
+    w->show();
+}
 
+
+
+void task5(QWidget* w) {
+  //  w->setStyleSheet("background-color: red");
+
+    QPalette sample_palette;
+    sample_palette.setColor(QPalette::Active, QPalette::Background,  Qt::blue);
+    sample_palette.setColor(QPalette::Inactive, QPalette::Background,  Qt::yellow);
+
+
+    QPixmap pix(":icon.ico");
+    QBrush brush(pix);
+    sample_palette.setBrush(QPalette::Active, QPalette::Background, brush);
+
+    w->setAutoFillBackground(true);
+    w->setPalette(sample_palette);
+
+   // w->setWindowOpacity(.5);
+   // w->show();
+}
+
+void task6(QWidget* w) {
+    w->move(100,100);
+    w->resize(320, 240);
+
+    QDesktopWidget* d = QApplication::desktop();
+    QRect r = d->screenGeometry();
+
+    w->move(r.right()-w->width(),r.bottom() - w->height());
+
+    w->setMinimumSize(100,100);
+    w->setMaximumSize(800,600);
+
+    w->setFixedSize(640, 480);
+}
+
+void task7(QWidget* w) {
+    QCursor cr = Qt::CrossCursor;
+    w->setCursor(cr);
+    w->unsetCursor();
+
+    QPixmap pix(":cursor.jpeg");
+    pix.setMask(QBitmap(":cursor.jpeg"));
+    QCursor cr1(pix.scaled(28,28));
+    w->setCursor(cr1);
+}
+
+void task11(QWidget* w) {
+    QPalette sample_palette;
+     QColor color = QColorDialog::getColor();
+     if(color.isValid()) {
+
+       sample_palette.setColor(QPalette::Inactive, QPalette::Background,  color);
+       w->setPalette(sample_palette);
+     }
+      QString str=QFileDialog::getOpenFileName(0,QString::fromUtf8("Выбор файла"), ".", "*.bmp *.jpg *.png" );
+      if(!str.isEmpty()) {
+          QPixmap pix(str);
+          QBrush brush(pix);
+          sample_palette.setBrush(QPalette::Active, QPalette::Background, brush);
+      }
+      w->setPalette(sample_palette);
 }
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    // lupdate main.cpp -ts dict_ru.ts
+    // cp dict_ru.qm ../build-qt_lab-Desktop-Debug/dict_ru.qm
+    // lrelease dict_ru.ts
     QTranslator translator;
-    if (translator.load(QLocale(), QLatin1String("dict"), QLatin1String("_"), QLatin1String(":/translations"))) {
+    if (translator.load("dict_ru.qm", ".")) {
             a.installTranslator(&translator);
-            qDebug( ) << "OK";
+     }
+    if (translator.load("qtbase_ru.qm", "/usr/share/qt5/translations/")) {
+            a.installTranslator(&translator);
      }
 
-    Spider w;
+
+
+    Spider w;    
     w.show();
 
     task1(&w);
     task2(&w);
     task3(&w);
     task4(&w);
+    task5(&w);
+    task6(&w);
+    task7(&w);
+    task11(&w);
 
     return a.exec();
 }
