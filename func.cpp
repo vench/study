@@ -13,7 +13,8 @@ void test(void) {
 void DrawScene()
 {
 float color[] = { 0.1f, 0.6f, 0.1f };
-float v[8][3] = { -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1 };
+float sz = 1.;
+float v[8][3] = { -sz, sz, -sz, sz, sz, -sz, sz, -sz, -sz, -sz, -sz, -sz, -sz, sz, sz, -sz, -sz, sz, sz, -sz, sz, sz, sz, sz };
 float norm[6][3] = { 0, 0, -1, 0, 0, 1, -1, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1, 0 };
 int id[6][4] =
 	{
