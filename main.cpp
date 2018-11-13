@@ -55,6 +55,7 @@ TypeFlag flags[] = {
 
 void task1(QWidget* w) {
     qDebug() << "Task 1";
+    //qDebug() << QT_VERSION_STR;
     Qt::WindowType type1 = w->windowType();
     qDebug() << "Default Qt::WindowType: " << type1;
     Qt::WindowFlags flag1 = w->windowFlags();
@@ -173,8 +174,9 @@ int main(int argc, char *argv[])
     if (translator.load("dict_ru.qm", ".")) {
             a.installTranslator(&translator);
      }
-    if (translator.load("qtbase_ru.qm", "/usr/share/qt5/translations/")) {
-            a.installTranslator(&translator);
+    QTranslator translator1;
+    if (translator1.load("qtbase_ru.qm", "/usr/share/qt5/translations/")) {
+            a.installTranslator(&translator1);
      }
 
 
