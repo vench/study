@@ -33,12 +33,10 @@ void displayMe(void) {
 	glLoadIdentity();
 	
         glPushMatrix();
-	glTranslatef(dx, dy, dz);
-	//glRotatef(ay, 0, 1, 0);
-	//glRotatef(ax, 1, 0, 0); 
+	glTranslatef(dx, dy, dz);  
         glMultMatrixf(rotMatrix); // Стираем буфер Вместо Стираем буфер поворотов Стираем буфер умножаем Стираем буфер на Стираем буфер матрицу, Стираем буфер вобравшую Стираем буфер все Стираем буфер вращения
 
-	glCallList(1);  
+	glCallList(2);  
         
         glPopMatrix();
         
@@ -68,7 +66,7 @@ void reshapeMe(int w, int h) {
 
 void initOpenGl() {
         glClearColor(1, 1, 1, 0);
-	glShadeModel(GL_SMOOTH); 
+	glShadeModel(GL_SMOOTH); //
 	glEnable(GL_DEPTH_TEST); // проверка на порядок !
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
