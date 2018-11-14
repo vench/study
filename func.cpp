@@ -17,9 +17,23 @@ void DrawScene()
 {
 
         // cube
-        glNewList(1,GL_COMPILE); 	// Создаем новый список команд OpenGL
+        glNewList(1,GL_COMPILE);          
+        Cube();
+	glEndList();
+	
+	/// ic
+	glNewList(2,GL_COMPILE);
+        Ikosaeder(0);  
+        glEndList();
         
-        float color[] = { 0.1f, 0.6f, 0.1f };
+	glNewList(3,GL_COMPILE);
+        Ikosaeder(1);  
+        glEndList(); 
+}
+
+//
+void Cube() {
+        float color[] = { 0.1f, 0.1f, 0.7f };
         float sz = 1.;
         float v[8][3] = { -sz, sz, -sz, sz, sz, -sz, sz, -sz, -sz, -sz, -sz, -sz, -sz, sz, sz, -sz, -sz,  sz, sz, -sz, sz, sz, sz, sz };
         float norm[6][3] = { 0, 0, -1, 0, 0, 1, -1, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1, 0 };
@@ -43,13 +57,14 @@ void DrawScene()
 			glVertex3fv(v[id[i][j]]);
 	}
 	glEnd();
-	glEndList();
-	
-	/// ic
-	glNewList(2,GL_COMPILE);
+}	
+
+
+//
+void Ikosaeder(int normType) {
 	float 
         r = (1 + sqrt(5)) / 2, // Золотое сечение
-        v1[12][3] =
+        v[12][3] =
         {
                 0, 1, r, 
                 0,-1, r, 
@@ -64,8 +79,8 @@ void DrawScene()
                 r, 0,-1, 
                 -r, 0,-1
         }, 
-        color1[] = {0.1f, 0.6f, 0.1f};
-        int id1[20][3] = // Стираем буфер 20 Стираем буфер triangular Стираем буфер faces
+        color[] = {0.9f, 0.1f, 0.2f};
+        int id[20][3] = // Стираем буфер 20 Стираем буфер triangular Стираем буфер faces
         {
                 0, 1, 8, 
                 0, 9, 1, 
@@ -94,113 +109,40 @@ void DrawScene()
         for (int i = 0; i < 12; i++)
         {
                 for (int j = 0; j < 3; j++)
-                v[i][j] /= d;
+                        v[i][j] /= d;
         }
         
-        glColor3fv(color1);
+        glColor3fv(color);
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < 20; i++)
 	{ 
+	        if(normType == 1) { 
 	        // создаем нормалии
-	        float norm[3], a[3], b[3];
-	         for (int n = 0; n < 3; n++) {
-                                a[n] = v1[id1[i][2]][n] - v1[id1[i][1]][n];
-                                b[n] = v1[id1[i][0]][n] - v1[id1[i][1]][n];
-                 }
-                        
-                 norm[0] = a[1] * b[2] - a[2] * b[1];
-                 norm[1] = a[2] * b[0] - a[0] * b[2];
-                 norm[2] = a[0] * b[1] - a[1] * b[0];      
-                 // нормализуем           
-                 float dd = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
-                if (dd != 0) {
-                        norm[0] /= dd; norm[1] /= dd; norm[2] /= dd; 
-                }
-              
-                // std::cout << norm[0] << std::endl;       
-                glNormal3fv(norm);        
+	                float norm[3], a[3], b[3];
+	                 for (int n = 0; n < 3; n++) {
+                                        a[n] = v[id[i][2]][n] - v[id[i][1]][n];
+                                        b[n] = v[id[i][0]][n] - v[id[i][1]][n];
+                         }
+                                
+                         norm[0] = a[1] * b[2] - a[2] * b[1];
+                         norm[1] = a[2] * b[0] - a[0] * b[2];
+                         norm[2] = a[0] * b[1] - a[1] * b[0];      
+                         // нормализуем           
+                         float dd = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
+                        if (dd != 0) {
+                                norm[0] /= dd; norm[1] /= dd; norm[2] /= dd; 
+                        }
+                      
+                        // std::cout << norm[0] << std::endl;       
+                        glNormal3fv(norm);   
+                }    
                         
 		for (int j = 0; j < 3; j++) {
-		        //glNormal3fv(v1[id1[i][j]]); soft normale 
-			glVertex3fv(v1[id1[i][j]]);
+		        if(normType == 0) {
+		                glNormal3fv(v[id[i][j]]); //smooth normale 
+			}
+			glVertex3fv(v[id[i][j]]);
 		}	
 	}
 	glEnd();
-
-        glEndList();
-
-
-
-
-}	
-
-
-
-//
-void meSolidCube(float s) {
-  //face
-  glBegin(GL_QUADS);
-   glColor3d(0,1,0);
-   glVertex3d(-s,-s, s);
-   glVertex3d(-s, s, s); 
-   glVertex3d( s, s, s);
-   glVertex3d( s,-s, s);
-  glEnd();
-  // back
-  glBegin(GL_QUADS);
-   glColor3d(0,0,1);
-   glVertex3d(-s, -s,-s);
-   glVertex3d(-s, s, -s);  
-   glVertex3d( s, s, -s); 
-   glVertex3d( s,-s, -s);
-  glEnd();
-  //right
-  glBegin(GL_QUADS);
-   glColor3d(1,1,0);
-   glVertex3d(s,-s, s);
-   glVertex3d(s, s, s); 
-   glVertex3d(s, s, -s);
-   glVertex3d(s,-s, -s);
-  glEnd();
-  
-  //left
-  glBegin(GL_QUADS);
-   glColor3d(1,0,0);
-   glVertex3d(-s,-s, s);
-   glVertex3d(-s, s, s); 
-   glVertex3d(-s, s, -s);
-   glVertex3d(-s,-s, -s);
-  glEnd(); 
-  
-  //top
-  glBegin(GL_QUADS);
-   glColor3d(0,0,0);
-   glVertex3d(-s,-s, s);
-   glVertex3d( s,-s, s); 
-   glVertex3d( s,-s, -s);
-   glVertex3d(-s,-s, -s);
-  glEnd();
-    //bottom
-  glBegin(GL_QUADS);
-   glColor3d(0,1,1);
-   glVertex3d(-s, s, s);
-   glVertex3d( s, s, s); 
-   glVertex3d( s, s, -s);
-   glVertex3d(-s, s, -s);
-  glEnd();
-  
-}
-
-//
-void meSolidCube(float left, float top, float right, float bottom) {
-  glBegin(GL_QUADS);
-   glColor3d(1,0,0);
-   glVertex3d(left,top, 0);
-   glColor3d(0,1,0);
-   glVertex3d(left,bottom, 0); 
-   glColor3d(1,1,1);
-   glVertex3d(right,bottom, 0);
-   glColor3d(0,0,1);
-   glVertex3d(right,top,0 );
-  glEnd();      
-}
+} 

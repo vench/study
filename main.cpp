@@ -5,14 +5,18 @@
  
 float
         speedX, speedY,
-        rotMatrix[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения
-	ax=11.1, ay=.2, // Углы поворота изображения вокруг осей X и Y
-	dx=0.1f, dy=.0, dz = -6.0f, // Сдвиги вдоль координат
-	speed = 1;
+        rotMatrix[16] = { 
+                1, 0, 0, 0, 
+                0, 1, 0, 0, 
+                0, 0, 1, 0, 
+                0, 0, 0, 1 
+                }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения 
+	dx=0.1f, dy=.0, dz = -3.0f, 
+	speed = .1;
 short posX, posY; // Текущая позиция указателя мыши
-bool leftButton, twoSide; // Нажата левая кнопка мыши. Свет отражается от обеих поверхностей (лицевой и обратной)
-
-
+bool leftButton, twoSide, normale; 
+ 
+//
 void addRotation(float angle, float x, float y, float z)
 {
         glPushMatrix();
@@ -26,29 +30,34 @@ void addRotation(float angle, float x, float y, float z)
 //
 void displayMe(void) {
  
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
          
 	glMatrixMode(GL_MODELVIEW); 
 	glLoadIdentity();
 	
         glPushMatrix();
 	glTranslatef(dx, dy, dz);  
-        glMultMatrixf(rotMatrix); // Стираем буфер Вместо Стираем буфер поворотов Стираем буфер умножаем Стираем буфер на Стираем буфер матрицу, Стираем буфер вобравшую Стираем буфер все Стираем буфер вращения
-
-	glCallList(2);  
-        
+        glMultMatrixf(rotMatrix);  
+	glCallList(normale ? 3 : 2);   
         glPopMatrix();
         
-        //
+        /*
         glPushMatrix();
-	glTranslatef(-5, 0, -11);
-	glRotatef(13, 0, 1, 0);
-	glRotatef(12, 1, 0, 0); 
-
+	glTranslatef(-4, 0, -11);
+	glRotatef(66, 0, 1, 0);
+	glRotatef(12, 1, 0, 0);  
+	//glMultMatrixf(rotMatrix);
 	glCallList(1);  
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(4, 0, -11);
+	glMultMatrixf(rotMatrix);  
+	glCallList(3);
+	glPopMatrix(); */
+	
+	
         
-        glPopMatrix();
 	glutSwapBuffers(); 
 	glFlush();
 }
@@ -78,12 +87,14 @@ void initOpenGl() {
 }
 
 //
-void onKeyboardFunc(unsigned char key, int x, int y )
-{  
+void onKeyboardFunc(byte key, int x, int y )
+{       
+         std::cout << key << std::endl;
         switch(key) 
 	{
-	case '+': dz += 0.1; break;
-	case '-': dz -= 0.1; break;
+	case ' ': normale = !normale; break;
+	case '+': dz += speed; break;
+	case '-': dz -= speed; break;
 	case 27: exit(0); break;
 	case '2': glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (twoSide = !twoSide)); break;
 	}
@@ -101,20 +112,20 @@ void onIdle()
 
 //
 void onSpecialKey(int key, int x, int y ){
-        std::cout << key << std::endl;
+       // std::cout << key << std::endl;
 	 
 	switch(key) {
 	        case 102:
-	                dx += 0.1;
+	                dx += speed;
 	        break;
 	        case 100:
-	                dx -= 0.1;
+	                dx -= speed;
 	        break;   
 	        case 101:
-	                dy += 0.1;
+	                dy += speed;
 	        break;
 	        case 103:
-	                dy -= 0.1;
+	                dy -= speed;
 	        break;     
 	} 
 	glutPostRedisplay();
@@ -132,9 +143,7 @@ void onMouse(int button, int state, int x, int y){
 	      glutIdleFunc(0);   
 	}
 	else
-	{
-	      
-             // std::cout << "bbbbbx: " << speedY << speedX << std::endl;
+	{ 
               if(fabs(speedY) > 1. || fabs(speedX) > 1.) {
                 glutIdleFunc(onIdle);
               }       
