@@ -12,11 +12,15 @@ void test(void) {
 	
 void DrawScene()
 {
-float color[] = { 0.1f, 0.6f, 0.1f };
-float sz = 1.;
-float v[8][3] = { -sz, sz, -sz, sz, sz, -sz, sz, -sz, -sz, -sz, -sz, -sz, -sz, sz, sz, -sz, -sz, sz, sz, -sz, sz, sz, sz, sz };
-float norm[6][3] = { 0, 0, -1, 0, 0, 1, -1, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1, 0 };
-int id[6][4] =
+
+        // cube
+        glNewList(1,GL_COMPILE); 	// Создаем новый список команд OpenGL
+        
+        float color[] = { 0.1f, 0.6f, 0.1f };
+        float sz = 1.;
+        float v[8][3] = { -sz, sz, -sz, sz, sz, -sz, sz, -sz, -sz, -sz, -sz, -sz, -sz, sz, sz, -sz, -sz,  sz, sz, -sz, sz, sz, sz, sz };
+        float norm[6][3] = { 0, 0, -1, 0, 0, 1, -1, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1, 0 };
+        int id[6][4] =
 	{
 		0, 1, 2, 3,	// Rear (CCW - counterclockwise)
 		4, 5, 6, 7,	// Front
@@ -26,7 +30,7 @@ int id[6][4] =
 		5, 3, 2, 6,	// Bottom
 	};
 	
-	glNewList(1,GL_COMPILE); 	// Создаем новый список команд OpenGL
+	
 	glColor3fv(color);
 	glBegin(GL_QUADS);
 	for (int i = 0; i < 6; i++)

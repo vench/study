@@ -4,40 +4,53 @@
  
  
 float
-	ax=.1, ay=.2, // Углы поворота изображения вокруг осей X и Y
-	dx=0.1f, dy=.0, dz = -1.0f, // Сдвиги вдоль координат
+        speedX, speedY,
+        rotMatrix[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения
+	ax=11.1, ay=.2, // Углы поворота изображения вокруг осей X и Y
+	dx=0.1f, dy=.0, dz = -6.0f, // Сдвиги вдоль координат
 	speed = 1;
 short posX, posY; // Текущая позиция указателя мыши
 bool leftButton, twoSide; // Нажата левая кнопка мыши. Свет отражается от обеих поверхностей (лицевой и обратной)
 
 
+void addRotation(float angle, float x, float y, float z)
+{
+        glPushMatrix();
+        glLoadIdentity();
+        glRotatef(angle, x, y, z);
+        glMultMatrixf(rotMatrix);
+        glGetFloatv(GL_MODELVIEW_MATRIX, rotMatrix);
+        glPopMatrix();
+}
 
 //
 void displayMe(void) {
  
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glLoadIdentity();                               // Сброс просмотра
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
         
-        //
-        glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective (45, 1.3, 0.3, 0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(25, 0, 0, 0, 0, 0, 0, 50, 0);
-        //
-        
-        
+         
 	glMatrixMode(GL_MODELVIEW); 
+	glLoadIdentity();
 	
         glPushMatrix();
 	glTranslatef(dx, dy, dz);
-	glRotatef(ay, 0, 1, 0);
-	glRotatef(ax, 1, 0, 0);
-		
+	//glRotatef(ay, 0, 1, 0);
+	//glRotatef(ax, 1, 0, 0); 
+        glMultMatrixf(rotMatrix); // Стираем буфер Вместо Стираем буфер поворотов Стираем буфер умножаем Стираем буфер на Стираем буфер матрицу, Стираем буфер вобравшую Стираем буфер все Стираем буфер вращения
 
-	glCallList(1); 	// Воспроизводим команды из списка 1
+	glCallList(1);  
+        
+        glPopMatrix();
+        
+        //
         glPushMatrix();
+	glTranslatef(-5, 0, -11);
+	glRotatef(13, 0, 1, 0);
+	glRotatef(12, 1, 0, 0); 
+
+	glCallList(1);  
+        
+        glPopMatrix();
 	glutSwapBuffers(); 
 	glFlush();
 }
@@ -46,15 +59,11 @@ void reshapeMe(int w, int h) {
         std::cout << "Reshape" << std::endl; 
         
         glViewport(0,0,w,h); 
-        glLoadIdentity();
+        
         glMatrixMode(GL_PROJECTION); ///
-      //  gluPerspective(100, double(w)/h, 0.3, 100);
-           
-        glLoadIdentity();   
-        //gluPerspective(200,double(w)/h, 0.1, 100);   
-
-        glMatrixMode(GL_MODELVIEW);
-        gluPerspective(100, double(w)/h, 0.3, 400);
+        glLoadIdentity();
+        gluPerspective(45, double(w)/h, 0.6, 100);
+            
 }
 
 void initOpenGl() {
@@ -66,47 +75,48 @@ void initOpenGl() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_COLOR_MATERIAL);
-	
-	//   
-        //glMaterialf(GL_FRONT, GL_SHININESS, 128.0);
-	
+	glEnable(GL_COLOR_MATERIAL); 
 	DrawScene();
-	
-	
 }
 
 //
-
 void onKeyboardFunc(unsigned char key, int x, int y )
-{        
-        
-	
+{  
         switch(key) 
 	{
-	case '+': dz += 0.5; break;
-	case '-': dz -= 0.5; break;
+	case '+': dz += 0.1; break;
+	case '-': dz -= 0.1; break;
 	case 27: exit(0); break;
 	case '2': glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (twoSide = !twoSide)); break;
 	}
 	glutPostRedisplay();
 } 
 
+void onIdle()
+{
+        // Стираем буфер Изменяйте Стираем буфер значения Стираем буфер углов Стираем буфер поворота
+        
+        addRotation(speedY * .1, 0, 1, 0);
+        addRotation(speedX * .1, 1, 0, 0);
+        glutPostRedisplay(); 
+}
+
+//
 void onSpecialKey(int key, int x, int y ){
         std::cout << key << std::endl;
 	 
 	switch(key) {
 	        case 102:
-	                dx += 0.5;
+	                dx += 0.1;
 	        break;
 	        case 100:
-	                dx -= 0.5;
+	                dx -= 0.1;
 	        break;   
 	        case 101:
-	                dy += 0.5;
+	                dy += 0.1;
 	        break;
 	        case 103:
-	                dy -= 0.5;
+	                dy -= 0.1;
 	        break;     
 	} 
 	glutPostRedisplay();
@@ -114,35 +124,50 @@ void onSpecialKey(int key, int x, int y ){
 
 //
 void onMouse(int button, int state, int x, int y){
-//d +=0.1;
+
 	leftButton = button == GLUT_LEFT_BUTTON;
+	
 	if (state == GLUT_DOWN)
 	{
+	         
+	      speedX = speedY = 0;
+	      glutIdleFunc(0);   
 	}
 	else
 	{
+	      
+             // std::cout << "bbbbbx: " << speedY << speedX << std::endl;
+              if(fabs(speedY) > 1. || fabs(speedX) > 1.) {
+                glutIdleFunc(onIdle);
+              }       
+	      
 	}
 	posX = x;	// Запоминаем координаты мыши
 	posY = y;
 }
 
 void onMouseMove(int x, int y)
-{
+{       
+        speedX = y-posY;
+        speedY = x-posX;
         
 	if (leftButton)
 	{
-		ay += x-posX;// Измените углы поворота пропорционально смещению мыши (разностей x – posX и y – posY)
-		ax += y-posY;
+		addRotation(speedY * .1, 0, 1, 0);
+                addRotation(speedX * .1, 1, 0, 0);
 		
 	}
 	else
 	{
-	//	dz += (posX + posY) / 60;// Вычислите степень удаления или приближения и измените величину dz пропорционально смещению мыши
+	        // Вычислите степень удаления или приближения и измените величину dz пропорционально смещению мыши
+		dz += (speedY + speedX) / 60.;
 	}
 	posX = x;	// Запоминаем новые координаты мыши
 	posY = y;
 	glutPostRedisplay();
 }
+
+
 
 //
 int main(int argc, char** argv) {
