@@ -20,8 +20,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // lupdate main.cpp -ts dict_ru.ts
-    // cp dict_ru.qm ../build-qt_lab-Desktop-Debug/dict_ru.qm
     // lrelease dict_ru.ts
+    // cp dict_ru.qm ../build-qt_lab-Desktop-Debug/dict_ru.qm
+
     QTranslator translator;
     if (translator.load("dict_ru.qm", ".")) {
             a.installTranslator(&translator);
