@@ -190,3 +190,75 @@ void Ikosaeder(int normType, int deep) {
 	}
 	glEnd();
 } 
+
+
+uint RGB(int r, int g, int b) {
+        return r << 8 | g << 4 | b;
+}
+
+///
+void Sphere(VERT *v, TRIA* t)
+{
+	uint last = nVert - 1; // Индекс последней вершины (на южном полюсе)
+
+	v[0].v = Point3D(0, rad, 0); // Формирование массива вершин. Северный полюс
+	v[0].n = Point3D(0, 1, 0);
+	v[0].c = clr2;
+
+	v[last].v = Point3D(0, -rad, 0); // Южный полюс
+	v[last].n = Point3D(0, -1, 0);
+	v[last].c = nVert & 1 ? clr2 : clr1;
+
+	float
+		da = PI / (nRings + 2),
+		db = 2 * PI / nSects,
+		af = PI - da / 2,
+		bf = 2 * PI - db / 2;
+
+	uint n = 1;	// Индекс вершины, следующей за северным полюсом
+
+	for (float a = da; a < af; a += da) 	// Цикл по широте
+	{
+		float
+			y = rad * cos(a), 		// Координата y постоянна для всего кольца
+			xz = rad * sin(a);
+
+		for (float b = 0.; b < bf; n++, b += db) // Цикл по долготе
+		{
+			float // Координаты проекции в экваториальной плоскости
+				x = xz * sin(b),
+				z = xz * cos(b);
+
+			v[n].v = Point3D(x, y, z);
+			v[n].n = Point3D(x / rad, y / rad, z / rad);
+			v[n].c = n & 1 ? clr1 : clr2;
+		}
+	}
+
+	for (n = 0; n < nSects; n++) 	// Формирование массива индексов. Треугольники вблизи полюсов
+	{
+		t[n].i1 = 0; // Индекс общей вершины  (северный полюс)
+		t[n].i2 = n + 1; // Индекс текущей вершины
+		t[n].i3 = n == nSects - 1 ? 1 : n + 2; // Замыкание
+
+		t[nTria - nSects + n].i1 = nVert - 2 - ((1 + n) % nSects); 	// Южный полюс
+		t[nTria - nSects + n].i2 = nVert - 1;
+		t[nTria - nSects + n].i3 = nVert - 2 - n;
+	}
+	
+	int k = 1;		// Вершина, следующая за полюсом
+	n = nSects;
+	for (uint i = 0; i < nRings; i++, k += nSects) // Треугольники разбиения колец
+	{
+		for (uint j = 0; j < nSects; j++, n += 2)
+		{
+			t[n].i1 = k + j;
+			t[n].i2 = k + nSects + j;
+			t[n].i3 = k + nSects + ((j + 1) % nSects);
+
+			t[n + 1].i1 = t[n].i1;
+			t[n + 1].i2 = t[n].i3;
+			t[n + 1].i3 = k + ((j + 1) % nSects);
+		}
+	}
+} 

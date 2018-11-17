@@ -11,11 +11,67 @@ float
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
                 }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения 
-	dx=0.1f, dy=.0, dz = -7.0f, 
-	spec[] = {1.,1.,1.},
+	dx=0.1f, dy=.0, dz = -7.0f,  
 	speed = .1;
 short posX, posY,deep; // Текущая позиция указателя мыши
-bool leftButton, twoSide, normale=1,deepType=2; 
+bool leftButton, twoSide, normale=1,deepType=2,flat; 
+
+
+
+ 
+ 
+
+
+float
+pos[] = { 0, 0, 5, 0 }, //  
+amb[] = { 0.05f, 0.05f, 0.05 }, //  
+dif[] = { 0.9f, 0.9f, 0.9 }, // 
+spec[] = { 0.8f, 0.8f, 0.8 }; //  
+char buf[128]; //  
+int shine = 40; // 
+ 
+ 
+ 
+//////
+
+
+///
+void Print(float x, float y, char *format, ...)
+{
+	va_list args;
+	char buffer[200];
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	for (char* p = buffer; *p; p++)
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, *p); // GLUT_STROKE_MONO_ROMAN // GLUT_STROKE_ROMAN
+	glPopMatrix();
+}
+
+void DrawInfo()
+{
+	glPushAttrib(GL_ENABLE_BIT);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 3000, 0, 3000);
+	glMatrixMode(GL_MODELVIEW);
+	glColor3f(0.7f, 1, 0);
+	Print(80, 2800, "Rings: %d", nRings);
+	Print(80, 2650, "Sects: %d", nSects);
+	Print(80, 2500, "Triangles: %d", nTria);
+	Print(80, 200, "Light is: %s", buf);
+	Print(80, 60, "Coordinates: (%3.1f, %3.1f, %3.1f)", pos[0], pos[1], pos[2]);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopAttrib();
+}
+//// 
  
 //
 void addRotation(float angle, float x, float y, float z)
@@ -30,9 +86,9 @@ void addRotation(float angle, float x, float y, float z)
 
 //
 void displayMe(void) {
- 
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
-         
+       /*   
 	glMatrixMode(GL_MODELVIEW); 
 	glLoadIdentity();
 	
@@ -41,27 +97,26 @@ void displayMe(void) {
         glMultMatrixf(rotMatrix);  
 	//glCallList(normale ? 3 : 2);
 	Ikosaeder(normale ? 1 : 2, deep);   
-        glPopMatrix();
-        
-        /*
-        glPushMatrix();
-	glTranslatef(-4, 0, -11);
-	glRotatef(66, 0, 1, 0);
-	glRotatef(12, 1, 0, 0);  
-	//glMultMatrixf(rotMatrix);
-	glCallList(1);  
+        glPopMatrix(); 
+	
+        */
+	 
+	DrawInfo(); 
+	glPushMatrix();
+
+	
+
+	glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glTranslated(dx, dy, dz);
+	glMultMatrixf(rotMatrix);
+
+	glCallList(1);
+
 	glPopMatrix();
 	
-	glPushMatrix();
-	glTranslatef(4, 0, -11);
-	glMultMatrixf(rotMatrix);  
-	glCallList(3);
-	glPopMatrix(); */
 	
-	
-        
 	glutSwapBuffers(); 
-	glFlush();
+	glFlush(); 
 }
 
 void reshapeMe(int w, int h) {
@@ -76,22 +131,32 @@ void reshapeMe(int w, int h) {
 }
 
 void initOpenGl() {
-        glClearColor(1, 1, 1, 0);
-	glShadeModel(GL_SMOOTH); //
-	glEnable(GL_DEPTH_TEST); // проверка на порядок !
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_COLOR_MATERIAL);
-	/// 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
-        glMateriali(GL_FRONT, GL_SHININESS, 128); //настройка, определяющая блёскость материала,
-        
-        // толщина линий нормалий
-        glLineWidth(3);
-	DrawScene();
+        strcpy(buf, "Directional");
+        glClearColor(0, 0, 0, 0);
+        glEnable(GL_LIGHT0);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_CULL_FACE); 
+        glShadeModel(flat ? GL_FLAT : GL_SMOOTH);
+        glLightfv(GL_LIGHT0, GL_POSITION, pos);
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);  
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, dif);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+        glMaterialf(GL_FRONT, GL_SHININESS, shine);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        VERT *Vert = new VERT[nVert];
+        TRIA *Tria = new TRIA[nTria];
+        Sphere(Vert, Tria);   
+        glVertexPointer(3, GL_FLOAT, sizeof(VERT), &Vert->v);
+        glNormalPointer(GL_FLOAT, sizeof(VERT), &Vert->n);
+        glColorPointer(3, GL_UNSIGNED_BYTE, sizeof(VERT), &Vert->c);
+        glNewList(1, GL_COMPILE); 
+        glDrawElements(GL_TRIANGLES, nTria * 3, GL_UNSIGNED_INT, Tria);
+        glEndList();
+        delete[] Vert;
+        delete[] Tria;
 }
 
 //
