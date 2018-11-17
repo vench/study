@@ -10,7 +10,8 @@ void test(void) {
 //cube
 
  
-
+const float GOLD_R = (1 + sqrt(5)) / 2;
+const float GOLD_D = sqrt(1 + GOLD_R * GOLD_R);
  
 	
 void DrawScene()
@@ -23,11 +24,11 @@ void DrawScene()
 	
 	/// ic
 	glNewList(2,GL_COMPILE);
-        Ikosaeder(0);  
+        Ikosaeder(0, 0);  
         glEndList();
         
 	glNewList(3,GL_COMPILE);
-        Ikosaeder(1);  
+        Ikosaeder(1,0);  
         glEndList(); 
 }
 
@@ -59,11 +60,83 @@ void Cube() {
 	glEnd();
 }	
 
+//
+void makeNorm(float *v1, float *v2, float *v3, float * norm) {
+        float a[3], b[3];
+	for (int n = 0; n < 3; n++) {
+                a[n] = v3[n] - v2[n]; 
+                b[n] = v1[n] - v2[n]; 
+        }
+                                
+        norm[0] = a[1] * b[2] - a[2] * b[1];
+        norm[1] = a[2] * b[0] - a[0] * b[2];
+        norm[2] = a[0] * b[1] - a[1] * b[0];      
+                         // нормализуем           
+        float d = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
+        if (d != 0) {
+            norm[0] /= d; norm[1] /= d; norm[2] /= d; 
+        }
+}
+
 
 //
-void Ikosaeder(int normType) {
+void ToUnit(float *v) {
+ 
+  for (int j = 0; j < 3; j++)
+          v[j] /= GOLD_D;
+                  
+}
+
+//
+void DrawTriaSmooth(float *v1, float *v2, float *v3) {
+        glNormal3fv(v1);  
+	glVertex3fv(v1);
+	glNormal3fv(v2);  
+	glVertex3fv(v2);
+	glNormal3fv(v3);  
+	glVertex3fv(v3);
+}
+
+//
+void DrawTriaFlat(float *v1, float *v2, float *v3) {
+        float norm[3];
+        makeNorm(v1, v2, v3, norm);
+        glNormal3fv(norm);  
+	glVertex3fv(v1);   
+	glVertex3fv(v2);  
+	glVertex3fv(v3);
+}
+
+
+//
+void DrawRecursive(float *v1, float *v2, float *v3, int depth, int normType)
+{
+        float v12[3], v23[3], v31[3];
+        if (depth <= 0)
+        {
+                if (normType == 1)
+                        DrawTriaFlat(v1, v2, v3);
+                else
+                        DrawTriaSmooth(v1, v2, v3); 
+                return;
+        }
+        for (int i = 0; i < 3; i++)
+        {
+                v12[i] = v1[i] + v2[i];
+                v23[i] = v2[i] + v3[i];
+                v31[i] = v3[i] + v1[i];
+        }
+        ToUnit(v12); ToUnit(v23); ToUnit(v31);
+        DrawRecursive(v1, v12, v31, depth - 1, normType);
+        DrawRecursive(v2, v23, v12, depth - 1, normType);
+        DrawRecursive(v3, v31, v23, depth - 1, normType);
+        DrawRecursive(v12, v23, v31, depth - 1, normType);
+}
+
+//
+void Ikosaeder(int normType, int deep) {
 	float 
-        r = (1 + sqrt(5)) / 2, // Золотое сечение
+        r = GOLD_R, // Золотое сечение
         v[12][3] =
         {
                 0, 1, r, 
@@ -104,45 +177,16 @@ void Ikosaeder(int normType) {
                 7, 9, 11
         };
 
-        // делаем сдвиг
-        float d = sqrt(1 + r * r);
-        for (int i = 0; i < 12; i++)
-        {
-                for (int j = 0; j < 3; j++)
-                        v[i][j] /= d;
+        // делаем сдвиг 
+        for (int i = 0; i < 12; i++)  { 
+              ToUnit(v[i]);    
         }
         
         glColor3fv(color);
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < 20; i++)
-	{ 
-	        if(normType == 1) { 
-	        // создаем нормалии
-	                float norm[3], a[3], b[3];
-	                 for (int n = 0; n < 3; n++) {
-                                        a[n] = v[id[i][2]][n] - v[id[i][1]][n];
-                                        b[n] = v[id[i][0]][n] - v[id[i][1]][n];
-                         }
-                                
-                         norm[0] = a[1] * b[2] - a[2] * b[1];
-                         norm[1] = a[2] * b[0] - a[0] * b[2];
-                         norm[2] = a[0] * b[1] - a[1] * b[0];      
-                         // нормализуем           
-                         float dd = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
-                        if (dd != 0) {
-                                norm[0] /= dd; norm[1] /= dd; norm[2] /= dd; 
-                        }
-                      
-                        // std::cout << norm[0] << std::endl;       
-                        glNormal3fv(norm);   
-                }    
-                        
-		for (int j = 0; j < 3; j++) {
-		        if(normType == 0) {
-		                glNormal3fv(v[id[i][j]]); //smooth normale 
-			}
-			glVertex3fv(v[id[i][j]]);
-		}	
+	{  
+		DrawRecursive(v[id[i][0]], v[id[i][1]], v[id[i][2]], deep, normType);	
 	}
 	glEnd();
 } 

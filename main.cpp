@@ -11,10 +11,11 @@ float
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
                 }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения 
-	dx=0.1f, dy=.0, dz = -3.0f, 
+	dx=0.1f, dy=.0, dz = -7.0f, 
+	spec[] = {1.,1.,1.},
 	speed = .1;
-short posX, posY; // Текущая позиция указателя мыши
-bool leftButton, twoSide, normale; 
+short posX, posY,deep; // Текущая позиция указателя мыши
+bool leftButton, twoSide, normale=1,deepType=2; 
  
 //
 void addRotation(float angle, float x, float y, float z)
@@ -38,7 +39,8 @@ void displayMe(void) {
         glPushMatrix();
 	glTranslatef(dx, dy, dz);  
         glMultMatrixf(rotMatrix);  
-	glCallList(normale ? 3 : 2);   
+	//glCallList(normale ? 3 : 2);
+	Ikosaeder(normale ? 1 : 2, deep);   
         glPopMatrix();
         
         /*
@@ -82,7 +84,13 @@ void initOpenGl() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_COLOR_MATERIAL); 
+	glEnable(GL_COLOR_MATERIAL);
+	/// 
+	glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+        glMateriali(GL_FRONT, GL_SHININESS, 128); //настройка, определяющая блёскость материала,
+        
+        // толщина линий нормалий
+        glLineWidth(3);
 	DrawScene();
 }
 
@@ -92,7 +100,18 @@ void onKeyboardFunc(byte key, int x, int y )
          std::cout << key << std::endl;
         switch(key) 
 	{
-	case ' ': normale = !normale; break;
+	case ' ': 
+	        deep += deepType ? -1 : 1; 
+	        if(deep > 6) {
+	                deep = 6;
+	                deepType = !false;
+	        } else if(deep < 0) {
+	                deep = 0;
+	                deepType = false;
+	        }
+	        break;
+	case 'n': normale = !normale; break;
+	
 	case '+': dz += speed; break;
 	case '-': dz -= speed; break;
 	case 27: exit(0); break;
