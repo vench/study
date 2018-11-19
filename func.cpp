@@ -81,9 +81,11 @@ void makeNorm(float *v1, float *v2, float *v3, float * norm) {
 
 //
 void ToUnit(float *v) {
- 
+   
+   float d = sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+   
   for (int j = 0; j < 3; j++)
-          v[j] /= GOLD_D;
+          v[j] /= d;
                   
 }
 
