@@ -3,5 +3,7 @@
         <file>icon.ico</file>
         <file>cursor.jpeg</file>
         <file>dict_ru.ts</file>
+        <file>spider.png</file>
+        <file>cursor-32.gif</file>
     </qresource>
 </RCC>
