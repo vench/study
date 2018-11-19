@@ -4,6 +4,7 @@
 Spider::Spider(QWidget *parent)
     : QWidget(parent)
 {
+    this->timerId = -1;
     this->mouseDown = false;
     this->mouseRightDown = false;
     this->updateTitleInfo();
@@ -13,6 +14,23 @@ Spider::Spider(QWidget *parent)
 Spider::~Spider()
 {
 
+}
+
+//
+void Spider::timerEvent(QTimerEvent*) {
+    repaint();
+}
+
+//
+void Spider::keyPressEvent( QKeyEvent * event) {
+    if(event->key() == 32) {
+        if(this->timerId >= 0) {
+            this->killTimer(this->timerId);
+            this->timerId = -1;
+        } else {
+            timerId = this->startTimer(100);
+        }
+    }
 }
 
 //
@@ -98,6 +116,23 @@ void Spider::paintEvent ( QPaintEvent *  ) {
     if(this->mouseRightDown){
         this->drawRect(&p);
     }
+
+    //spdr
+    spdr.p.setX( spdr.p.x() + spdr.speedX * spdr.directionX );
+    if(!this->rect().contains(spdr.p)) {
+        spdr.directionX *=-1;
+        spdr.p.setX( spdr.p.x() + spdr.speedX * spdr.directionX );
+    }
+
+    spdr.p.setY( spdr.p.y() + spdr.speedY * spdr.directionY);
+    if(!this->rect().contains(spdr.p)) {
+        spdr.directionY *=-1;
+         spdr.p.setY( spdr.p.y() + spdr.speedY * spdr.directionY);
+    }
+    QString s = ":spider.png";
+    QPixmap pix(s);
+    p.drawPixmap(spdr.p.x(), spdr.p.y(), 28, 28, pix.scaled(28,28));
+
 
     this->drawRects(&p);
 }

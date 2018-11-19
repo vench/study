@@ -9,15 +9,23 @@
 #include <QBitmap>
 #include <math.h>
 
+
+struct Spdr {
+    QPoint p;
+    int speedX=4, speedY=4, directionX=1, directionY=1;
+};
+
 class Spider : public QWidget
 {
     Q_OBJECT
 
     bool mouseDown;
     bool mouseRightDown;
+    int timerId;
     QPoint firstPos;
     QPoint lastPos;
     QList<QRect> listRects;
+    Spdr spdr;
 
 
     void mathCPoint(int *, int *);
@@ -30,6 +38,7 @@ class Spider : public QWidget
     void drawRects(QPainter*);
     void fillRect(QRect&);
 
+
 public:
     Spider(QWidget *parent = 0);
     ~Spider();
@@ -41,6 +50,8 @@ protected:
     void mouseMoveEvent(QMouseEvent * event );
     void paintEvent ( QPaintEvent * event );
     void resizeEvent(QResizeEvent *);
+    void keyPressEvent( QKeyEvent * event);
+    void timerEvent(QTimerEvent*);
 };
 
 #endif // SPIDER_H
