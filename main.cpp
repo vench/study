@@ -17,7 +17,7 @@ short posX, posY,deep; // Текущая позиция указателя мы�
 bool leftButton, twoSide, normale=1,deepType=2,flat; 
 
 
-
+uint nRingsLoc = 10, nSectsLoc = 10;
  
  
 
@@ -36,7 +36,7 @@ int shine = 40; //
 
 
 ///
-void Print(float x, float y, char *format, ...)
+void Print(float x, float y, const char *format, ...)
 {
 	va_list args;
 	char buffer[200];
@@ -50,6 +50,7 @@ void Print(float x, float y, char *format, ...)
 	glPopMatrix();
 }
 
+//
 void DrawInfo()
 {
 	glPushAttrib(GL_ENABLE_BIT);
@@ -61,9 +62,9 @@ void DrawInfo()
 	gluOrtho2D(0, 3000, 0, 3000);
 	glMatrixMode(GL_MODELVIEW);
 	glColor3f(0.7f, 1, 0);
-	Print(80, 2800, "Rings: %d", nRings);
-	Print(80, 2650, "Sects: %d", nSects);
-	Print(80, 2500, "Triangles: %d", nTria);
+	Print(80, 2800, "Rings: %d", nRingsLoc);
+	Print(80, 2650, "Sects: %d", nSectsLoc);
+	Print(80, 2500, "Triangles: %d", getNTria());
 	Print(80, 200, "Light is: %s", buf);
 	Print(80, 60, "Coordinates: (%3.1f, %3.1f, %3.1f)", pos[0], pos[1], pos[2]);
 	glMatrixMode(GL_PROJECTION);
@@ -119,6 +120,7 @@ void displayMe(void) {
 	glFlush(); 
 }
 
+//
 void reshapeMe(int w, int h) {
         std::cout << "Reshape" << std::endl; 
         
@@ -131,7 +133,11 @@ void reshapeMe(int w, int h) {
 }
 
 void initOpenGl() {
-        strcpy(buf, "Directional");
+        if (pos[3] == 0) {
+                strcpy(buf, "Directional");
+        } else {
+                strcpy(buf, "Positional");
+        }         
         glClearColor(0, 0, 0, 0);
         glEnable(GL_LIGHT0);
         glEnable(GL_LIGHTING);
@@ -146,17 +152,8 @@ void initOpenGl() {
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
-        VERT *Vert = new VERT[nVert];
-        TRIA *Tria = new TRIA[nTria];
-        Sphere(Vert, Tria);   
-        glVertexPointer(3, GL_FLOAT, sizeof(VERT), &Vert->v);
-        glNormalPointer(GL_FLOAT, sizeof(VERT), &Vert->n);
-        glColorPointer(3, GL_UNSIGNED_BYTE, sizeof(VERT), &Vert->c);
-        glNewList(1, GL_COMPILE); 
-        glDrawElements(GL_TRIANGLES, nTria * 3, GL_UNSIGNED_INT, Tria);
-        glEndList();
-        delete[] Vert;
-        delete[] Tria;
+        
+        DrawSphera(nRingsLoc, nSectsLoc);
 }
 
 //
@@ -166,14 +163,8 @@ void onKeyboardFunc(byte key, int x, int y )
         switch(key) 
 	{
 	case ' ': 
-	        deep += deepType ? -1 : 1; 
-	        if(deep > 6) {
-	                deep = 6;
-	                deepType = !false;
-	        } else if(deep < 0) {
-	                deep = 0;
-	                deepType = false;
-	        }
+	        flat = !flat;
+	        initOpenGl();
 	        break;
 	case 'n': normale = !normale; break;
 	
@@ -181,6 +172,30 @@ void onKeyboardFunc(byte key, int x, int y )
 	case '-': dz -= speed; break;
 	case 27: exit(0); break;
 	case '2': glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (twoSide = !twoSide)); break;
+	case 'a': pos[0] -= speed; break;
+	case 'd': pos[0] += speed; break;
+	case 's': pos[1] -= speed; break;
+	case 'w': pos[1] += speed; break;
+	case 'q':  
+	                
+	           if(nRingsLoc > 100){
+	                nRingsLoc -=15; nSectsLoc -=15; 
+	           }   else {
+	                nRingsLoc --; nSectsLoc --; 
+	           }  
+	                
+	           initOpenGl();     
+	break;  
+	case 'e':  if(nRingsLoc > 100) {
+	                nRingsLoc += 15; nSectsLoc +=15; 
+	           } else {
+	                nRingsLoc ++; nSectsLoc ++; 
+	           }
+	           initOpenGl();     
+	break;
+	case 'z': pos[3] = (pos[3] - 1) * -1; 
+                   initOpenGl();
+        break;                	
 	}
 	glutPostRedisplay();
 } 

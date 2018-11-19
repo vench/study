@@ -1,19 +1,24 @@
 #include "func.h"
 
-void test(void) {
-        //
+
+
+const float GOLD_R = (1 + sqrt(5)) / 2;
+const float GOLD_D = sqrt(1 + GOLD_R * GOLD_R);
+//
+uint nRings = 100, 
+        nSects = 100,  
+        nTria,         nVert; 
+
+const float
+        rad = 1.5f, 
+        PI = acos(-1.0f);
+
+//
+void test(void) { 
         std::cout << "Test..." << std::endl;
 }
 
 //
-
-//cube
-
- 
-const float GOLD_R = (1 + sqrt(5)) / 2;
-const float GOLD_D = sqrt(1 + GOLD_R * GOLD_R);
- 
-	
 void DrawScene()
 {
 
@@ -262,3 +267,28 @@ void Sphere(VERT *v, TRIA* t)
 		}
 	}
 } 
+
+
+void DrawSphera(uint r, uint s) {
+        nRings = r;
+        nSects = s;
+        nTria = 2 * (nRings + 1) * nSects;
+        nVert = (nRings + 1) * nSects + 2; 
+
+        VERT *Vert = new VERT[nVert];
+        TRIA *Tria = new TRIA[nTria];
+        Sphere(Vert, Tria);   
+        glVertexPointer(3, GL_FLOAT, sizeof(VERT), &Vert->v);
+        glNormalPointer(GL_FLOAT, sizeof(VERT), &Vert->n);
+        glColorPointer(3, GL_UNSIGNED_BYTE, sizeof(VERT), &Vert->c);
+        glNewList(1, GL_COMPILE); 
+        glDrawElements(GL_TRIANGLES, nTria * 3, GL_UNSIGNED_INT, Tria);
+        glEndList();
+        delete[] Vert;
+        delete[] Tria;
+}
+
+uint getNTria() {
+        return nTria;
+}
+

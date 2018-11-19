@@ -3,15 +3,8 @@
 #include "all.h"
 
 
-//
-const uint nRings = 20, //
-nSects = 20, // 
-nTria = 2 * (nRings + 1) * nSects, // 
-nVert = (nRings + 1) * nSects + 2; //
+ 
 
-const float
-rad = 1.5f, 
-PI = acos(-1.0f);
 
 
 
@@ -66,7 +59,16 @@ struct TRIA { int i1, i2, i3; };
 //
 uint RGB(int r, int g, int b);
 
+
+
+
 //
 void Sphere(VERT *v, TRIA* t);
 
 const uint clr1 = RGB(0, 255, 0), clr2 = RGB(0, 0, 255); // цвета сферы
+
+
+//
+void DrawSphera(uint , uint );
+
+uint getNTria();
