@@ -9,6 +9,9 @@ Spider::Spider(QWidget *parent)
     this->mouseRightDown = false;
     this->updateTitleInfo();
     this->changeCursorDefault();
+
+
+    polygon.append(QPoint(0,0));
 }
 
 Spider::~Spider()
@@ -28,34 +31,15 @@ void Spider::keyPressEvent( QKeyEvent * event) {
             this->killTimer(this->timerId);
             this->timerId = -1;
         } else {
-            timerId = this->startTimer(100);
+            timerId = this->startTimer(50);
         }
     }
 }
 
 //
-void Spider::mousePressEvent(QMouseEvent * event) {
+void Spider::mousePressEvent(QMouseEvent * ) {
 
-    if(event->button() == Qt::MouseButton::RightButton) {
 
-        if((event->modifiers() & Qt::KeyboardModifier::ControlModifier) > 0) {
-            QString s = QString("X:%1,Y:%2")
-                    .arg(QString::number(event->pos().x()),
-                         QString::number(event->pos().y()));
-
-            QToolTip::showText(event->globalPos(), s);
-        } else {
-            this->firstPos = event->pos();
-            this->mouseRightDown = true;
-        }
-
-    } else if(event->button() == Qt::MouseButton::LeftButton ) {
-        this->mouseDown = true;
-        changeCursor(":spider.png");
-    } else {
-        this->mouseDown = false;
-        this->mouseRightDown = false;
-    }
 }
 
 
@@ -80,61 +64,69 @@ void Spider::changeCursorDefault() {
 
 //
 void Spider::mouseReleaseEvent(QMouseEvent*) {
-    this->mouseDown = false;
-    if(this->mouseRightDown) {
-        QRect r;
-        this->fillRect(r);
-        listRects.append(r);
-    }
-    this->mouseRightDown = false;
-    this->changeCursorDefault();
+
 }
 
 //
-void Spider::mouseMoveEvent(QMouseEvent * event) {
-    if(!this->rect().contains(event->pos())) {
-        this->mouseReleaseEvent(event);
-        return;
-    }
-    if(this->mouseRightDown) {
-        lastPos = event->pos();
-        repaint();
-    }
-    if(this->mouseDown) {
-        lastPos = event->pos();
-        repaint();
-    }
+void Spider::mouseMoveEvent(QMouseEvent * ) {
+
 }
 
 
 //
 void Spider::paintEvent ( QPaintEvent *  ) {
+
     QPainter p(this);
-    if(this->mouseDown) {
-        this->drawWeb(&p);
-    }
-    if(this->mouseRightDown){
-        this->drawRect(&p);
-    }
 
     //spdr
-    spdr.p.setX( spdr.p.x() + spdr.speedX * spdr.directionX );
-    if(!this->rect().contains(spdr.p)) {
+
+    spdr.x += spdr.speedX * spdr.directionX;
+    if(!this->rect().contains(spdr.rect())) {
         spdr.directionX *=-1;
-        spdr.p.setX( spdr.p.x() + spdr.speedX * spdr.directionX );
+        //polygon.append(QPoint(spdr.x,spdr.y));
+        spdr.x += spdr.speedX * spdr.directionX;
+
+        spdr.ox = spdr.x;
+        if(spdr.directionX < 0) {
+            spdr.ox += spdr.w;
+        }
+        spdr.oy = spdr.y;
+        if(spdr.directionY < 0) {
+            spdr.oy += spdr.h;
+        }
+        polygon.append(QPoint(spdr.ox,spdr.oy));
     }
 
-    spdr.p.setY( spdr.p.y() + spdr.speedY * spdr.directionY);
-    if(!this->rect().contains(spdr.p)) {
+    spdr.y += spdr.speedY * spdr.directionY;
+    if(!this->rect().contains(spdr.rect())) {
         spdr.directionY *=-1;
-         spdr.p.setY( spdr.p.y() + spdr.speedY * spdr.directionY);
+
+         spdr.y += spdr.speedY * spdr.directionY;
+
+         spdr.ox = spdr.x;
+         if(spdr.directionX < 0) {
+             spdr.ox += spdr.w;
+         }
+         spdr.oy = spdr.y;
+         if(spdr.directionY < 0) {
+             spdr.oy += spdr.h;
+         }
+         polygon.append(QPoint(spdr.ox,spdr.oy));
     }
+
+
+
+    p.setPen(QPen(Qt::blue,1,Qt::SolidLine));
+    p.drawPolyline(polygon);
+    p.drawLine(spdr.ox, spdr.oy, spdr.x, spdr.y);
+
+
     QString s = ":spider.png";
     QPixmap pix(s);
-    p.drawPixmap(spdr.p.x(), spdr.p.y(), 28, 28, pix.scaled(28,28));
 
+    p.drawPixmap(spdr.rect(), pix.scaled(spdr.w, spdr.h));
 
-    this->drawRects(&p);
+   // p.drawPixmap(0,0,*path);*/
 }
 
 //

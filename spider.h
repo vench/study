@@ -11,8 +11,10 @@
 
 
 struct Spdr {
-    QPoint p;
-    int speedX=4, speedY=4, directionX=1, directionY=1;
+    int speedX=4, speedY=4, directionX=1, directionY=1,x=0,y=0,w=28,h=28,ox=14,oy=14;
+    QRect rect() {
+        return QRect(x,y,w,h);
+    }
 };
 
 class Spider : public QWidget
@@ -26,7 +28,7 @@ class Spider : public QWidget
     QPoint lastPos;
     QList<QRect> listRects;
     Spdr spdr;
-
+    QVector<QPoint> polygon;
 
     void mathCPoint(int *, int *);
     void changeCursor(QString s);
