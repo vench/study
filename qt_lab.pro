@@ -25,4 +25,4 @@ TRANSLATIONS += dict_ru.ts
 RESOURCES += \
     rc.qrc
 
-RC_ICONS = :icon.ico
+RC_ICONS = icon.ico

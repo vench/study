@@ -37,7 +37,11 @@ void Spider::mousePressEvent(QMouseEvent * event) {
     } else {
         this->mouseDown = false;
         this->mouseRightDown = false;
+
+        QWidget::mousePressEvent(event);
     }
+
+
 }
 
 
@@ -70,12 +74,13 @@ void Spider::mouseReleaseEvent(QMouseEvent*) {
     }
     this->mouseRightDown = false;
     this->changeCursorDefault();
+    repaint();
 }
 
 //
 void Spider::mouseMoveEvent(QMouseEvent * event) {
     if(!this->rect().contains(event->pos())) {
-        this->mouseReleaseEvent(event);
+       // this->mouseReleaseEvent(event);
         return;
     }
     if(this->mouseRightDown) {
@@ -94,12 +99,15 @@ void Spider::paintEvent ( QPaintEvent *  ) {
     QPainter p(this);
     if(this->mouseDown) {
         this->drawWeb(&p);
+    } else {
+        this->drawRects(&p);
     }
     if(this->mouseRightDown){
         this->drawRect(&p);
+
     }
 
-    this->drawRects(&p);
+
 }
 
 //
