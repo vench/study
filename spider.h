@@ -8,27 +8,20 @@
 #include <QPainter>
 #include <QBitmap>
 #include <math.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QMessageBox>
 
 
-struct Spdr {
-    int speedX=4, speedY=4, directionX=1, directionY=1,x=0,y=0,w=28,h=28,ox=14,oy=14;
-    QRect rect() {
-        return QRect(x,y,w,h);
-    }
-};
 
 class Spider : public QWidget
 {
     Q_OBJECT
 
-    bool mouseDown;
-    bool mouseRightDown;
-    int timerId;
-    QPoint firstPos;
-    QPoint lastPos;
-    QList<QRect> listRects;
-    Spdr spdr;
-    QVector<QPoint> polygon;
+
+    QPushButton* btnNo;
+    QPushButton* btnYes;
+    QLabel * label;
 
     void mathCPoint(int *, int *);
     void changeCursor(QString s);
@@ -54,6 +47,13 @@ protected:
     void resizeEvent(QResizeEvent *);
     void keyPressEvent( QKeyEvent * event);
     void timerEvent(QTimerEvent*);
+    bool eventFilter(QObject*,QEvent*);
+
+
+private slots:
+    void handleButtonNo();
+    void handleButtonYes();
 };
+
 
 #endif // SPIDER_H

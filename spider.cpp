@@ -4,19 +4,87 @@
 Spider::Spider(QWidget *parent)
     : QWidget(parent)
 {
-    this->timerId = -1;
-    this->mouseDown = false;
-    this->mouseRightDown = false;
+    this->setFixedSize(320, 240);
     this->updateTitleInfo();
-    this->changeCursorDefault();
 
 
-    polygon.append(QPoint(0,0));
+
+    label = new QLabel(tr("Are you suit your salary?"), this);
+    label->setGeometry(QRect(QPoint(20, 20),QSize(200, 50)));
+
+    btnNo = new QPushButton(tr("No"), this);
+    btnNo->setGeometry(QRect(QPoint(20, 100),QSize(100, 30)));
+
+    btnYes = new QPushButton(tr("Yes"), this);
+    btnYes->setGeometry(QRect(QPoint(200, 100),QSize(100, 30)));
+
+    connect(btnNo, SIGNAL (released()), this, SLOT (handleButtonNo()));
+    connect(btnYes, SIGNAL (released()), this, SLOT (handleButtonYes()));
+
+    btnNo->installEventFilter(this);
+
 }
 
 Spider::~Spider()
 {
+    delete btnNo;
+    delete btnYes;
+    delete label;
+}
 
+//
+bool Spider::eventFilter(QObject* target,QEvent* event) {
+    if((target == btnNo)) {
+        if(event->type() == QEvent::MouseMove ||
+           event->type() == QEvent::HoverEnter ||
+           event->type() == QEvent::HoverMove
+                ) {
+
+            int mx=(btnNo->x()>this->width()/2) ? -1 : 1,
+                my=(btnNo->y()>this->height()/2) ? -1 : 1;
+            while(true) {
+
+                QRect r(
+                            btnNo->x()+ (rand()%width()-btnNo->width())*mx,
+                            btnNo->y()+(rand()%height()-btnNo->height())*my,
+                            btnNo->width(), btnNo->height());
+
+                if(!this->rect().contains(r)) {
+                    mx = -mx;
+                    my = -my;
+                    continue;
+                }
+                if(this->btnYes->rect().contains(r)) {
+                    continue;
+                }
+                if(r.contains(QCursor::pos())) {
+                    continue;
+                }
+                btnNo->setGeometry(r);
+
+                break;
+            }
+
+            return true;
+        }
+
+    }
+
+    return QWidget::eventFilter(target, event);
+}
+
+//
+void Spider::handleButtonNo() {
+    QMessageBox msgBox;
+    msgBox.setText("Oh!");
+    msgBox.exec();
+}
+
+//
+void Spider::handleButtonYes() {
+    QMessageBox msgBox;
+    msgBox.setText(tr("We think as you."));
+    msgBox.exec();
 }
 
 //
@@ -25,15 +93,8 @@ void Spider::timerEvent(QTimerEvent*) {
 }
 
 //
-void Spider::keyPressEvent( QKeyEvent * event) {
-    if(event->key() == 32) {
-        if(this->timerId >= 0) {
-            this->killTimer(this->timerId);
-            this->timerId = -1;
-        } else {
-            timerId = this->startTimer(50);
-        }
-    }
+void Spider::keyPressEvent( QKeyEvent * ) {
+
 }
 
 //
@@ -76,125 +137,32 @@ void Spider::mouseMoveEvent(QMouseEvent * ) {
 //
 void Spider::paintEvent ( QPaintEvent *  ) {
 
-    QPainter p(this);
 
-    //spdr
-
-    spdr.x += spdr.speedX * spdr.directionX;
-    if(!this->rect().contains(spdr.rect())) {
-        spdr.directionX *=-1;
-        //polygon.append(QPoint(spdr.x,spdr.y));
-        spdr.x += spdr.speedX * spdr.directionX;
-
-        spdr.ox = spdr.x;
-        if(spdr.directionX < 0) {
-            spdr.ox += spdr.w;
-        }
-        spdr.oy = spdr.y;
-        if(spdr.directionY < 0) {
-            spdr.oy += spdr.h;
-        }
-        polygon.append(QPoint(spdr.ox,spdr.oy));
-    }
-
-    spdr.y += spdr.speedY * spdr.directionY;
-    if(!this->rect().contains(spdr.rect())) {
-        spdr.directionY *=-1;
-
-         spdr.y += spdr.speedY * spdr.directionY;
-
-         spdr.ox = spdr.x;
-         if(spdr.directionX < 0) {
-             spdr.ox += spdr.w;
-         }
-         spdr.oy = spdr.y;
-         if(spdr.directionY < 0) {
-             spdr.oy += spdr.h;
-         }
-         polygon.append(QPoint(spdr.ox,spdr.oy));
-    }
-
-
-
-    p.setPen(QPen(Qt::blue,1,Qt::SolidLine));
-    p.drawPolyline(polygon);
-    p.drawLine(spdr.ox, spdr.oy, spdr.x, spdr.y);
-
-
-    QString s = ":spider.png";
-    QPixmap pix(s);
-
-    p.drawPixmap(spdr.rect(), pix.scaled(spdr.w, spdr.h));
-
-   // p.drawPixmap(0,0,*path);*/
 }
 
 //
-void Spider::drawRects(QPainter*p) {
-    p->setPen(QPen(Qt::blue,1,Qt::SolidLine));
-    for(auto i : listRects) {
-        p->drawRect(i);
-    }
+void Spider::drawRects(QPainter*) {
+
 }
 
 //
-void Spider::drawRect(QPainter*p) {
-    p->setPen(QPen(Qt::green,1,Qt::SolidLine));
-    QRect r;
-    this->fillRect(r);
-    p->drawRect(r);
+void Spider::drawRect(QPainter*) {
+
 }
 
 //
- void Spider::fillRect(QRect&r) {
-     int x = std::min(this->firstPos.x(), this->lastPos.x()),
-         y = std::min(this->firstPos.y(), this->lastPos.y()),
-         w = fabs(this->firstPos.x() - this->lastPos.x()),
-         h = fabs(this->firstPos.y() - this->lastPos.y());
-     r.setX(x);
-     r.setY(y);
-     r.setWidth(w);
-     r.setHeight(h);
+ void Spider::fillRect(QRect&) {
+
  }
 
 //
-void Spider::drawWeb(QPainter*p) {
-    if(lastPos.x() <= 0 || lastPos.y() <= 0) {
-        return;
-    }
-    int lb[8][4] = {
-        {lastPos.x(), lastPos.y(),0,0},
-        {lastPos.x(), lastPos.y(),width()>>1,0},
-        {lastPos.x(), lastPos.y(),width(),0},
-        {lastPos.x(), lastPos.y(),width(),height() >> 1},
-        {lastPos.x(), lastPos.y(),width(),height()},
-        {lastPos.x(), lastPos.y(),width()>>1,height()},
-        {lastPos.x(), lastPos.y(),0,height()},
-        {lastPos.x(), lastPos.y(),0,height() >> 1}
-    };
+void Spider::drawWeb(QPainter*) {
 
-    p->setPen(QPen(Qt::red,1,Qt::SolidLine));
-
-    int a[2],b[2];
-    mathCPoint(lb[7], a);
-
-    for(int i = 0; i < 8; i ++) {
-        p->drawLine(lb[i][0], lb[i][1], lb[i][2], lb[i][3]);
-
-        mathCPoint(lb[i], b);
-        p->drawLine(a[0], a[1], b[0], b[1]);
-        a[0] = b[0];
-        a[1] = b[1];
-    }
 }
 
 //
-void Spider::mathCPoint(int *line, int *pc) {
-    double len = sqrt(pow(line[3]  - line[1],2) + pow(line[0] * 1. - line[2], 2));
-    int llen = width() >> 2;
-    double k = llen / len;
-    pc[0] = line[0] + (line[2]-line[0])*k;
-    pc[1] = line[1] + (line[3]-line[1])*k;
+void Spider::mathCPoint(int *, int *) {
+
 }
 
 
