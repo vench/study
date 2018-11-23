@@ -8,6 +8,10 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Signal and slot");
     resize(480, 120);
 
+
+    mapper = new QSignalMapper(this);
+
+
     buttonExit=new QPushButton(QObject::tr("Exit"),this);
     connect(buttonExit, SIGNAL(clicked()), this, SLOT(clickBtnExit()));
 
@@ -40,20 +44,32 @@ MainWindow::MainWindow(QWidget *parent)
     hLayout->addWidget(lineEdit, 2);
     hLayout->addWidget(labelTest,0);
 
+    vLayout = new QVBoxLayout();
+    vLayout->addWidget(spinBox, 0);
+    vLayout->addWidget(slider, 3);
+    vLayout->addWidget(lineEdit, 2);
+    vLayout->addWidget(labelTest,0);
+
+
+
     buttonsLayout = new QVBoxLayout();
     buttonVertival=new QPushButton(QObject::tr("Vertical"),this);
     buttonsLayout->addWidget(buttonVertival);
-    connect(buttonVertival, SIGNAL(clicked()), this, SLOT(click_buttonVertival()));
+    connect(buttonVertival, SIGNAL(clicked(bool)), mapper, SLOT(map()));
     buttonHorizontal=new QPushButton(QObject::tr("Horizontal"),this);
     buttonsLayout->addWidget(buttonHorizontal);
-    connect(buttonHorizontal, SIGNAL(clicked()), this, SLOT(click_buttonHorizontal()));
+    connect(buttonHorizontal, SIGNAL(clicked(bool)), mapper, SLOT(map()));
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->addLayout(hLayout);
+    mainLayout->addLayout(vLayout);
     mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(buttonExit);
 
+    mapper->setMapping(buttonHorizontal, hLayout);
+    mapper->setMapping(buttonVertival, vLayout);
 
+    connect(mapper, SIGNAL(mapped(QObject*)), this, SLOT(changeLayout(QObject*)));
 }
 
 //
@@ -67,6 +83,16 @@ void MainWindow::clickBtnExit() {
     qDebug() << "clickBtn";
     close();
 }
+
+
+//
+void MainWindow::changeLayout(QObject*pNewLayout) {
+    QLayoutItem * pItem= mainLayout->itemAt(0);
+    mainLayout->removeItem(pItem);
+    mainLayout->insertLayout(0,static_cast<QLayout *>(pNewLayout));
+    qDebug() << "chnage ";
+}
+
 
 //
 void MainWindow::spinBox_valueChanged(int value) {

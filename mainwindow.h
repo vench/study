@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QSlider>
 #include <QVBoxLayout>
+#include <QSignalMapper>
 
 class MainWindow : public QWidget
 {
@@ -22,6 +23,7 @@ class MainWindow : public QWidget
 
 
     QHBoxLayout* hLayout;
+    QVBoxLayout*vLayout;
     QPushButton*buttonExit;
     QLabel*labelTest;
     QLineEdit *lineEdit;
@@ -31,6 +33,7 @@ class MainWindow : public QWidget
     QVBoxLayout* buttonsLayout;
     QPushButton*    buttonVertival;
     QPushButton*    buttonHorizontal;
+    QSignalMapper*mapper;
 
 
 public:
@@ -41,6 +44,7 @@ public:
 protected:
     QString intToStringValue(int);
 
+
 protected Q_SLOTS:
     void clickBtnExit();
     void click_buttonVertival();
@@ -48,6 +52,7 @@ protected Q_SLOTS:
     void spinBox_valueChanged(int);
     void slider_valueChanged(int);
     void lineEdit_textChanged(QString);
+    void changeLayout(QObject*pNewLayout);
 };
 
 #endif // SPIDER_H
