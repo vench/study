@@ -62,7 +62,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->addLayout(hLayout);
-    mainLayout->addLayout(vLayout);
     mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(buttonExit);
 
