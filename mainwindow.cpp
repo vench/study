@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     labelTest->setFrameStyle(1);
     labelTest->setMinimumWidth(10);
     labelTest->setAlignment(Qt::AlignCenter);
+    labelTest->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     lineEdit = new QLineEdit(this);
     lineEdit->setValidator(new QIntValidator(MIN_VALUE,MAX_VALUE));
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     spinBox = new QSpinBox(this);
     spinBox->setRange(MIN_VALUE,MAX_VALUE);
     spinBox->setValue(DEFAULT_VALUE);
+    spinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(spinBox_valueChanged(int)));
 
     slider = new QSlider(Qt::Horizontal ,this);
@@ -37,6 +39,12 @@ MainWindow::MainWindow(QWidget *parent)
     //slider->setTracking(false);
     slider->setSingleStep(5);
     connect(slider, SIGNAL(valueChanged(int)), this, SLOT(slider_valueChanged(int)));
+
+    combo = new QComboBox(this);
+    combo->addItem("QSpinBox");
+    combo->addItem("QSlider");
+    combo->addItem("QLineEdit");
+    combo->hide();
 
     hLayout = new QHBoxLayout();
     hLayout->addWidget(spinBox, 0);
@@ -50,31 +58,65 @@ MainWindow::MainWindow(QWidget *parent)
     vLayout->addWidget(lineEdit, 2);
     vLayout->addWidget(labelTest,0);
 
+    gLayout = new QGridLayout();
+    gLayout->addWidget(spinBox, 0,0);
+    gLayout->addWidget(slider, 0,1);
+    gLayout->addWidget(lineEdit, 1,0);
+    gLayout->addWidget(labelTest,1,1);
+
+    sLayout = new QStackedLayout();
+    sLayout->addWidget(spinBox);
+    sLayout->addWidget(slider);
+    sLayout->addWidget(lineEdit);
+
+    demoStackLayout = new QVBoxLayout();
+    demoStackLayout->addWidget(combo);
+    demoStackLayout->addWidget(labelTest);
+    demoStackLayout->addLayout(sLayout);
 
 
     buttonsLayout = new QVBoxLayout();
     buttonVertival=new QPushButton(QObject::tr("Vertical"),this);
     buttonsLayout->addWidget(buttonVertival);
     connect(buttonVertival, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+
     buttonHorizontal=new QPushButton(QObject::tr("Horizontal"),this);
     buttonsLayout->addWidget(buttonHorizontal);
     connect(buttonHorizontal, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+
+    buttonGrid=new QPushButton(QObject::tr("Table"),this);
+    buttonsLayout->addWidget(buttonGrid);
+    connect(buttonGrid, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+
+    buttonStacked=new QPushButton(QObject::tr("Stack"),this);
+    buttonsLayout->addWidget(buttonStacked);
+    connect(buttonStacked, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+
+    mapper->setMapping(buttonHorizontal, hLayout);
+    mapper->setMapping(buttonVertival, vLayout);
+    mapper->setMapping(buttonGrid, gLayout);
+    mapper->setMapping(buttonStacked, demoStackLayout);
+
+    connect(mapper, SIGNAL(mapped(QObject*)), this, SLOT(changeLayout(QObject*)));
+    connect(combo, SIGNAL(activated(int)), sLayout, SLOT(setCurrentIndex(int)));
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->addLayout(hLayout);
     mainLayout->addLayout(buttonsLayout);
     mainLayout->addWidget(buttonExit);
 
-    mapper->setMapping(buttonHorizontal, hLayout);
-    mapper->setMapping(buttonVertival, vLayout);
-
-    connect(mapper, SIGNAL(mapped(QObject*)), this, SLOT(changeLayout(QObject*)));
+    changeLayout(hLayout);
 }
 
 //
 MainWindow::~MainWindow()
 {
     delete hLayout;
+    delete vLayout;
+    delete gLayout;
+    delete sLayout;
+    delete buttonsLayout;
+    delete demoStackLayout;
 }
 
 //
@@ -86,6 +128,19 @@ void MainWindow::clickBtnExit() {
 
 //
 void MainWindow::changeLayout(QObject*pNewLayout) {
+
+    if(pNewLayout==demoStackLayout)  {
+        combo->setVisible(true);
+        spinBox->hide();
+        lineEdit->hide();
+        slider->hide();
+        sLayout->currentWidget()->show();
+        sLayout->setStackingMode(QStackedLayout::StackOne);
+    } else  {
+        combo->setVisible(false);
+        sLayout->setStackingMode(QStackedLayout::StackAll);
+    }
+
     QLayoutItem * pItem= mainLayout->itemAt(0);
     mainLayout->removeItem(pItem);
     mainLayout->insertLayout(0,static_cast<QLayout *>(pNewLayout));
@@ -119,12 +174,4 @@ QString MainWindow::intToStringValue(int value) {
     return QString("%1").arg(value) ;
 }
 
-//
-void MainWindow::click_buttonVertival() {
-    qDebug() << "click_buttonVertival";
-}
 
-//
-void MainWindow::click_buttonHorizontal() {
-    qDebug() << "click_buttonHorizontal";
-}

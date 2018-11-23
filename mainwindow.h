@@ -11,6 +11,9 @@
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QSignalMapper>
+#include <QGridLayout>
+#include <QStackedLayout>
+#include <QComboBox>
 
 class MainWindow : public QWidget
 {
@@ -23,17 +26,25 @@ class MainWindow : public QWidget
 
 
     QHBoxLayout* hLayout;
-    QVBoxLayout*vLayout;
-    QPushButton*buttonExit;
-    QLabel*labelTest;
-    QLineEdit *lineEdit;
-    QSpinBox*spinBox;
-    QSlider*slider;
+    QVBoxLayout* vLayout;
+    QGridLayout* gLayout;
+    QStackedLayout* sLayout;
+    QVBoxLayout* demoStackLayout;
+    QPushButton* buttonExit;
+    QLabel* labelTest;
+    QLineEdit* lineEdit;
+    QSpinBox* spinBox;
+    QSlider* slider;
     QHBoxLayout* mainLayout;
     QVBoxLayout* buttonsLayout;
     QPushButton*    buttonVertival;
     QPushButton*    buttonHorizontal;
-    QSignalMapper*mapper;
+    QPushButton*    buttonGrid;
+    QPushButton*    buttonStacked;
+    QSignalMapper* mapper;
+    QComboBox* combo;
+
+
 
 
 public:
@@ -47,8 +58,6 @@ protected:
 
 protected Q_SLOTS:
     void clickBtnExit();
-    void click_buttonVertival();
-    void click_buttonHorizontal();
     void spinBox_valueChanged(int);
     void slider_valueChanged(int);
     void lineEdit_textChanged(QString);
