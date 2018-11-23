@@ -12,10 +12,11 @@ TARGET = qt_lab
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        spider.cpp
+SOURCES += main.cpp \
+    mainwindow.cpp
 
-HEADERS  += spider.h
+HEADERS  += \
+    mainwindow.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11

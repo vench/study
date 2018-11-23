@@ -1,15 +1,7 @@
-#include "spider.h"
 #include <QApplication>
-#include <QDebug>
 #include <QTranslator>
-#include <QObject>
-#include <QIcon>
-#include <QPixmap>
-#include <QBrush>
-#include <QDesktopWidget>
-#include <QBitmap>
-#include <QColorDialog>
-#include <QFileDialog>
+#include "mainwindow.h"
+
 
 
 typedef unsigned int uint;
@@ -34,7 +26,7 @@ int main(int argc, char *argv[])
 
 
 
-    Spider w;    
+    MainWindow w;
     w.show();
 
 
