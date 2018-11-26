@@ -10,12 +10,13 @@ float
                 0, 1, 0, 0, 
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
-                }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения 
-	dx=0.1f, dy=.0, dz = -7.0f, 
-	spec[] = {1.,1.,1.},
+                },  
+	dx=0.1f, dy=.0, dz = -4.0f, 
+	spec[] = {0.9f,0.9f,0.9f},
 	speed = .1;
 short posX, posY,deep; // Текущая позиция указателя мыши
-bool leftButton, twoSide, normale=1,deepType=2; 
+bool leftButton, twoSide, normale=1,deepType=0,normaleLine=0; 
+int maxDeep = 6;
  
 //
 void addRotation(float angle, float x, float y, float z)
@@ -38,27 +39,9 @@ void displayMe(void) {
 	
         glPushMatrix();
 	glTranslatef(dx, dy, dz);  
-        glMultMatrixf(rotMatrix);  
-	//glCallList(normale ? 3 : 2);
-	Ikosaeder(normale ? 1 : 2, deep);   
-        glPopMatrix();
-        
-        /*
-        glPushMatrix();
-	glTranslatef(-4, 0, -11);
-	glRotatef(66, 0, 1, 0);
-	glRotatef(12, 1, 0, 0);  
-	//glMultMatrixf(rotMatrix);
-	glCallList(1);  
-	glPopMatrix();
-	
-	glPushMatrix();
-	glTranslatef(4, 0, -11);
-	glMultMatrixf(rotMatrix);  
-	glCallList(3);
-	glPopMatrix(); */
-	
-	
+        glMultMatrixf(rotMatrix);   
+	Ikosaeder(normale ? 1 : 2, deep, normaleLine);   
+        glPopMatrix();  
         
 	glutSwapBuffers(); 
 	glFlush();
@@ -90,7 +73,8 @@ void initOpenGl() {
         glMateriali(GL_FRONT, GL_SHININESS, 128); //настройка, определяющая блёскость материала,
         
         // толщина линий нормалий
-        glLineWidth(3);
+        glEnable( GL_LIGHTING); 
+        glLineWidth(3); 
 	DrawScene();
 }
 
@@ -102,8 +86,8 @@ void onKeyboardFunc(byte key, int x, int y )
 	{
 	case ' ': 
 	        deep += deepType ? -1 : 1; 
-	        if(deep > 6) {
-	                deep = 6;
+	        if(deep > maxDeep) {
+	                deep = maxDeep;
 	                deepType = !false;
 	        } else if(deep < 0) {
 	                deep = 0;
@@ -111,6 +95,7 @@ void onKeyboardFunc(byte key, int x, int y )
 	        }
 	        break;
 	case 'n': normale = !normale; break;
+	case 's': normaleLine = !normaleLine; break; 
 	
 	case '+': dz += speed; break;
 	case '-': dz -= speed; break;

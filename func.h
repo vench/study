@@ -11,7 +11,7 @@ void test(void);
 void Cube();
 
 //
-void Ikosaeder(int normType, int deep);
+void Ikosaeder(int normType, int deep, bool normaleLine);
 
 //
 void DrawScene();

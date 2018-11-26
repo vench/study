@@ -1,5 +1,7 @@
 #include "func.h"
 
+bool globalNormaleLine = false;
+
 void test(void) {
         //
         std::cout << "Test..." << std::endl;
@@ -12,8 +14,9 @@ void test(void) {
  
 const float GOLD_R = (1 + sqrt(5)) / 2;
 const float GOLD_D = sqrt(1 + GOLD_R * GOLD_R);
- 
+const float ZERO_POINT[3] = {0.0f, 0.0f, 0.0f}; 
 	
+//	
 void DrawScene()
 {
 
@@ -24,11 +27,11 @@ void DrawScene()
 	
 	/// ic
 	glNewList(2,GL_COMPILE);
-        Ikosaeder(0, 0);  
+        Ikosaeder(0, 0, false);  
         glEndList();
         
 	glNewList(3,GL_COMPILE);
-        Ikosaeder(1,0);  
+        Ikosaeder(1,0, false);  
         glEndList(); 
 }
 
@@ -89,37 +92,68 @@ void ToUnit(float *v) {
                   
 }
 
+void DrawNornaleVector(float *norm, float *color) {
+        if(!globalNormaleLine) {
+                return;
+        }
+        glBegin(GL_LINES);
+        glColor3fv(color);
+        float shift = 1.1;
+        
+        glVertex3fv(ZERO_POINT);  
+        glVertex3f(norm[0]*shift, norm[1]*shift, norm[2]*shift); 
+        glEnd();
+}
+
+
 //
-void DrawTriaSmooth(float *v1, float *v2, float *v3) {
-        glNormal3fv(v1);  
+void DrawTriaSmooth(float *v1, float *v2, float *v3, float *color) { 
+        float color2[] = {0.0f, 0.1f, 0.9f};
+        
+        glNormal3fv(v1); 	
+	glNormal3fv(v2); 	
+	glNormal3fv(v3); 
+	
+	DrawNornaleVector(v1, color2); 
+	DrawNornaleVector(v2, color2); 
+	DrawNornaleVector(v3, color2); 	
+	
+	glBegin(GL_TRIANGLES);
+	glColor3fv(color);
 	glVertex3fv(v1);
-	glNormal3fv(v2);  
 	glVertex3fv(v2);
-	glNormal3fv(v3);  
 	glVertex3fv(v3);
+	glEnd();
 }
 
 //
-void DrawTriaFlat(float *v1, float *v2, float *v3) {
-        float norm[3];
+void DrawTriaFlat(float *v1, float *v2, float *v3, float *color) {
+        float norm[3]; 
+        float color2[] = {0.0f, 0.1f, 0.9f};
         makeNorm(v1, v2, v3, norm);
         glNormal3fv(norm);  
+        
+        DrawNornaleVector(norm, color2); 
+        
+        glBegin(GL_TRIANGLES);
+        glColor3fv(color);
 	glVertex3fv(v1);   
 	glVertex3fv(v2);  
 	glVertex3fv(v3);
+	glEnd();
 }
 
 
 //
-void DrawRecursive(float *v1, float *v2, float *v3, int depth, int normType)
+void DrawRecursive(float *v1, float *v2, float *v3, int depth, int normType, float *color)
 {
         float v12[3], v23[3], v31[3];
         if (depth <= 0)
         {
                 if (normType == 1)
-                        DrawTriaFlat(v1, v2, v3);
+                        DrawTriaFlat(v1, v2, v3, color);
                 else
-                        DrawTriaSmooth(v1, v2, v3); 
+                        DrawTriaSmooth(v1, v2, v3, color); 
                 return;
         }
         for (int i = 0; i < 3; i++)
@@ -129,14 +163,17 @@ void DrawRecursive(float *v1, float *v2, float *v3, int depth, int normType)
                 v31[i] = v3[i] + v1[i];
         }
         ToUnit(v12); ToUnit(v23); ToUnit(v31);
-        DrawRecursive(v1, v12, v31, depth - 1, normType);
-        DrawRecursive(v2, v23, v12, depth - 1, normType);
-        DrawRecursive(v3, v31, v23, depth - 1, normType);
-        DrawRecursive(v12, v23, v31, depth - 1, normType);
+        DrawRecursive(v1, v12, v31, depth - 1, normType, color);
+        DrawRecursive(v2, v23, v12, depth - 1, normType, color);
+        DrawRecursive(v3, v31, v23, depth - 1, normType, color);
+        DrawRecursive(v12, v23, v31, depth - 1, normType, color);
 }
 
 //
-void Ikosaeder(int normType, int deep) {
+void Ikosaeder(int normType, int deep, bool normaleLine) {
+
+        globalNormaleLine = normaleLine;
+
 	float 
         r = GOLD_R, // Золотое сечение
         v[12][3] =
@@ -155,7 +192,7 @@ void Ikosaeder(int normType, int deep) {
                 -r, 0,-1
         }, 
         color[] = {0.9f, 0.1f, 0.2f};
-        int id[20][3] = // Стираем буфер 20 Стираем буфер triangular Стираем буфер faces
+        int id[20][3] = 
         {
                 0, 1, 8, 
                 0, 9, 1, 
@@ -182,13 +219,10 @@ void Ikosaeder(int normType, int deep) {
         // делаем сдвиг 
         for (int i = 0; i < 12; i++)  { 
               ToUnit(v[i]);    
-        }
-        
-        glColor3fv(color);
-	glBegin(GL_TRIANGLES);
+        } 
+	
 	for (int i = 0; i < 20; i++)
 	{  
-		DrawRecursive(v[id[i][0]], v[id[i][1]], v[id[i][2]], deep, normType);	
-	}
-	glEnd();
+		DrawRecursive(v[id[i][0]], v[id[i][1]], v[id[i][2]], deep, normType, color);	
+	} 
 } 
