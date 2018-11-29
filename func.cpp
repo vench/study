@@ -2,293 +2,89 @@
 
 
 
-const float GOLD_R = (1 + sqrt(5)) / 2;
-const float GOLD_D = sqrt(1 + GOLD_R * GOLD_R);
+
+
 //
 uint nRings = 100, 
         nSects = 100,  
         nTria,         nVert; 
 
-const float
-        rad = 1.5f, 
-        PI = acos(-1.0f);
+ 
 
-//
-void test(void) { 
-        std::cout << "Test..." << std::endl;
-}
+
 
 //
 void DrawScene()
-{
-
-        // cube
-        glNewList(1,GL_COMPILE);          
-        Cube();
+{ 
+        glNewList(1, GL_COMPILE);
+	DrawPoints();
+	DrawPlane();
+	DrawObjects();
 	glEndList();
-	
-	/// ic
-	glNewList(2,GL_COMPILE);
-        Ikosaeder(0, 0);  
-        glEndList();
-        
-	glNewList(3,GL_COMPILE);
-        Ikosaeder(1,0);  
-        glEndList(); 
 }
-
-//
-void Cube() {
-        float color[] = { 0.1f, 0.1f, 0.7f };
-        float sz = 1.;
-        float v[8][3] = { -sz, sz, -sz, sz, sz, -sz, sz, -sz, -sz, -sz, -sz, -sz, -sz, sz, sz, -sz, -sz,  sz, sz, -sz, sz, sz, sz, sz };
-        float norm[6][3] = { 0, 0, -1, 0, 0, 1, -1, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1, 0 };
-        int id[6][4] =
-	{
-		0, 1, 2, 3,	// Rear (CCW - counterclockwise)
-		4, 5, 6, 7,	// Front
-		0, 3, 5, 4,	// Left
-		7, 6, 2, 1,	// Right
-		0, 4, 7, 1,	// Top
-		5, 3, 2, 6,	// Bottom
-	};
-	
-	
-	glColor3fv(color);
-	glBegin(GL_QUADS);
-	for (int i = 0; i < 6; i++)
-	{
-		glNormal3fv(norm[i]);
-		for (int j = 0; j < 4; j++)
-			glVertex3fv(v[id[i][j]]);
-	}
-	glEnd();
-}	
-
-//
-void makeNorm(float *v1, float *v2, float *v3, float * norm) {
-        float a[3], b[3];
-	for (int n = 0; n < 3; n++) {
-                a[n] = v3[n] - v2[n]; 
-                b[n] = v1[n] - v2[n]; 
-        }
-                                
-        norm[0] = a[1] * b[2] - a[2] * b[1];
-        norm[1] = a[2] * b[0] - a[0] * b[2];
-        norm[2] = a[0] * b[1] - a[1] * b[0];      
-                         // нормализуем           
-        float d = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
-        if (d != 0) {
-            norm[0] /= d; norm[1] /= d; norm[2] /= d; 
-        }
-}
-
-
-//
-void ToUnit(float *v) {
  
-  for (int j = 0; j < 3; j++)
-          v[j] /= GOLD_D;
-                  
-}
-
 //
-void DrawTriaSmooth(float *v1, float *v2, float *v3) {
-        glNormal3fv(v1);  
-	glVertex3fv(v1);
-	glNormal3fv(v2);  
-	glVertex3fv(v2);
-	glNormal3fv(v3);  
-	glVertex3fv(v3);
-}
-
-//
-void DrawTriaFlat(float *v1, float *v2, float *v3) {
-        float norm[3];
-        makeNorm(v1, v2, v3, norm);
-        glNormal3fv(norm);  
-	glVertex3fv(v1);   
-	glVertex3fv(v2);  
-	glVertex3fv(v3);
-}
-
-
-//
-void DrawRecursive(float *v1, float *v2, float *v3, int depth, int normType)
+void DrawPoints()
 {
-        float v12[3], v23[3], v31[3];
-        if (depth <= 0)
-        {
-                if (normType == 1)
-                        DrawTriaFlat(v1, v2, v3);
-                else
-                        DrawTriaSmooth(v1, v2, v3); 
-                return;
-        }
-        for (int i = 0; i < 3; i++)
-        {
-                v12[i] = v1[i] + v2[i];
-                v23[i] = v2[i] + v3[i];
-                v31[i] = v3[i] + v1[i];
-        }
-        ToUnit(v12); ToUnit(v23); ToUnit(v31);
-        DrawRecursive(v1, v12, v31, depth - 1, normType);
-        DrawRecursive(v2, v23, v12, depth - 1, normType);
-        DrawRecursive(v3, v31, v23, depth - 1, normType);
-        DrawRecursive(v12, v23, v31, depth - 1, normType);
-}
-
-//
-void Ikosaeder(int normType, int deep) {
-	float 
-        r = GOLD_R, // Золотое сечение
-        v[12][3] =
-        {
-                0, 1, r, 
-                0,-1, r, 
-                0, 1,-r, 
-                0,-1,-r,
-                1, r, 0, 
-                -1, r, 0, 
-                1,-r, 0, 
-                -1,-r, 0,
-                r, 0, 1, 
-                -r, 0, 1, 
-                r, 0,-1, 
-                -r, 0,-1
-        }, 
-        color[] = {0.9f, 0.1f, 0.2f};
-        int id[20][3] = // Стираем буфер 20 Стираем буфер triangular Стираем буфер faces
-        {
-                0, 1, 8, 
-                0, 9, 1, 
-                0, 8, 4, 
-                0, 4, 5, 
-                0, 5, 9,
-                2, 3, 11, 
-                2, 11, 5, 
-                2, 5, 4, 
-                2, 4, 10, 
-                2, 10, 3,
-                1, 9, 7, 
-                1, 7, 6, 
-                1, 6, 8, 
-                3, 10, 6, 
-                3, 6, 7,
-                3, 7, 11, 
-                4, 8, 10, 
-                5, 11, 9, 
-                6, 10, 8, 
-                7, 9, 11
-        };
-
-        // делаем сдвиг 
-        for (int i = 0; i < 12; i++)  { 
-              ToUnit(v[i]);    
-        }
-        
-        glColor3fv(color);
-	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < 20; i++)
-	{  
-		DrawRecursive(v[id[i][0]], v[id[i][1]], v[id[i][2]], deep, normType);	
+	srand(time(0));
+	glPointSize(5);
+	glDisable(GL_LIGHTING);
+	glColor3f(1, 1, 1);
+	glBegin(GL_POINTS);
+	for (int i = 0; i < 150; i++)
+	{
+		int
+			x = rand() % 60 - 30,
+			y = rand() % 30,
+			z = rand() % 200 - 100;
+		glVertex3f(x, y, z);
+		glVertex3f(x, -y, z);
 	}
 	glEnd();
+	glEnable(GL_LIGHTING);
 } 
 
-
-uint RGB(int r, int g, int b) {
-        return r << 8 | g << 4 | b;
-}
-
-///
-void Sphere(VERT *v, TRIA* t)
+//
+void DrawPlane()
 {
-	uint last = nVert - 1; // Индекс последней вершины (на южном полюсе)
+	glColor3f(0, 0.5, 0);
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);
+	glVertex3f(-5, 0, 5); glVertex3f(5, 0, 5); glVertex3f(5, 0, -15); glVertex3f(-5, 0, -15);
+	glEnd();
 
-	v[0].v = Point3D(0, rad, 0); // Формирование массива вершин. Северный полюс
-	v[0].n = Point3D(0, 1, 0);
-	v[0].c = clr2;
-
-	v[last].v = Point3D(0, -rad, 0); // Южный полюс
-	v[last].n = Point3D(0, -1, 0);
-	v[last].c = nVert & 1 ? clr2 : clr1;
-
-	float
-		da = PI / (nRings + 2),
-		db = 2 * PI / nSects,
-		af = PI - da / 2,
-		bf = 2 * PI - db / 2;
-
-	uint n = 1;	// Индекс вершины, следующей за северным полюсом
-
-	for (float a = da; a < af; a += da) 	// Цикл по широте
+	glColor3f(1, 1, 1);
+	glDisable(GL_LIGHTING);
+	glLineWidth(2);
+	glBegin(GL_LINES);
+	for (float x = -4.4; x < 4.5; x += 0.4)
 	{
-		float
-			y = rad * cos(a), 		// Координата y постоянна для всего кольца
-			xz = rad * sin(a);
-
-		for (float b = 0.; b < bf; n++, b += db) // Цикл по долготе
-		{
-			float // Координаты проекции в экваториальной плоскости
-				x = xz * sin(b),
-				z = xz * cos(b);
-
-			v[n].v = Point3D(x, y, z);
-			v[n].n = Point3D(x / rad, y / rad, z / rad);
-			v[n].c = n & 1 ? clr1 : clr2;
-		}
+		glVertex3f(x, 0.02, 5);
+		glVertex3f(x, 0.02, -15);
 	}
-
-	for (n = 0; n < nSects; n++) 	// Формирование массива индексов. Треугольники вблизи полюсов
-	{
-		t[n].i1 = 0; // Индекс общей вершины  (северный полюс)
-		t[n].i2 = n + 1; // Индекс текущей вершины
-		t[n].i3 = n == nSects - 1 ? 1 : n + 2; // Замыкание
-
-		t[nTria - nSects + n].i1 = nVert - 2 - ((1 + n) % nSects); 	// Южный полюс
-		t[nTria - nSects + n].i2 = nVert - 1;
-		t[nTria - nSects + n].i3 = nVert - 2 - n;
-	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+}
+ 
+//
+void DrawObjects() {
+        glColor3f(0.8,0.6,0.4); 
+	glTranslatef(-3,0.25,0); glutSolidCube(0.5);
+	glTranslatef(0,0,-5);    glutSolidCube(0.5);	// -3, 0.25, -5
+	glTranslatef(6,0,0);     glutSolidCube(0.5);	// 3, 0.25, -5
+	glTranslatef(0,0,5);     glutSolidCube(0.5);	// 3, 0.25, 0
 	
-	int k = 1;		// Вершина, следующая за полюсом
-	n = nSects;
-	for (uint i = 0; i < nRings; i++, k += nSects) // Треугольники разбиения колец
-	{
-		for (uint j = 0; j < nSects; j++, n += 2)
-		{
-			t[n].i1 = k + j;
-			t[n].i2 = k + nSects + j;
-			t[n].i3 = k + nSects + ((j + 1) % nSects);
-
-			t[n + 1].i1 = t[n].i1;
-			t[n + 1].i2 = t[n].i3;
-			t[n + 1].i3 = k + ((j + 1) % nSects);
-		}
-	}
+	glColor3f(0.4,0.2,0.1);
+	glTranslatef(0,0.25,0); glRotatef(-90,1,0,0); glutSolidCone(0.28,1,16,16); glRotatef(90,1,0,0); 	// 3, 0.5, 0
+	glTranslatef(0,0,-5);   glRotatef(-90,1,0,0); glutSolidCone(0.28,1,16,16); glRotatef(90,1,0,0); // 3, 0.5, -5
+	glTranslatef(-6,0,0);   glRotatef(-90,1,0,0); glutSolidCone(0.28,1,16,16); glRotatef(90,1,0,0); // -3, 0.5, -5 
+	glTranslatef(0,0,5);    glRotatef(-90,1,0,0); glutSolidCone(0.28,1,16,16); glRotatef(90,1,0,0); // -3, 0.5, 0
+	glColor3f(0.6,0,0); 
+	glTranslatef(0,-0.23,-9); glRotatef(-90,1,0,0); glutSolidTorus(0.27,0.8,16,16); glRotatef(90,1,0,0);// -3,0.27, -14
+	glTranslatef(6,0,0);      glRotatef(-90,1,0,0); glutSolidTorus(0.27,0.8,16,16); glRotatef(90,1,0,0);// 3,0.27,-14
+	glColor3f(0,0.2,1);
 } 
 
 
-void DrawSphera(uint r, uint s) {
-        nRings = r;
-        nSects = s;
-        nTria = 2 * (nRings + 1) * nSects;
-        nVert = (nRings + 1) * nSects + 2; 
-
-        VERT *Vert = new VERT[nVert];
-        TRIA *Tria = new TRIA[nTria];
-        Sphere(Vert, Tria);   
-        glVertexPointer(3, GL_FLOAT, sizeof(VERT), &Vert->v);
-        glNormalPointer(GL_FLOAT, sizeof(VERT), &Vert->n);
-        glColorPointer(3, GL_UNSIGNED_BYTE, sizeof(VERT), &Vert->c);
-        glNewList(1, GL_COMPILE); 
-        glDrawElements(GL_TRIANGLES, nTria * 3, GL_UNSIGNED_INT, Tria);
-        glEndList();
-        delete[] Vert;
-        delete[] Tria;
-}
-
-uint getNTria() {
-        return nTria;
-}
-
+// 
+ 

@@ -1,79 +1,26 @@
 //  g++ testgl.cpp -o testgl -lglut -lGLU -lGL
 
 #include "all.h" 
+ #include "func.h"
  
- 
+
 float
-        speedX, speedY,
+	speedX, speedY,
         rotMatrix[16] = { 
                 1, 0, 0, 0, 
                 0, 1, 0, 0, 
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
-                }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения 
+                },  
 	dx=0.1f, dy=.0, dz = -7.0f,  
-	speed = .1;
-short posX, posY,deep; // Текущая позиция указателя мыши
-bool leftButton, twoSide, normale=1,deepType=2,flat; 
-
-
-uint nRingsLoc = 10, nSectsLoc = 10;
+        speed = .1,  dist = 14,
+	spec[] = { 1, 1, 1 },
+	pos0[] = { -3, 3, 3, 0 },
+	pos1[] = { 3, 3, -3, 0 },
+	amb[] = { 0.3f, 0.3f, 0.3f };
  
- 
+Point3D center, eye, up; 
 
-
-float
-pos[] = { 0, 0, 5, 0 }, //  
-amb[] = { 0.05f, 0.05f, 0.05 }, //  
-dif[] = { 0.9f, 0.9f, 0.9 }, // 
-spec[] = { 0.8f, 0.8f, 0.8 }; //  
-char buf[128]; //  
-int shine = 40; // 
- 
- 
- 
-//////
-
-
-///
-void Print(float x, float y, const char *format, ...)
-{
-	va_list args;
-	char buffer[200];
-	va_start(args, format);
-	vsprintf(buffer, format, args);
-	va_end(args);
-	glPushMatrix();
-	glTranslatef(x, y, 0);
-	for (char* p = buffer; *p; p++)
-		glutStrokeCharacter(GLUT_STROKE_ROMAN, *p); // GLUT_STROKE_MONO_ROMAN // GLUT_STROKE_ROMAN
-	glPopMatrix();
-}
-
-//
-void DrawInfo()
-{
-	glPushAttrib(GL_ENABLE_BIT);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(0, 3000, 0, 3000);
-	glMatrixMode(GL_MODELVIEW);
-	glColor3f(0.7f, 1, 0);
-	Print(80, 2800, "Rings: %d", nRingsLoc);
-	Print(80, 2650, "Sects: %d", nSectsLoc);
-	Print(80, 2500, "Triangles: %d", getNTria());
-	Print(80, 200, "Light is: %s", buf);
-	Print(80, 60, "Coordinates: (%3.1f, %3.1f, %3.1f)", pos[0], pos[1], pos[2]);
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopAttrib();
-}
-//// 
- 
 //
 void addRotation(float angle, float x, float y, float z)
 {
@@ -87,130 +34,100 @@ void addRotation(float angle, float x, float y, float z)
 
 //
 void displayMe(void) {
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
-       /*   
-	glMatrixMode(GL_MODELVIEW); 
-	glLoadIdentity();
-	
-        glPushMatrix();
-	glTranslatef(dx, dy, dz);  
-        glMultMatrixf(rotMatrix);  
-	//glCallList(normale ? 3 : 2);
-	Ikosaeder(normale ? 1 : 2, deep);   
-        glPopMatrix(); 
-	
-        */
-	 
-	DrawInfo(); 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
-
-	
-
-	glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glTranslated(dx, dy, dz);
-	glMultMatrixf(rotMatrix);
-
-	glCallList(1);
-
+	gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z); 
+	glCallList(1); 
 	glPopMatrix();
-	
-	
 	glutSwapBuffers(); 
-	glFlush(); 
 }
 
 //
 void reshapeMe(int w, int h) {
-        std::cout << "Reshape" << std::endl; 
-        
-        glViewport(0,0,w,h); 
-        
-        glMatrixMode(GL_PROJECTION); ///
-        glLoadIdentity();
-        gluPerspective(45, double(w)/h, 0.6, 100);
-            
+        glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(35, float(w) / h, .1, 1000);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity(); 
 }
 
 void initOpenGl() {
-        if (pos[3] == 0) {
-                strcpy(buf, "Directional");
-        } else {
-                strcpy(buf, "Positional");
-        }         
         glClearColor(0, 0, 0, 0);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_COLOR_MATERIAL);
-        glEnable(GL_CULL_FACE); 
-        glShadeModel(flat ? GL_FLAT : GL_SMOOTH);
-        glLightfv(GL_LIGHT0, GL_POSITION, pos);
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);  
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, dif);
-        glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
-        glMaterialf(GL_FRONT, GL_SHININESS, shine);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-        
-        DrawSphera(nRingsLoc, nSectsLoc);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_COLOR_MATERIAL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+	glMaterialf(GL_FRONT, GL_SHININESS, 128);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+	glLightfv(GL_LIGHT0, GL_POSITION, pos0);
+	glLightfv(GL_LIGHT1, GL_POSITION, pos1);
+	DrawScene();
 }
 
 //
-int fstep(int x){ 
-        if(x == 0) {
-                return 1;
-        }
-        return 1 + log(x) / log(15);
+void Go(bool fwrd)
+{
+	Point3D pt((eye - center) * speed);
+	if (fwrd)
+	{
+		eye -= pt;
+		center -= pt;
+	}
+	else
+	{
+		eye += pt;
+		center += pt;
+	}
 }
+
+//
+void Roll(float angle) {
+        Point3D tmp = center - eye;
+        up.Rotate(tmp, angle);
+}
+
+void Pitch(float angle) {}
+
+void Yaw(float angle) {}
 
 //
 void onKeyboardFunc(byte key, int x, int y )
 {       
-        // std::cout << key << std::endl;
-        switch(key) 
+        switch(key)
 	{
-	case ' ': 
-	        flat = !flat;
-	        initOpenGl();
-	        break;
-	case 'n': normale = !normale; break;
-	
-	case '+': dz += speed; break;
-	case '-': dz -= speed; break;
+	case '7': Roll(0.1);	break;
+	case '9': Roll(-0.1); break;
+	case '8': Pitch(0.1); break;
+	case '2': Pitch(-0.1); break;
+	case '4': Yaw(1); break;
+	case '6': Yaw(-1); break;
+	case '5': Go(true); break;
+	case '3': Go(false); break;
+	case '0': // Возврат в исходное состояние
+		eye = Point3D(0, 1.5, dist);
+		center = Point3D(0, 1.5, 0);
+		up = Point3D(0, 1, 0);
+		break;
+	case '1': // Помещаем глаз в симметричную позицию и поворачиваем его на 180 градусов
+		eye = Point3D(0, 1.5, -2 * dist);
+		center = Point3D(0, 1.5, 0);
+		up = Point3D(0, 1, 0);
+		break;
+	case 't': // Телепортируем глаз в удаленную позицию, чтобы оценить звездный кластер издалека
+		eye = Point3D(0, 1.5, 20 * dist);
+		center = Point3D(0, 1.5, 19 * dist);
+		up = Point3D(0, 1, 0);
+		break;
+	case ' ':
+		std::cout << "\nE = (" << eye.x << ", " << eye.y << ", " << eye.z << ')'
+			<< "\nC = (" << center.x << ", " << center.y << ", " << center.z << ')'
+			<< "\nU = (" << up.x << ", " << up.y << ", " << up.z << ")\n";
+		break;
 	case 27: exit(0); break;
-	case '2': glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (twoSide = !twoSide)); break;
-	case 'a': pos[0] -= speed; break;
-	case 'd': pos[0] += speed; break;
-	case 's': pos[1] -= speed; break;
-	case 'w': pos[1] += speed; break;
-	case 'q':  	                
-	           if(nRingsLoc == 0) {
-	                return;
-	           }             
-	           nRingsLoc -= fstep(nRingsLoc);  	                
-	           initOpenGl();     
-	break;  
-	case 'e':  
-	           nRingsLoc += fstep(nRingsLoc);    
-	           initOpenGl();     
-	break;
-	case 'r':  
-	           if(nSectsLoc == 0) {
-	                return;
-	           }     
-	           nSectsLoc -= fstep(nSectsLoc);   
-	                
-	           initOpenGl();     
-	break;  
-	case 't':  //std::cout << nSectsLoc << '-' << fstep(nSectsLoc) << std::endl;
-	           nSectsLoc += fstep(nSectsLoc); 
-	           initOpenGl();     
-	break;
-	
-	case 'z': pos[3] = (pos[3] - 1) * -1; 
-                   initOpenGl();
-        break;                	
 	}
 	glutPostRedisplay();
 } 
@@ -226,74 +143,32 @@ void onIdle()
 
 //
 void onSpecialKey(int key, int x, int y ){
-       // std::cout << key << std::endl;
-	 
-	switch(key) {
-	        case 102:
-	                dx += speed;
-	        break;
-	        case 100:
-	                dx -= speed;
-	        break;   
-	        case 101:
-	                dy += speed;
-	        break;
-	        case 103:
-	                dy -= speed;
-	        break;     
-	} 
-	glutPostRedisplay();
+       Point3D pt;
+	switch(key)
+	{
+	case GLUT_KEY_LEFT: pt = Point3D(-0.1, 0, 0); break;
+	case GLUT_KEY_RIGHT: pt = Point3D(0.1, 0, 0); break;
+	case GLUT_KEY_DOWN: pt = Point3D(0, -0.1, 0); break;
+	case GLUT_KEY_UP: pt = Point3D(0, 0.1, 0); break;
+	}
+	eye += pt; center += pt;
+	glutPostRedisplay(); 
 }
 
 //
-void onMouse(int button, int state, int x, int y){
-
-	leftButton = button == GLUT_LEFT_BUTTON;
-	
-	if (state == GLUT_DOWN)
-	{
-	         
-	      speedX = speedY = 0;
-	      glutIdleFunc(0);   
-	}
-	else
-	{ 
-              if(fabs(speedY) > 1. || fabs(speedX) > 1.) {
-                glutIdleFunc(onIdle);
-              }       
-	      
-	}
-	posX = x;	// Запоминаем координаты мыши
-	posY = y;
+void onMouse(int button, int state, int x, int y){ 
 }
 
+//
 void onMouseMove(int x, int y)
-{       
-        speedX = y-posY;
-        speedY = x-posX;
-        
-	if (leftButton)
-	{
-		addRotation(speedY * .1, 0, 1, 0);
-                addRotation(speedX * .1, 1, 0, 0);
-		
-	}
-	else
-	{
-	        // Вычислите степень удаления или приближения и измените величину dz пропорционально смещению мыши
-		dz += (speedY + speedX) / 60.;
-	}
-	posX = x;	// Запоминаем новые координаты мыши
-	posY = y;
-	glutPostRedisplay();
+{         
 }
 
 
 
 //
 int main(int argc, char** argv) {
-
-        test();
+ 
         std::cout << "Start" << std::endl;
 
         glutInit(&argc, argv);
