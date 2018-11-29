@@ -86,13 +86,22 @@ void Go(bool fwrd)
 
 //
 void Roll(float angle) {
-        Point3D tmp = center - eye;
-        up.Rotate(tmp, angle);
+        Point3D V = center - eye;
+        up.Rotate(V, angle);
 }
 
-void Pitch(float angle) {}
+void Pitch(float angle) {
+        // TODO page 43
+}
 
-void Yaw(float angle) {}
+// by Y
+void Yaw(float angle) {
+        // TODO page 43
+        Point3D V = center - eye;
+        V.Rotate(up, angle);
+        Point3D tmp = V + eye;
+        center.Update(tmp);
+}
 
 //
 void onKeyboardFunc(byte key, int x, int y )

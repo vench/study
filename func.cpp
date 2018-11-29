@@ -83,6 +83,12 @@ void DrawObjects() {
 	glTranslatef(0,-0.23,-9); glRotatef(-90,1,0,0); glutSolidTorus(0.27,0.8,16,16); glRotatef(90,1,0,0);// -3,0.27, -14
 	glTranslatef(6,0,0);      glRotatef(-90,1,0,0); glutSolidTorus(0.27,0.8,16,16); glRotatef(90,1,0,0);// 3,0.27,-14
 	glColor3f(0,0.2,1);
+	
+	glTranslatef(0,9,-10);  glutSolidSphere(3, 20, 20); // 3,9.27,-24 
+	glColor3f(1,0.2,1);
+	glTranslatef(-3,11,-20);  glutSolidSphere(3, 20, 20); // 0,20.27,-44 
+	glColor3f(0.7,0.2,0.3);
+	glTranslatef(-17,0,-2);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
 } 
 
 

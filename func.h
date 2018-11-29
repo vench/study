@@ -45,6 +45,7 @@ public:
 	void operator*= (float d) { x *= d; y *= d, z *= d; }
 	Point3D ToUnit() { float r = !*this; return Point3D(x / r, y / r, z / r); }
 	float Dist(Point3D& p) { return !Point3D(*this - p); }
+	void Update(Point3D& p) { this->x= p.x; this->y= p.y; this->z= p.z; }
 
 	Point3D& Rotate(Point3D& p, float a) {
 		a *= ToRad;
