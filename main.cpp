@@ -156,6 +156,12 @@ void initOpenGl() {
         DrawSphera(nRingsLoc, nSectsLoc);
 }
 
+
+int flin(int x){
+        //std::cout << log(2.7) << std::endl;
+        return 1 + x * log(x) / 100.;
+}
+
 //
 void onKeyboardFunc(byte key, int x, int y )
 {       
@@ -176,23 +182,29 @@ void onKeyboardFunc(byte key, int x, int y )
 	case 'd': pos[0] += speed; break;
 	case 's': pos[1] -= speed; break;
 	case 'w': pos[1] += speed; break;
-	case 'q':  
-	                
-	           if(nRingsLoc > 100){
-	                nRingsLoc -=15; nSectsLoc -=15; 
-	           }   else {
-	                nRingsLoc --; nSectsLoc --; 
-	           }  
+	case 'q':  	                
+	           if(nRingsLoc == 0) {
+	                return;
+	           }             
+	           nRingsLoc -= flin(nRingsLoc);  	                
+	           initOpenGl();     
+	break;  
+	case 'e':  
+	           nRingsLoc += flin(nRingsLoc);    
+	           initOpenGl();     
+	break;
+	case 'r':  
+	           if(nSectsLoc == 0) {
+	                return;
+	           }     
+	           nSectsLoc -= flin(nSectsLoc);   
 	                
 	           initOpenGl();     
 	break;  
-	case 'e':  if(nRingsLoc > 100) {
-	                nRingsLoc += 15; nSectsLoc +=15; 
-	           } else {
-	                nRingsLoc ++; nSectsLoc ++; 
-	           }
+	case 't':  nSectsLoc += flin(nSectsLoc); 
 	           initOpenGl();     
 	break;
+	
 	case 'z': pos[3] = (pos[3] - 1) * -1; 
                    initOpenGl();
         break;                	

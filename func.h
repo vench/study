@@ -65,7 +65,7 @@ uint RGB(int r, int g, int b);
 //
 void Sphere(VERT *v, TRIA* t);
 
-const uint clr1 = RGB(0, 255, 0), clr2 = RGB(0, 0, 255); // цвета сферы
+const uint clr1 = RGB(255, 0, 0), clr2 = RGB(0, 0, 255); // цвета сферы
 
 
 //
