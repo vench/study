@@ -156,16 +156,18 @@ void initOpenGl() {
         DrawSphera(nRingsLoc, nSectsLoc);
 }
 
-
-int flin(int x){
-        //std::cout << log(2.7) << std::endl;
-        return 1 + x * log(x) / 100.;
+//
+int fstep(int x){ 
+        if(x == 0) {
+                return 1;
+        }
+        return 1 + log(x) / log(15);
 }
 
 //
 void onKeyboardFunc(byte key, int x, int y )
 {       
-         std::cout << key << std::endl;
+        // std::cout << key << std::endl;
         switch(key) 
 	{
 	case ' ': 
@@ -186,22 +188,23 @@ void onKeyboardFunc(byte key, int x, int y )
 	           if(nRingsLoc == 0) {
 	                return;
 	           }             
-	           nRingsLoc -= flin(nRingsLoc);  	                
+	           nRingsLoc -= fstep(nRingsLoc);  	                
 	           initOpenGl();     
 	break;  
 	case 'e':  
-	           nRingsLoc += flin(nRingsLoc);    
+	           nRingsLoc += fstep(nRingsLoc);    
 	           initOpenGl();     
 	break;
 	case 'r':  
 	           if(nSectsLoc == 0) {
 	                return;
 	           }     
-	           nSectsLoc -= flin(nSectsLoc);   
+	           nSectsLoc -= fstep(nSectsLoc);   
 	                
 	           initOpenGl();     
 	break;  
-	case 't':  nSectsLoc += flin(nSectsLoc); 
+	case 't':  //std::cout << nSectsLoc << '-' << fstep(nSectsLoc) << std::endl;
+	           nSectsLoc += fstep(nSectsLoc); 
 	           initOpenGl();     
 	break;
 	
