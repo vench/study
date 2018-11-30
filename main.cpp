@@ -90,13 +90,31 @@ void Roll(float angle) {
         up.Rotate(V, angle);
 }
 
+//
 void Pitch(float angle) {
         // TODO page 43
+        
+       
+     /*// calculate the new forward vector
+  this->viewDir = glm::normalize(
+    this->viewDir * cosf(angle * PION180) +
+    this->upVector * sinf(angle * PION180)
+  );
+
+  // calculate the new up vector
+  this->upVector  = glm::cross(this->viewDir, this->rightVector);*/
+   // Point3D V = center - eye;
+  // V.Rotate(up, angle);
+  // up *= V;
+  Point3D tmp;
+  tmp.z = 10;
+  //center.Rotate(tmp, angle);
+  eye.Rotate(tmp, angle);
+  //center.Rotate(tmp, angle);
 }
 
 // by Y
-void Yaw(float angle) {
-        // TODO page 43
+void Yaw(float angle) { 
         Point3D V = center - eye;
         V.Rotate(up, angle);
         Point3D tmp = V + eye;
