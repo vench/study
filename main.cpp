@@ -1,25 +1,23 @@
 //  g++ testgl.cpp -o testgl -lglut -lGLU -lGL
 
 #include "all.h" 
- #include "func.h"
+#include "func.h"
  
-
+float sun, year, day, moon;		// Углы вращения
 float
-	speedX, speedY,
+        speedX, speedY,
         rotMatrix[16] = { 
                 1, 0, 0, 0, 
                 0, 1, 0, 0, 
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
                 },  
-	dx=0.1f, dy=.0, dz = -7.0f,  
-        speed = .1,  dist = 14,
-	spec[] = { 1, 1, 1 },
-	pos0[] = { -3, 3, 3, 0 },
-	pos1[] = { 3, 3, -3, 0 },
-	amb[] = { 0.3f, 0.3f, 0.3f };
- 
-Point3D center, eye, up; 
+	dx=0.1f, dy=.0, dz = -4.0f, 
+	spec[] = {0.9f,0.9f,0.9f},
+	speed = .1;
+short posX, posY,deep; // Текущая позиция указателя мыши
+bool leftButton, twoSide, normale=1,deepType=0,normaleLine=0; 
+int maxDeep = 6;
 
 //
 void addRotation(float angle, float x, float y, float z)
@@ -34,11 +32,30 @@ void addRotation(float angle, float x, float y, float z)
 
 //
 void displayMe(void) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPushMatrix();
-	gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z); 
-	glCallList(1); 
-	glPopMatrix();
+       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glPushMatrix();	// Запоминаем единичное значение ММ в стеке
+	glTranslated(dx, dy, dz);
+	glMultMatrixf(rotMatrix); // Изменяем ММ
+
+	glColor3f(1, 1, 1);
+	glRotatef(sun, 1, 1, 1);	// Вращаем систему координат
+	glutWireSphere(1,20,20);	// Рисуем Солнце
+
+	// Операция со стеком (Ваш код)
+	glRotatef(year, 0, 1, 0);	// Вращаем систему координат
+	glTranslatef(2, 0, 0);	// Смещаем вправо (Землю)
+
+	// Операция со стеком (Ваш код)
+	glRotatef(day, 0, 0, 1);	// Вращаем в смещенной системе
+
+	glutWireSphere(0.3,20,20); // Рисуем Землю
+
+	// Операция со стеком (Ваш код)
+	glRotatef(moon, 1, 0, 0);	// Вращаем систему координат
+	glTranslatef(0, 0.45, 0);		// Смещаем вверх (луну)
+
+	glutWireSphere(0.08,20,20);  // Рисуем Луну
+	glPopMatrix();		// Восстанавливаем единичное значение из стека
 	glutSwapBuffers(); 
 }
 
@@ -53,142 +70,94 @@ void reshapeMe(int w, int h) {
 }
 
 void initOpenGl() {
-        glClearColor(0, 0, 0, 0);
-	glEnable(GL_DEPTH_TEST);
+glClearColor(1, 1, 1, 0);
+	glShadeModel(GL_SMOOTH); //
+	glEnable(GL_DEPTH_TEST);  
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_COLOR_MATERIAL);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_COLOR_MATERIAL); 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
-	glMaterialf(GL_FRONT, GL_SHININESS, 128);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
-	glLightfv(GL_LIGHT0, GL_POSITION, pos0);
-	glLightfv(GL_LIGHT1, GL_POSITION, pos1);
-	DrawScene();
+        glMateriali(GL_FRONT, GL_SHININESS, 128); 
+        glEnable( GL_LIGHTING); 
+        glLineWidth(3); 
+        DrawScene();
 }
+ 
 
-//
-void Go(bool fwrd)
-{
-	Point3D pt((eye - center) * speed);
-	if (fwrd)
-	{
-		eye -= pt;
-		center -= pt;
-	}
-	else
-	{
-		eye += pt;
-		center += pt;
-	}
-}
+ 
 
-//
-void Roll(float angle) {
-        Point3D V = center - eye;
-        up.Rotate(V, angle);
-}
-
-//
-void Pitch(float angle) {
-        // TODO page 43
-        
-       
-     /*// calculate the new forward vector
-  this->viewDir = glm::normalize(
-    this->viewDir * cosf(angle * PION180) +
-    this->upVector * sinf(angle * PION180)
-  );
-
-  // calculate the new up vector
-  this->upVector  = glm::cross(this->viewDir, this->rightVector);*/
-   // Point3D V = center - eye;
-  // V.Rotate(up, angle);
-  // up *= V;
-  Point3D tmp;
-  tmp.z = 10;
-  //center.Rotate(tmp, angle);
-  eye.Rotate(tmp, angle);
-  //center.Rotate(tmp, angle);
-}
-
-// by Y
-void Yaw(float angle) { 
-        Point3D V = center - eye;
-        V.Rotate(up, angle);
-        Point3D tmp = V + eye;
-        center.Update(tmp);
-}
+ 
 
 //
 void onKeyboardFunc(byte key, int x, int y )
 {       
-        switch(key)
-	{
-	case '7': Roll(0.1);	break;
-	case '9': Roll(-0.1); break;
-	case '8': Pitch(0.1); break;
-	case '2': Pitch(-0.1); break;
-	case '4': Yaw(1); break;
-	case '6': Yaw(-1); break;
-	case '5': Go(true); break;
-	case '3': Go(false); break;
-	case '0': // Возврат в исходное состояние
-		eye = Point3D(0, 1.5, dist);
-		center = Point3D(0, 1.5, 0);
-		up = Point3D(0, 1, 0);
-		break;
-	case '1': // Помещаем глаз в симметричную позицию и поворачиваем его на 180 градусов
-		eye = Point3D(0, 1.5, -2 * dist);
-		center = Point3D(0, 1.5, 0);
-		up = Point3D(0, 1, 0);
-		break;
-	case 't': // Телепортируем глаз в удаленную позицию, чтобы оценить звездный кластер издалека
-		eye = Point3D(0, 1.5, 20 * dist);
-		center = Point3D(0, 1.5, 19 * dist);
-		up = Point3D(0, 1, 0);
-		break;
-	case ' ':
-		std::cout << "\nE = (" << eye.x << ", " << eye.y << ", " << eye.z << ')'
-			<< "\nC = (" << center.x << ", " << center.y << ", " << center.z << ')'
-			<< "\nU = (" << up.x << ", " << up.y << ", " << up.z << ")\n";
-		break;
-	case 27: exit(0); break;
-	}
+         
 	glutPostRedisplay();
 } 
 
-void onIdle()
-{
-        // Стираем буфер Изменяйте Стираем буфер значения Стираем буфер углов Стираем буфер поворота
-        
+//
+void onIdle() {
         addRotation(speedY * .1, 0, 1, 0);
         addRotation(speedX * .1, 1, 0, 0);
+        
+        
+        
         glutPostRedisplay(); 
 }
 
 //
 void onSpecialKey(int key, int x, int y ){
-       Point3D pt;
-	switch(key)
-	{
-	case GLUT_KEY_LEFT: pt = Point3D(-0.1, 0, 0); break;
-	case GLUT_KEY_RIGHT: pt = Point3D(0.1, 0, 0); break;
-	case GLUT_KEY_DOWN: pt = Point3D(0, -0.1, 0); break;
-	case GLUT_KEY_UP: pt = Point3D(0, 0.1, 0); break;
-	}
-	eye += pt; center += pt;
+        switch(key) {
+	        case 102:
+	                dx += speed;
+	        break;
+	        case 100:
+	                dx -= speed;
+	        break;   
+	        case 101:
+	                dy += speed;
+	        break;
+	        case 103:
+	                dy -= speed;
+	        break;     
+        } 
 	glutPostRedisplay(); 
 }
 
 //
 void onMouse(int button, int state, int x, int y){ 
+        leftButton = button == GLUT_LEFT_BUTTON;
+	
+	if (state == GLUT_DOWN)	{	         
+	      speedX = speedY = 0;
+	      glutIdleFunc(0);   
+	}	else { 
+              if(fabs(speedY) > 1. || fabs(speedX) > 1.) {
+                glutIdleFunc(onIdle);
+              }      	      
+	}
+	posX = x;	// Запоминаем координаты мыши
+        posY = y;
 }
 
 //
 void onMouseMove(int x, int y)
-{         
+{  
+        speedX = y-posY;
+        speedY = x-posX;
+        
+	if (leftButton) {
+		addRotation(speedY * .1, 0, 1, 0);
+                addRotation(speedX * .1, 1, 0, 0);
+	}	else	{ 
+		dz += (speedY + speedX) / 60.;
+	}
+	posX = x;
+	posY = y;
+        glutPostRedisplay();       
 }
 
 
