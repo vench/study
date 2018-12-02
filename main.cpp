@@ -12,12 +12,13 @@ float
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
                 },  
-	dx=0.1f, dy=.0, dz = -4.0f, 
+	dx=0.1f, dy=.0, dz = -20.0f, 
 	spec[] = {0.9f,0.9f,0.9f},
 	speed = .1;
 short posX, posY,deep; // Текущая позиция указателя мыши
 bool leftButton, twoSide, normale=1,deepType=0,normaleLine=0; 
 int maxDeep = 6;
+float speedTest = 0.5;
 
 //
 void addRotation(float angle, float x, float y, float z)
@@ -38,24 +39,42 @@ void displayMe(void) {
 	glMultMatrixf(rotMatrix); // Изменяем ММ
 
 	glColor3f(1, 1, 1);
-	glRotatef(sun, 1, 1, 1);	// Вращаем систему координат
+	
+	glPushMatrix();
+	glRotatef(sun, 0,1,0);	// Вращаем систему координат
 	glutWireSphere(1,20,20);	// Рисуем Солнце
-
-	// Операция со стеком (Ваш код)
-	glRotatef(year, 0, 1, 0);	// Вращаем систему координат
-	glTranslatef(2, 0, 0);	// Смещаем вправо (Землю)
-
-	// Операция со стеком (Ваш код)
-	glRotatef(day, 0, 0, 1);	// Вращаем в смещенной системе
+	glPopMatrix();
+        // sun end
+        
+        
+        // earth
+	glPushMatrix();
+	 
+	glRotatef(year, 0, 1, 0);
+	glTranslatef(20, 0, 0); 
+	glRotatef(day, 0, 1, 0);
+	
 
 	glutWireSphere(0.3,20,20); // Рисуем Землю
-
-	// Операция со стеком (Ваш код)
-	glRotatef(moon, 1, 0, 0);	// Вращаем систему координат
-	glTranslatef(0, 0.45, 0);		// Смещаем вверх (луну)
-
-	glutWireSphere(0.08,20,20);  // Рисуем Луну
-	glPopMatrix();		// Восстанавливаем единичное значение из стека
+	
+	// moon
+	glPushMatrix();
+	glRotatef(moon, 0, 1, 0);
+	glTranslatef(1, 0,  0); 
+	
+	glutWireSphere(0.08,20,20);
+	glPopMatrix();
+	// end moon
+	
+	glPopMatrix();
+	// earth end
+	 
+	
+	
+	glPopMatrix();		
+	
+	
+	
 	glutSwapBuffers(); 
 }
 
@@ -70,7 +89,7 @@ void reshapeMe(int w, int h) {
 }
 
 void initOpenGl() {
-glClearColor(1, 1, 1, 0);
+        glClearColor(1, 1, 1, 0);
 	glShadeModel(GL_SMOOTH); //
 	glEnable(GL_DEPTH_TEST);  
 	glCullFace(GL_BACK);
@@ -100,11 +119,13 @@ void onKeyboardFunc(byte key, int x, int y )
 
 //
 void onIdle() {
-        addRotation(speedY * .1, 0, 1, 0);
-        addRotation(speedX * .1, 1, 0, 0);
+        //addRotation(speedY * .1, 0, 1, 0);
+        //addRotation(speedX * .1, 1, 0, 0);
         
-        
-        
+        sun += 0.01; 
+        moon += 2;
+        day += 0.3;
+        year += 0.1;
         glutPostRedisplay(); 
 }
 
@@ -160,6 +181,7 @@ void onMouseMove(int x, int y)
         glutPostRedisplay();       
 }
 
+ 
 
 
 //
@@ -180,6 +202,7 @@ int main(int argc, char** argv) {
 	glutMotionFunc(onMouseMove);
         glutReshapeFunc(reshapeMe);
         glutDisplayFunc(displayMe);
+        glutIdleFunc(onIdle);
         glutMainLoop();
         return 0;
 }
