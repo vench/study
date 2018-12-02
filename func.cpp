@@ -57,7 +57,7 @@ void DrawPlane()
 	glDisable(GL_LIGHTING);
 	glLineWidth(2);
 	glBegin(GL_LINES);
-	for (float x = -4.4; x < 4.5; x += 0.4)
+	for (float x = -4.4; x < 5.5; x += 0.4)
 	{
 		glVertex3f(x, 0.02, 5);
 		glVertex3f(x, 0.02, -15);
@@ -89,6 +89,9 @@ void DrawObjects() {
 	glTranslatef(-3,11,-20);  glutSolidSphere(3, 20, 20); // 0,20.27,-44 
 	glColor3f(0.7,0.2,0.3);
 	glTranslatef(-17,0,-2);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
+	glColor3f(0.7,0.8,0.3);
+	glTranslatef(-17,0,-500);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
+	glTranslatef(-17,0,-1000);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
 } 
 
 

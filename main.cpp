@@ -1,7 +1,7 @@
 //  g++ testgl.cpp -o testgl -lglut -lGLU -lGL
 
 #include "all.h" 
- #include "func.h"
+#include "func.h"
  
 
 float
@@ -13,13 +13,15 @@ float
                 0, 0, 0, 1 
                 },  
 	dx=0.1f, dy=.0, dz = -7.0f,  
-        speed = .1,  dist = 14,
+        speed = .05,  dist = 14,
 	spec[] = { 1, 1, 1 },
 	pos0[] = { -3, 3, 3, 0 },
 	pos1[] = { 3, 3, -3, 0 },
 	amb[] = { 0.3f, 0.3f, 0.3f };
  
 Point3D center, eye, up; 
+
+int move  = 0;
 
 //
 void addRotation(float angle, float x, float y, float z)
@@ -92,25 +94,11 @@ void Roll(float angle) {
 
 //
 void Pitch(float angle) {
-        // TODO page 43
-        
-       
-     /*// calculate the new forward vector
-  this->viewDir = glm::normalize(
-    this->viewDir * cosf(angle * PION180) +
-    this->upVector * sinf(angle * PION180)
-  );
-
-  // calculate the new up vector
-  this->upVector  = glm::cross(this->viewDir, this->rightVector);*/
-   // Point3D V = center - eye;
-  // V.Rotate(up, angle);
-  // up *= V;
-  Point3D tmp;
-  tmp.z = 10;
-  //center.Rotate(tmp, angle);
-  eye.Rotate(tmp, angle);
-  //center.Rotate(tmp, angle);
+      Point3D 
+        v = center - eye,
+        n = v * up;
+      center = eye + v.Rotate(n, angle); 
+      up.Rotate(n, angle); 
 }
 
 // by Y
@@ -149,6 +137,12 @@ void onKeyboardFunc(byte key, int x, int y )
 		center = Point3D(0, 1.5, 19 * dist);
 		up = Point3D(0, 1, 0);
 		break;
+	case 'w': move ++; break;
+	case 's': move --; break;
+	case 'a': Yaw(1); break;
+	case 'd': Yaw(-1); break;
+	case 'e': Pitch(0.1); break;
+	case 'q': Pitch(-0.1); break;
 	case ' ':
 		std::cout << "\nE = (" << eye.x << ", " << eye.y << ", " << eye.z << ')'
 			<< "\nC = (" << center.x << ", " << center.y << ", " << center.z << ')'
@@ -163,8 +157,14 @@ void onIdle()
 {
         // Стираем буфер Изменяйте Стираем буфер значения Стираем буфер углов Стираем буфер поворота
         
-        addRotation(speedY * .1, 0, 1, 0);
-        addRotation(speedX * .1, 1, 0, 0);
+        if(move > 0) {
+                Go(true);
+        } else if(move < 0) {
+                Go(false);
+        }
+        
+       // addRotation(speedY * .1, 0, 1, 0);
+       // addRotation(speedX * .1, 1, 0, 0);
         glutPostRedisplay(); 
 }
 
@@ -209,6 +209,7 @@ int main(int argc, char** argv) {
         glutSpecialFunc(onSpecialKey);
         glutMouseFunc(onMouse);
 	glutMotionFunc(onMouseMove);
+	glutIdleFunc(onIdle);
         glutReshapeFunc(reshapeMe);
         glutDisplayFunc(displayMe);
         glutMainLoop();
