@@ -91,7 +91,10 @@ void DrawObjects() {
 	glTranslatef(-17,0,-2);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
 	glColor3f(0.7,0.8,0.3);
 	glTranslatef(-17,0,-500);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
+	glTranslatef(-17,0,-0);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
 	glTranslatef(-17,0,-1000);  glutSolidSphere(1, 20, 20); // -17,20.27,-46
+	glTranslatef(-27,10,0);  glutSolidSphere(2, 20, 20);
+	glTranslatef(+27,0,0);  glutSolidSphere(2, 20, 20);
 } 
 
 
