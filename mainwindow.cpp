@@ -15,6 +15,11 @@ MainWindow::MainWindow(QWidget *parent)
     buttonExit=new QPushButton(QObject::tr("Exit"),this);
     connect(buttonExit, SIGNAL(clicked()), this, SLOT(clickBtnExit()));
 
+    buttonDisabled=new QPushButton(QObject::tr("Disabled"),this);
+    connect(buttonDisabled, SIGNAL(clicked()), this, SLOT(clickBtnDisabled()));
+    buttonStyle =new QPushButton(QObject::tr(BTN_STYLE_TWO),this);
+    connect(buttonStyle, SIGNAL(clicked()), this, SLOT(clickBtnStyle()));
+
     labelTest = new QLabel(intToStringValue(DEFAULT_VALUE), this);
     labelTest->setFrameStyle(1);
     labelTest->setMinimumWidth(10);
@@ -29,7 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     spinBox = new QSpinBox(this);
     spinBox->setRange(MIN_VALUE,MAX_VALUE);
     spinBox->setValue(DEFAULT_VALUE);
-    spinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+   // spinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    spinBox->setFixedSize(spinBox->sizeHint());
     connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(spinBox_valueChanged(int)));
 
     slider = new QSlider(Qt::Horizontal ,this);
@@ -100,10 +106,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mapper, SIGNAL(mapped(QObject*)), this, SLOT(changeLayout(QObject*)));
     connect(combo, SIGNAL(activated(int)), sLayout, SLOT(setCurrentIndex(int)));
 
+
+    panelControll = new QFrame(this);
+    layoutPanelControll = new QHBoxLayout(panelControll);
+    layoutPanelControll->addLayout(hLayout);
+    layoutPanelControll->addLayout(buttonsLayout);
+
+    menuBtm = new QVBoxLayout();
+    menuBtm->addWidget(buttonExit);
+    menuBtm->addWidget(buttonStyle);
+    menuBtm->addWidget(buttonDisabled);
+
     mainLayout=new QHBoxLayout(this);
-    mainLayout->addLayout(hLayout);
-    mainLayout->addLayout(buttonsLayout);
-    mainLayout->addWidget(buttonExit);
+    mainLayout->addWidget(panelControll);
+    mainLayout->addLayout(menuBtm);
+
 
     changeLayout(hLayout);
 }
@@ -117,6 +134,7 @@ MainWindow::~MainWindow()
     delete sLayout;
     delete buttonsLayout;
     delete demoStackLayout;
+    delete menuBtm;
 }
 
 //
@@ -141,9 +159,9 @@ void MainWindow::changeLayout(QObject*pNewLayout) {
         sLayout->setStackingMode(QStackedLayout::StackAll);
     }
 
-    QLayoutItem * pItem= mainLayout->itemAt(0);
-    mainLayout->removeItem(pItem);
-    mainLayout->insertLayout(0,static_cast<QLayout *>(pNewLayout));
+    QLayoutItem * pItem= layoutPanelControll->itemAt(0);
+    layoutPanelControll->removeItem(pItem);
+    layoutPanelControll->insertLayout(0,static_cast<QLayout *>(pNewLayout));
     qDebug() << "chnage ";
 }
 
@@ -174,4 +192,22 @@ QString MainWindow::intToStringValue(int value) {
     return QString("%1").arg(value) ;
 }
 
+//
+void MainWindow::clickBtnDisabled() {
+    qDebug() << "panelControll";
+    panelControll->setDisabled(!!panelControll->isEnabled());
+}
+
+//
+void MainWindow::clickBtnStyle() {
+    qDebug() << QStyleFactory::keys();
+    if(buttonStyle->text() == BTN_STYLE_ONE) {
+        QApplication::setStyle(QStyleFactory::create("Windows"));
+        buttonStyle->setText(BTN_STYLE_TWO);
+    } else {
+        buttonStyle->setText(BTN_STYLE_ONE);
+        QApplication::setStyle(QStyleFactory::create("Motif"));
+    }
+
+}
 

@@ -14,6 +14,9 @@
 #include <QGridLayout>
 #include <QStackedLayout>
 #include <QComboBox>
+#include <QStyleFactory>
+#include <QApplication>
+#include <QFrame>
 
 class MainWindow : public QWidget
 {
@@ -23,6 +26,8 @@ class MainWindow : public QWidget
     const int MIN_VALUE = 0;
     const int MAX_VALUE = 100;
     const int DEFAULT_VALUE = 10;
+    const char* BTN_STYLE_ONE = "Windows style";
+    const char* BTN_STYLE_TWO = "Motif style";
 
 
     QHBoxLayout* hLayout;
@@ -30,7 +35,13 @@ class MainWindow : public QWidget
     QGridLayout* gLayout;
     QStackedLayout* sLayout;
     QVBoxLayout* demoStackLayout;
+    QVBoxLayout* menuBtm;
     QPushButton* buttonExit;
+    QPushButton* buttonDisabled;
+    QPushButton* buttonStyle;
+    QHBoxLayout* layoutPanelControll;
+    QFrame* panelControll;
+
     QLabel* labelTest;
     QLineEdit* lineEdit;
     QSpinBox* spinBox;
@@ -58,6 +69,8 @@ protected:
 
 protected Q_SLOTS:
     void clickBtnExit();
+    void clickBtnDisabled();
+    void clickBtnStyle();
     void spinBox_valueChanged(int);
     void slider_valueChanged(int);
     void lineEdit_textChanged(QString);
