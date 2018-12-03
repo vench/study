@@ -27,3 +27,6 @@ RESOURCES += \
     rc.qrc
 
 RC_ICONS = icon.ico
+
+FORMS += \
+    mainwindow.ui
