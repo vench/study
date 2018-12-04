@@ -2,10 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>MainWindow</name>
+    <message>
+        <source>MainWindow</source>
+        <translation type="unfinished">Главное окно</translation>
+    </message>
+    <message>
+        <source>Window title</source>
+        <translation type="unfinished">Заголовок окна</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>red</source>
-        <translation type="unfinished">красный</translation>
+        <translation type="obsolete">красный</translation>
     </message>
     <message>
         <source>Hello</source>
@@ -13,7 +24,7 @@
     </message>
     <message>
         <source>Hello world!</source>
-        <translation type="unfinished">Привет мир!!!, моя первая программа QT!!!</translation>
+        <translation type="obsolete">Привет мир!!!, моя первая программа QT!!!</translation>
     </message>
 </context>
 <context>
