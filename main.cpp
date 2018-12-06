@@ -1,5 +1,7 @@
 //  g++ testgl.cpp -o testgl -lglut -lGLU -lGL
 
+// http://citforum.ru/programming/opengl/opengl_06.shtml
+
 #include "all.h" 
 #include "func.h"
  
@@ -13,8 +15,8 @@ float
                 0, 0, 0, 1 
                 },  
 	dx=0.1f, dy=.0, dz = -10.0f, 
-	spec[] = {0.9f,0.9f,0.9f},
-	colorSun[] = {.7,.7,0,1},
+	spec[] = {0.6f,0.6f,0.6f},
+	colorSun[] = {1,1,0,1},
 	colorEarth[] = {0,0,1,.5},
 	colorMoon[] = {0.5,0.5,0.5,1},
 	colorEndl[] = {0,0,0,1},
@@ -24,6 +26,11 @@ short posX, posY,deep;
 bool leftButton, twoSide, normale=1,deepType=0,normaleLine=0, sunRun,dayRun,yaerRun,moonRun; 
 int maxDeep = 6;
 float speedTest = 1;
+// Lighting values
+float  whiteLight1[] = { 0.1f, 0.1f, 0.1f, 1.0f };
+float  whiteLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+float  sourceLight[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+float	 lightPos[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 //
 void addRotation(float angle, float x, float y, float z)
@@ -45,10 +52,18 @@ void displayMe(void) {
  
 	
 	glPushMatrix();
+	glLightfv(GL_LIGHT1,GL_POSITION,lightPos);
 	glRotatef(sun, 0,1,0);	// Вращаем систему координат
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorSun);
-	glutSolidSphere(1,20,20);	// Рисуем Солнце
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, colorEndl);
+	 
+	glMaterialfv(GL_FRONT, GL_EMISSION, colorSun);
+	glutSolidSphere(1,30,30);	// Рисуем Солнце
+	glLightfv(GL_LIGHT1,GL_POSITION,lightPos);
+	glMaterialfv(GL_FRONT, GL_EMISSION, colorEndl); 
+	
+	//////
+	
+	
+	//////
 	glPopMatrix();
         // sun end
         
@@ -95,40 +110,27 @@ void reshapeMe(int w, int h) {
 
 void initOpenGl() {
        
-	/*glShadeModel(GL_SMOOTH); //
+	glShadeModel(GL_SMOOTH); //
 	 
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_COLOR_MATERIAL); 
-	
-	glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
-        glMateriali(GL_FRONT, GL_SHININESS, 128); 
+	   
+ 
+        glEnable(GL_DEPTH_TEST); 
+
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glEnable(GL_LIGHT1);
+ 
+        glLightfv(GL_LIGHT0,GL_DIFFUSE,whiteLight1);
     
-        
-        glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);*/
-        
-        // 
-        float pos[4] = {0,0,0,1};
-        float dir[3] = {-1,-1,-1};
-
-    float mat_specular[] = {1,1,1,1 };
-        glEnable(GL_DEPTH_TEST);
-
-  glEnable(GL_COLOR_MATERIAL);
-
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
-
-    glLightfv(GL_LIGHT1, GL_POSITION, pos);
-    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, dir);
+        glLightfv(GL_LIGHT1,GL_DIFFUSE,sourceLight);
+	glLightfv(GL_LIGHT1,GL_POSITION,lightPos);
 
 
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); //Добавьте блеск всем телам:
-    glMaterialf(GL_FRONT, GL_SHININESS, 128.0);
+
+        glMaterialfv(GL_FRONT, GL_SPECULAR, spec); //Добавьте блеск всем телам:
+        glMaterialf(GL_FRONT, GL_SHININESS, 30.0);
 
 
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
@@ -144,10 +146,10 @@ void onIdle() {
         //addRotation(speedY * .1, 0, 1, 0);
         //addRotation(speedX * .1, 1, 0, 0);
         
-        if(sunRun) sun += 0.01; 
-        if(moonRun) moon += 2;
+        if(sunRun) sun += 0.1; 
+        if(moonRun) moon += 1;
         if(dayRun) day += 0.3;
-        if(yaerRun) year += 0.1;
+        if(yaerRun) year += 0.5;
         glutPostRedisplay(); 
 }
 
@@ -168,6 +170,12 @@ void onKeyboardFunc(byte key, int x, int y )
                 break;
                 case 'y':
                         yaerRun = !yaerRun;
+                break;
+                case 'z':
+                        dz -= speed;
+                break;
+                case 'x':
+                        dz += speed;
                 break;
         }
         
