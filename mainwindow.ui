@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>626</width>
-    <height>311</height>
+    <height>203</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="statusTip">
+   <string/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -21,22 +24,31 @@
        <widget class="QLineEdit" name="lineEdit">
         <property name="maximumSize">
          <size>
-          <width>50</width>
+          <width>70</width>
           <height>16777215</height>
          </size>
         </property>
+        <property name="statusTip">
+         <string>Edit text</string>
+        </property>
         <property name="inputMethodHints">
          <set>Qt::ImhNone</set>
+        </property>
+        <property name="readOnly">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>EditBuddy</string>
+         <string>&amp;EditBuddy</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>lineEdit</cstring>
         </property>
        </widget>
       </item>
@@ -51,19 +63,37 @@
        <widget class="QSpinBox" name="spinBox">
         <property name="minimumSize">
          <size>
-          <width>342</width>
-          <height>0</height>
+          <width>50</width>
+          <height>17</height>
          </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>70</width>
+          <height>27</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Spin box</string>
+        </property>
+        <property name="maximum">
+         <number>100</number>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
         <property name="text">
-         <string>SpinBuddy</string>
+         <string>&amp;SpinBuddy</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>spinBox</cstring>
         </property>
        </widget>
       </item>
@@ -80,18 +110,36 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QSlider" name="horizontalSlider">
+        <property name="toolTip">
+         <string>Scale %</string>
+        </property>
+        <property name="statusTip">
+         <string>Slider</string>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>5</number>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>SliderBuddy</string>
+         <string>&amp;SliderBuddy</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>horizontalSlider</cstring>
         </property>
        </widget>
       </item>
@@ -118,5 +166,90 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>horizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>267</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>44</x>
+     <y>48</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox</sender>
+   <signal>valueChanged(QString)</signal>
+   <receiver>lineEdit</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>44</x>
+     <y>93</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setTextEditLine(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>93</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>changeTextEditLine(int)</signal>
+   <receiver>horizontalSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>312</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>changeTextEditLine(int)</signal>
+  <slot>setTextEditLine(QString)</slot>
+ </slots>
 </ui>
