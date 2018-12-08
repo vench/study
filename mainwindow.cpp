@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->lineEdit->setValidator(new QIntValidator(0, 100));
-    ui->horizontalSlider->setToolTip(tr("Scale %"));
+    ui->spinBox->setValue(100);
 }
 
 MainWindow::~MainWindow()
@@ -17,8 +17,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::setTextEditLine(const QString & val) {
-
-    qDebug() << "xxxxx";
     emit changeTextEditLine(val.toInt());
 }
 

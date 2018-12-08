@@ -13,10 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mypicture.cpp
 
 HEADERS  += \
-    mainwindow.h
+    mainwindow.h \
+    mypicture.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
