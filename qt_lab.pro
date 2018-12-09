@@ -13,10 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    glass.cpp \
+    figure.cpp
 
 HEADERS  += \
-    mainwindow.h
+    mainwindow.h \
+    glass.h \
+    figure.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
@@ -27,3 +31,6 @@ RESOURCES += \
     rc.qrc
 
 RC_ICONS = icon.ico
+
+FORMS += \
+    mainwindow.ui
