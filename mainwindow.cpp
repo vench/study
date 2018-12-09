@@ -123,6 +123,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     changeLayout(hLayout);
+
+    // synch
+    spinBox->setValue(10);
+
 }
 
 //
