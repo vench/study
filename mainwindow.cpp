@@ -16,7 +16,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//
 void MainWindow::setTextEditLine(const QString & val) {
     emit changeTextEditLine(val.toInt());
+}
+
+//
+void MainWindow::showAboutDialog() {
+    qDebug() << "MainWindowMainWindowMainWindowMainWindow";
+    QMessageBox::about(this, tr("About window"), tr("Text about my programme.\nCopyright 2018"));
 }
 

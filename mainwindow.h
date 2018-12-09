@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QIntValidator>
 #include <QDebug>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +20,7 @@ public:
 
 public Q_SLOTS:
     void setTextEditLine(const QString &);
+    void showAboutDialog();
 
 Q_SIGNALS:
     void changeTextEditLine( int );
