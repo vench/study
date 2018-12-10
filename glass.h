@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QKeyEvent>
+#include <QThread>
 #include "figure.h"
 
 
@@ -25,8 +26,10 @@ class Glass : public QWidget
     uint v_cols;
     uint v_rows;
     bool gameOn;
+    bool tickScore;
     uint score;
     QVector<QColor> *glassArray;
+    int timerId;
 
     Figure *cur;
     Figure *next;
@@ -42,9 +45,15 @@ public:
     uint cols() const;
 
     void clearGlass();
+    inline int indexOf(uint i, uint j);
+    uint minRow(uint j);
+    void gameOver();
+    void scoreCount();
 
 signals:
     void signalGlassInit();
+    void signalUpdateScore(int);
+
 
 public slots:
     void slotGlassInit();

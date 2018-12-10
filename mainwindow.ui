@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Main Window</string>
   </property>
   <property name="windowIcon">
    <iconset resource="rc.qrc">
@@ -151,6 +151,7 @@
    <header>glass.h</header>
    <container>1</container>
    <slots>
+    <signal>signalUpdateScore(int)</signal>
     <slot>slotNewGame()</slot>
    </slots>
   </customwidget>
@@ -220,6 +221,22 @@
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widget</sender>
+   <signal>signalUpdateScore(int)</signal>
+   <receiver>lcdNumber</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>662</x>
+     <y>470</y>
     </hint>
    </hints>
   </connection>
