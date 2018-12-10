@@ -29,6 +29,9 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="FigureNew" name="widgetNewFigure" native="true"/>
+       </item>
       </layout>
      </widget>
     </item>
@@ -152,7 +155,17 @@
    <container>1</container>
    <slots>
     <signal>signalUpdateScore(int)</signal>
+    <signal>signalNewFigure(Figure)</signal>
     <slot>slotNewGame()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>FigureNew</class>
+   <extends>QWidget</extends>
+   <header>figurenew.h</header>
+   <container>1</container>
+   <slots>
+    <slot>slotUpdateFigure(Figure)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -237,6 +250,22 @@
     <hint type="destinationlabel">
      <x>662</x>
      <y>470</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widget</sender>
+   <signal>signalNewFigure(Figure)</signal>
+   <receiver>widgetNewFigure</receiver>
+   <slot>slotUpdateFigure(Figure)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>307</y>
     </hint>
    </hints>
   </connection>

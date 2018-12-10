@@ -26,6 +26,7 @@ public:
     Figure(uint i, uint j);
 
     void drawFigure(QPainter*);
+    void drawFigure(QPainter*, uint, uint);
     void newPos(uint i, uint j);
     uint posi();
     uint posj();

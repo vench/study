@@ -46,14 +46,16 @@ public:
 
     void clearGlass();
     inline int indexOf(uint i, uint j);
-    uint minRow(uint j);
+    uint minRow(uint i);
+    uint minLeft(uint i, uint j);
+    uint maxRight(uint i, uint j);
     void gameOver();
     void scoreCount();
 
 signals:
     void signalGlassInit();
     void signalUpdateScore(int);
-
+    void signalNewFigure(Figure);
 
 public slots:
     void slotGlassInit();

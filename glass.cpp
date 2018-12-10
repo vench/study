@@ -41,8 +41,8 @@ uint Glass::cols() const {
 //
 void Glass::slotGlassInit() {
     qDebug() << "signalGlassInit";
-    qDebug() << v_cols;
-    qDebug() << v_rows;
+   // qDebug() << v_cols;
+   // qDebug() << v_rows;
     glassArray = new QVector<QColor>();
     glassArray->resize(v_cols * v_rows);
     glassArray->fill(emptyCell);
@@ -76,12 +76,14 @@ void Glass::keyPressEvent(QKeyEvent*event) {
 
     switch(event->key()) {
         case Qt::Key_Left:
-            if( cur->posj() > 0)
+            if( cur->posj() > minLeft(cur->posi()+2, cur->posj())) {
                 cur->newPos(cur->posi(), cur->posj()-1);
+            }
         break;
         case Qt::Key_Right:
-            if(cur->posj()+1 < v_cols)
-                cur->newPos(cur->posi(), cur->posj()+1);
+            if(cur->posj() < maxRight(cur->posi()+2, cur->posj())) {
+                cur->newPos(cur->posi(), cur->posj() +1);
+            }
         break;
         case Qt::Key_Up:
             cur->changeUp();
@@ -101,6 +103,35 @@ void Glass::keyPressEvent(QKeyEvent*event) {
 }
 
 //
+uint Glass::minLeft(uint i, uint j) {
+    if(j == 0) {
+        return 0;
+    }
+    int x = j;
+    for(; x > 0; x --) {
+        int index =  indexOf(i, x-1);
+        if(glassArray->at(index) != emptyCell) {
+            break;
+        }
+    }
+    return x;
+}
+
+//
+uint Glass::maxRight(uint i, uint j) {
+    if(j + 1 == v_cols) {
+        return j;
+    }
+    for(; j < v_cols; j ++) {
+        int index =  indexOf(i, j+1);
+        if(glassArray->at(index) != emptyCell) {
+            break;
+        }
+    }
+    return j;
+}
+
+//
 void Glass::timerEvent(QTimerEvent *) {
 
     if(!gameOn) {
@@ -109,7 +140,7 @@ void Glass::timerEvent(QTimerEvent *) {
 
     if(!next) {
         next = new Figure(0, v_cols / 2);
-
+        emit signalNewFigure(*next);
     }
 
     if (tickScore) {
@@ -145,9 +176,6 @@ void Glass::timerEvent(QTimerEvent *) {
             cur->newPos(cur->posi()+1, cur->posj());
         }
     }
-
-
-
 
     repaint();
 }
@@ -200,6 +228,7 @@ void Glass::scoreCount() {
                 continue;
             }
 
+            // to left
             uint j = x+1;
             for(; j < v_cols; j ++) {
                 index = indexOf(y, j);
@@ -232,7 +261,37 @@ void Glass::scoreCount() {
 
                 tickScore = true;
                 repaint();
-                //scoreCount();
+                return;
+            }
+
+            // to top
+            uint i = y-1;
+            for(; i > 0; i --) {
+                index = indexOf(i, x);
+                if(a != glassArray->at(index)) {
+                    break;
+                }
+            }
+
+            if(y - i > 2) {
+                // shift
+                //qDebug() << "shift " << y - i;
+                int diff = y - i;
+                this->score += y - i - 2;
+                emit signalUpdateScore(this->score);
+
+                for(int y2 = y-diff; y2 >= 0; y2 --) {
+                    index = indexOf(y2, x);
+                    QColor b =glassArray->at(index);
+
+                    glassArray->replace(index, emptyCell);
+                    if(index+v_cols < v_cols * v_rows) {
+                        glassArray->replace(index+v_cols*diff, b);
+                    }
+                }
+
+                tickScore = true;
+                repaint();
                 return;
             }
         }

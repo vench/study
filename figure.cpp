@@ -6,7 +6,7 @@ Figure::Figure()
     int size = 3;
     colors.resize(size);
 
-    int s = 3;// sizeof(M_COLORS) / sizeof(QColor);
+    int s =  sizeof(M_COLORS) / sizeof(QColor);
     int start = rand() % s + 1;
     for(int i = 0; i < size; i ++) {
         int n = (i + start) % s;
@@ -37,10 +37,14 @@ uint Figure::posj() {
 
 //
 void Figure::drawFigure(QPainter* p) {
-    p->fillRect(pos_j * 30+1, pos_i * 30+1, 30-2, 30-2, QBrush(colors.at(0)));
-    p->fillRect(pos_j * 30+1, (pos_i+1) * 30+1, 30-2, 30-2, QBrush(colors.at(1)));
-    p->fillRect(pos_j * 30+1, (pos_i+2) * 30+1, 30-2, 30-2, QBrush(colors.at(2)));
-  //  qDebug() << "drawFigure" << pos_j << pos_i;
+    drawFigure(p, pos_j, pos_i);
+}
+
+//
+void Figure::drawFigure(QPainter* p, uint j, uint i) {
+    p->fillRect(j * 30+1, i * 30+1, 30-2, 30-2, QBrush(colors.at(0)));
+    p->fillRect(j * 30+1, (i+1) * 30+1, 30-2, 30-2, QBrush(colors.at(1)));
+    p->fillRect(j * 30+1, (i+2) * 30+1, 30-2, 30-2, QBrush(colors.at(2)));
 }
 
 //

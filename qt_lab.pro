@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     mainwindow.cpp \
     glass.cpp \
-    figure.cpp
+    figure.cpp \
+    figurenew.cpp
 
 HEADERS  += \
     mainwindow.h \
     glass.h \
-    figure.h
+    figure.h \
+    figurenew.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11
