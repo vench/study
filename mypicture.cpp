@@ -17,7 +17,7 @@ void MyPicture::paintEvent ( QPaintEvent *  ) {
     QPainter p(this);
     // qDebug() << "paintEvent";
     QPixmap px = picture->scaled(this->width()*scale, this->height()*scale);
-    p.drawPixmap(this->rect(), px);
+    p.drawPixmap(0,0, px);
 }
 
 //
