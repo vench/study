@@ -136,9 +136,9 @@ MainWindow::~MainWindow()
     delete vLayout;
     delete gLayout;
     delete sLayout;
-    delete buttonsLayout;
+    //delete buttonsLayout;
     delete demoStackLayout;
-    delete menuBtm;
+   // delete menuBtm;
 }
 
 //
