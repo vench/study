@@ -1,17 +1,69 @@
 //  g++ testgl.cpp -o testgl -lglut -lGLU -lGL
 
 #include "all.h" 
+#include "BmpLoader.h"
  
  
 float
-        speedX, speedY,
-        rotMatrix[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 }, // Стираем буфер Матрица, Стираем буфер суммирующая Стираем буфер малые Стираем буфер вращения
+        speedX, speedY, 
 	ax=11.1, ay=.2, // Углы поворота изображения вокруг осей X и Y
-	dx=0.1f, dy=.0, dz = -6.0f, // Сдвиги вдоль координат
+	//dx=0.1f, dy=.0, dz = -6.0f, // Сдвиги вдоль координат
 	speed = 1;
 short posX, posY; // Текущая позиция указателя мыши
-bool leftButton, twoSide; // Нажата левая кнопка мыши. Свет отражается от обеих поверхностей (лицевой и обратной)
+bool leftButton, twoSide, lighting, sphereMap, decal, colored; 
 
+float
+	rotX = 20, rotY = 30,
+	dx, dy, dz = -5, 
+	rotMatrix[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 },
+	green[] = { 0, 0.6, 0 },
+	white[] = { 0.9, 0.9, 0.9 },
+	sx, sy,
+	texX, texY, texZ;
+int  
+	filter = GL_NEAREST,
+	wrap = GL_REPEAT; 
+uint texture;
+
+const int MAX_PATH = 255;
+
+std::string* FileDlg()
+{  
+        FILE *f = popen("zenity --file-selection", "r");
+        if(!f) {
+                return 0;
+        }
+        char *arr = new char[1024];
+        fgets(arr, 1024, f);
+        fclose(f);   
+         
+	return new std::string(arr); 
+}
+
+//
+inline std::string& rtrim(std::string& s, const char* t = " \t\n\r\f\v") {
+    s.erase(s.find_last_not_of(t) + 1);
+    return s;
+}
+
+//
+bool LoadTexture(int id)
+{  
+	std::string *fn = FileDlg();  
+	std::cout << "LoadTexture: " << *fn  << fn->length() <<  std::endl; 
+	
+	if (!fn)
+		return false;
+	BmpLoader* p = new BmpLoader(rtrim(*fn));
+	if (!p)
+		throw "Error reading texture.\n";
+	glBindTexture(GL_TEXTURE_2D, id);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, p->sizeX, p->sizeY, GL_RGB, GL_UNSIGNED_BYTE, p->data);
+	
+	std::cout << "LoadTexture: x: "  << p->sizeX << ", y: "<< p->sizeY <<  std::endl;
+	
+	return true;
+}
 
 void addRotation(float angle, float x, float y, float z)
 {
@@ -24,37 +76,64 @@ void addRotation(float angle, float x, float y, float z)
 }
 
 //
-void displayMe(void) {
- 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-        
-         
-	glMatrixMode(GL_MODELVIEW); 
-	glLoadIdentity();
-	
-        glPushMatrix();
-	glTranslatef(dx, dy, dz);
-	//glRotatef(ay, 0, 1, 0);
-	//glRotatef(ax, 1, 0, 0); 
-        glMultMatrixf(rotMatrix); // Стираем буфер Вместо Стираем буфер поворотов Стираем буфер умножаем Стираем буфер на Стираем буфер матрицу, Стираем буфер вобравшую Стираем буфер все Стираем буфер вращения
-
-	glCallList(1);  
-        
-        glPopMatrix();
-        
-        //
-        glPushMatrix();
-	glTranslatef(-5, 0, -11);
-	glRotatef(13, 0, 1, 0);
-	glRotatef(12, 1, 0, 0); 
-
-	glCallList(1);  
-        
-        glPopMatrix();
-	glutSwapBuffers(); 
-	glFlush();
+void Print(float x, float y, char *format, ...) {
+	va_list args;
+	char buffer[200];
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	for (char* p = buffer; *p; p++)
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, *p);
+	glPopMatrix();
 }
 
+//
+void DrawInfo() {
+	glPushAttrib(GL_ENABLE_BIT);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+	
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, 3000, 0, 3000);
+	glMatrixMode(GL_MODELVIEW);
+	glColor3f(0.7f, 1, 0);
+	Print(80, 2800, "Decal: %d", decal);
+	Print(80, 2650, "Colored: %d", colored);
+	Print(80, 2500, "Lighting: %d", lighting);
+	Print(80, 200, "Wrapping: %s", (wrap == GL_REPEAT ? "Repeat" : "Clamp"));
+	Print(80, 60, "Filtering: %s", (filter == GL_LINEAR ? "Linear" : "Nearest"));
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopAttrib();
+	glColor3f(1, 1, 1); // base color
+}
+
+//
+void displayMe(void) {
+ 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+	
+	glPushMatrix();
+	DrawInfo();
+	glTranslated(dx, dy, dz);
+	glMultMatrixf(rotMatrix);
+	glCallList(1);
+	glPopMatrix();
+	glutSwapBuffers(); 
+}
+
+//
 void reshapeMe(int w, int h) {
         std::cout << "Reshape" << std::endl; 
         
@@ -66,24 +145,45 @@ void reshapeMe(int w, int h) {
             
 }
 
-void initOpenGl() {
-        glClearColor(1, 1, 1, 0);
-	glShadeModel(GL_SMOOTH); 
-	glEnable(GL_DEPTH_TEST); // проверка на порядок !
+
+void SetLight()
+{
+	if (lighting)
+	{
+		glEnable(GL_LIGHTING);
+		glEnable(GL_COLOR_MATERIAL);
+	}
+	else
+		glDisable(GL_LIGHTING);
+}
+
+
+//
+void initOpenGl() { 
+	glClearColor(0, 0, 0, 0);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_COLOR_MATERIAL); 
-	DrawScene();
+	SetLight();
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_TEXTURE_2D);
+	if (LoadTexture(1))
+		DrawScene();
 }
+
 
 //
 void onKeyboardFunc(unsigned char key, int x, int y )
 {  
         switch(key) 
 	{
+	case 'c': colored = !colored; break;
+	case 'd': decal = !decal; break;
+	case 's': sphereMap = !sphereMap; break;
+	case 'l': lighting = !lighting; break;
+	case 'o': LoadTexture(1); break;
+	
 	case '+': dz += 0.1; break;
 	case '-': dz -= 0.1; break;
 	case 27: exit(0); break;
@@ -159,10 +259,9 @@ void onMouseMove(int x, int y)
 	}
 	else
 	{
-	        // Вычислите степень удаления или приближения и измените величину dz пропорционально смещению мыши
-		dz += (speedY + speedX) / 60.;
+	      dz += (speedY + speedX) / 60.;
 	}
-	posX = x;	// Запоминаем новые координаты мыши
+	posX = x;
 	posY = y;
 	glutPostRedisplay();
 }

@@ -4,7 +4,10 @@
 //#include <GL/glu.h> 
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h> 
+#include <string.h>
 #include <math.h>
+#include <stdarg.h>
 #include "func.h" 
 
 
