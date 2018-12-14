@@ -18,7 +18,7 @@ float
 	rotMatrix[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 },
 	green[] = { 0, 0.6, 0 },
 	white[] = { 0.9, 0.9, 0.9 },
-	sx, sy,
+	sx, sy, translX,translY,translZ,
 	texX, texY, texZ;
 int  
 	filter = GL_NEAREST,
@@ -112,7 +112,7 @@ void DrawInfo() {
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopAttrib();
-	glColor3f(1, 1, 1); // base color
+	
 }
 
 //
@@ -120,12 +120,15 @@ void displayMe(void) {
  
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        if(colored) {
+        //if(colored) {
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
 	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
 	        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
 	        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
-	}
+	//}
+	
+	
+	
 	//
 	if(decal) {
 	        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
@@ -135,12 +138,12 @@ void displayMe(void) {
 	
 	//glTexGeni
 	if(sphereMap) {
-	glEnable(GL_TEXTURE_GEN_S);
- glEnable(GL_TEXTURE_GEN_T);
+	        glEnable(GL_TEXTURE_GEN_S);
+                 glEnable(GL_TEXTURE_GEN_T);
 	        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
                 glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
                 glDisable(GL_TEXTURE_GEN_S);
- glDisable(GL_TEXTURE_GEN_T);
+                 glDisable(GL_TEXTURE_GEN_T);
 	} else {}
 	//
 	
@@ -150,11 +153,18 @@ void displayMe(void) {
         glTranslatef(0.5, 0.5, 0.0);
         glRotatef(angle, 0.0, 0.0, 1.0);
         glTranslatef(-0.5, -0.5, 0.0);
+        glTranslatef(translX, translY, translZ);
 	glMatrixMode(GL_MODELVIEW);
 	// ex
 	
 	glPushMatrix();
 	DrawInfo();
+	//
+	if(!colored) {
+	      glColor3f(1, 1, 1); // base color
+	     //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);   
+	     //glBlendFunc(GL_ONE, GL_ZERO);
+	}
 	glTranslated(dx, dy, dz);
 	glMultMatrixf(rotMatrix);
 	glCallList(1);
@@ -235,7 +245,12 @@ void onKeyboardFunc(unsigned char key, int x, int y )
 	
 	case 'q': angle += 1; break;
 	case 'a': angle -= 1; break;
-	
+	case 't': translX -= 0.01; break;
+	case 'y': translX += 0.01; break;
+	case 'u': translY -= 0.01; break;
+	case 'i': translY += 0.01; break;
+	case 'g': translZ -= 0.01; break;
+	case 'h': translZ += 0.01; break;
 	case '+': dz += 0.1; break;
 	case '-': dz -= 0.1; break;
 	case 27: exit(0); break;
@@ -287,9 +302,7 @@ void onMouse(int button, int state, int x, int y){
 	      glutIdleFunc(0);   
 	}
 	else
-	{
-	      
-             // std::cout << "bbbbbx: " << speedY << speedX << std::endl;
+	{ 
               if(fabs(speedY) > 1. || fabs(speedX) > 1.) {
                 glutIdleFunc(onIdle);
               }       
