@@ -16,15 +16,17 @@ float
                 },  
 	dx=0.1f, dy=.0, dz = -10.0f, 
 	spec[] = {0.6f,0.6f,0.6f},
+	specPos1[] = {0.1f,0.1f,0.1f},
 	colorSun[] = {1,1,0,1},
 	colorEarth[] = {0,0,1,.5},
 	colorMoon[] = {0.5,0.5,0.5,1},
 	colorEndl[] = {0,0,0,1},
+	
 	speed = .1;
 	
 short posX, posY,deep; 
 bool leftButton, twoSide, normale=1,deepType=0,normaleLine=0, sunRun,dayRun,yaerRun,moonRun; 
-int maxDeep = 6;
+//int maxDeep = 6;
 float speedTest = 1;
 // Lighting values
 float  whiteLight1[] = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -110,7 +112,8 @@ void reshapeMe(int w, int h) {
 
 void initOpenGl() {
        
-	glShadeModel(GL_SMOOTH); //
+	//glShadeModel(GL_SMOOTH); //
+	glShadeModel(GL_FLAT);
 	 
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
@@ -126,7 +129,7 @@ void initOpenGl() {
     
         glLightfv(GL_LIGHT1,GL_DIFFUSE,sourceLight);
 	glLightfv(GL_LIGHT1,GL_POSITION,lightPos);
-
+        glLightfv(GL_LIGHT1,GL_SPECULAR,specPos1);
 
 
         glMaterialfv(GL_FRONT, GL_SPECULAR, spec); //Добавьте блеск всем телам:
