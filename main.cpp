@@ -7,7 +7,7 @@
 float
         speedX, speedY, 
 	ax=11.1, ay=.2, // Углы поворота изображения вокруг осей X и Y
-	//dx=0.1f, dy=.0, dz = -6.0f, // Сдвиги вдоль координат
+	angle =0,
 	speed = 1;
 short posX, posY; // Текущая позиция указателя мыши
 bool leftButton, twoSide, lighting, sphereMap, decal, colored; 
@@ -47,10 +47,11 @@ inline std::string& rtrim(std::string& s, const char* t = " \t\n\r\f\v") {
 }
 
 //
-bool LoadTexture(int id)
+bool LoadTexture(int id, bool def = true)
 {  
-	std::string *fn = FileDlg();  
-	std::cout << "LoadTexture: " << *fn  << fn->length() <<  std::endl; 
+	std::string *fn = def ? 
+	        new std::string("/home/vench/dev/opengl/image/test.bmp") : FileDlg();  
+	//std::cout << "LoadTexture: " << *fn  << fn->length() <<  std::endl; 
 	
 	if (!fn)
 		return false;
@@ -60,7 +61,7 @@ bool LoadTexture(int id)
 	glBindTexture(GL_TEXTURE_2D, id);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, p->sizeX, p->sizeY, GL_RGB, GL_UNSIGNED_BYTE, p->data);
 	
-	std::cout << "LoadTexture: x: "  << p->sizeX << ", y: "<< p->sizeY <<  std::endl;
+	//std::cout << "LoadTexture: x: "  << p->sizeX << ", y: "<< p->sizeY <<  std::endl;
 	
 	return true;
 }
@@ -76,7 +77,7 @@ void addRotation(float angle, float x, float y, float z)
 }
 
 //
-void Print(float x, float y, char *format, ...) {
+void Print(float x, float y, const char *format, ...) {
 	va_list args;
 	char buffer[200];
 	va_start(args, format);
@@ -119,10 +120,38 @@ void displayMe(void) {
  
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+        if(colored) {
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+	        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+	        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+	}
+	//
+	if(decal) {
+	        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	} else {
+	        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	}
+	
+	//glTexGeni
+	if(sphereMap) {
+	glEnable(GL_TEXTURE_GEN_S);
+ glEnable(GL_TEXTURE_GEN_T);
+	        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+                glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+                glDisable(GL_TEXTURE_GEN_S);
+ glDisable(GL_TEXTURE_GEN_T);
+	} else {}
+	//
+	
+	// x
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+        glTranslatef(0.5, 0.5, 0.0);
+        glRotatef(angle, 0.0, 0.0, 1.0);
+        glTranslatef(-0.5, -0.5, 0.0);
+	glMatrixMode(GL_MODELVIEW);
+	// ex
 	
 	glPushMatrix();
 	DrawInfo();
@@ -178,17 +207,41 @@ void onKeyboardFunc(unsigned char key, int x, int y )
 {  
         switch(key) 
 	{
-	case 'c': colored = !colored; break;
+	case 'c': colored = !colored; 
+	        /*if(colored) {
+	                glEnable(GL_TEXTURE_2D);
+	        } else {
+	                glDisable(GL_TEXTURE_2D);
+	        }  */      
+	break;
 	case 'd': decal = !decal; break;
 	case 's': sphereMap = !sphereMap; break;
-	case 'l': lighting = !lighting; break;
-	case 'o': LoadTexture(1); break;
+	case 'l': lighting = !lighting; SetLight(); break;
+	case 'o': LoadTexture(1, false); break;
+	case 'w': 
+	        if(wrap == GL_REPEAT) {
+	                wrap = GL_CLAMP;
+	        } else {
+	                wrap = GL_REPEAT;
+	        }
+	 break;
+	 case 'f': 
+	        if(filter == GL_LINEAR){
+	                filter = GL_NEAREST; //Nearest
+	        } else {
+	                filter = GL_LINEAR;
+	        }
+	 break;
+	
+	case 'q': angle += 1; break;
+	case 'a': angle -= 1; break;
 	
 	case '+': dz += 0.1; break;
 	case '-': dz -= 0.1; break;
 	case 27: exit(0); break;
 	case '2': glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (twoSide = !twoSide)); break;
 	}
+	
 	glutPostRedisplay();
 } 
 
