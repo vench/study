@@ -3,6 +3,7 @@
 // http://citforum.ru/programming/opengl/opengl_06.shtml
 
 #include "all.h" 
+#include "BmpLoader.h"
 #include "func.h"
  
 float sun, year, day, moon;		// Углы вращения
@@ -14,7 +15,7 @@ float
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
                 },  
-	dx=0.1f, dy=.0, dz = -10.0f, 
+	dx=0.1f, dy=.0, dz = -40.0f, 
 	spec[] = {0.6f,0.6f,0.6f},
 	specPos1[] = {0.1f,0.1f,0.1f},
 	colorSun[] = {1,1,0,1},
@@ -22,7 +23,7 @@ float
 	colorMoon[] = {0.5,0.5,0.5,1},
 	colorEndl[] = {0,0,0,1},
 	
-	speed = .1;
+	speed = .1; 
 	
 short posX, posY,deep; 
 bool leftButton, twoSide, normale=1,deepType=0,normaleLine=0, sunRun,dayRun,yaerRun,moonRun; 
@@ -33,6 +34,21 @@ float  whiteLight1[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 float  whiteLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 float  sourceLight[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 float	 lightPos[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+Point3D center, eye, up;
+
+//
+bool LoadTexture(int id, const char *fn) { 
+        if (!fn)
+		return false;
+	BmpLoader* p = new BmpLoader(fn);
+	if (!p)
+		throw "Error reading texture.\n";
+	glBindTexture(GL_TEXTURE_2D, id);
+        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, p->sizeX, p->sizeY, GL_RGB, GL_UNSIGNED_BYTE, p->data);
+        std::cout <<  p->sizeX << " " << p->sizeY << std::endl;
+        return true;
+}
 
 //
 void addRotation(float angle, float x, float y, float z)
@@ -48,23 +64,31 @@ void addRotation(float angle, float x, float y, float z)
 //
 void displayMe(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glPushMatrix();	// Запоминаем единичное значение ММ в стеке
+        
+        // text
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_LINEAR);
+         
+        
+        
+	glPushMatrix();	
 	glTranslated(dx, dy, dz);
-	glMultMatrixf(rotMatrix); // Изменяем ММ
- 
+	glMultMatrixf(rotMatrix); // Изменяем ММ 
+	// gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z); 
 	
 	glPushMatrix();
-	glLightfv(GL_LIGHT1,GL_POSITION,lightPos);
+	glLightfv(GL_LIGHT1,GL_POSITION,lightPos); // TODO change pos
 	glRotatef(sun, 0,1,0);	// Вращаем систему координат
 	 
 	glMaterialfv(GL_FRONT, GL_EMISSION, colorSun);
-	glutSolidSphere(1,30,30);	// Рисуем Солнце
+	//glutWireSphere(1,30,30);	// Рисуем Солнце
+	glCallList(1);
 	glLightfv(GL_LIGHT1,GL_POSITION,lightPos);
 	glMaterialfv(GL_FRONT, GL_EMISSION, colorEndl); 
-	
-	//////
-	
-	
+	 
 	//////
 	glPopMatrix();
         // sun end
@@ -74,13 +98,15 @@ void displayMe(void) {
 	glPushMatrix();
 	 
 	glRotatef(year, 0, 1, 0);
-	glTranslatef(4, 0, 0); 
+	glTranslatef(14, 0, 0); 
 	glPushMatrix(); 
 	 
 	glRotatef(day, 0, 1, 0);
 	
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, colorEarth);
-	glutSolidSphere(0.3,20,20); // Рисуем Землю
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, colorEarth); 
+	////gluSphere(sphere, 0.3,20,20);
+	//glutWireSphere(0.3,20,20); // Рисуем Землю
+	glCallList(2);
 	
 	glPopMatrix();	
 	 
@@ -93,9 +119,7 @@ void displayMe(void) {
 	// end moon
 	
 	glPopMatrix();
-	// earth end 
-	
-	
+	// earth end  
 	
 	glutSwapBuffers(); 
 }
@@ -115,12 +139,13 @@ void initOpenGl() {
 	//glShadeModel(GL_SMOOTH); //
 	glShadeModel(GL_FLAT);
 	 
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	   
- 
-        glEnable(GL_DEPTH_TEST); 
-
+	glCullFace(GL_BACK);   
+        glEnable(GL_DEPTH_TEST);  
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_COLOR_MATERIAL);
+        glDisable(GL_CULL_FACE);
+        glEnable(GL_TEXTURE_2D); 
+        
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
         glEnable(GL_LIGHT1);
@@ -138,7 +163,12 @@ void initOpenGl() {
 
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
        
-        DrawScene();
+       
+        //glClearColor(0, 0, 0, 0);  
+        LoadTexture(1, "/home/vench/dev/opengl/tx/sun.bmp");
+        LoadTexture(2, "/home/vench/dev/opengl/tx/earth.bmp") ;
+        LoadTexture(3, "/home/vench/dev/opengl/tx/moon.bmp") ;
+        DrawScene();         
 }
  
 

@@ -16,11 +16,31 @@ uint nRings = 100,
 //
 void DrawScene()
 { 
-        glNewList(1, GL_COMPILE);
-	DrawPoints();
-	DrawPlane();
-	DrawObjects();
-	glEndList();
+          GLUquadricObj *sphere=NULL;
+          sphere = gluNewQuadric();
+          gluQuadricDrawStyle(sphere, GLU_FILL);
+          gluQuadricTexture(sphere, true);
+          gluQuadricNormals(sphere, GLU_SMOOTH);
+          //Making a display list 
+          glNewList(1, GL_COMPILE);
+          glBindTexture(GL_TEXTURE_2D, 1);
+          gluSphere(sphere, 10.0, 50, 50);
+          glEndList();
+          
+          //
+          glNewList(2, GL_COMPILE);
+          glBindTexture(GL_TEXTURE_2D, 2);
+          gluSphere(sphere, 0.2, 20, 20);
+          glEndList();
+          
+          //
+          glNewList(3, GL_COMPILE);
+          glBindTexture(GL_TEXTURE_2D, 3);
+          gluSphere(sphere, 0.025, 20, 20);
+          glEndList();
+          
+          gluDeleteQuadric(sphere);
+           
 }
  
 //
