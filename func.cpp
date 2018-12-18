@@ -22,21 +22,28 @@ void DrawScene()
           gluQuadricTexture(sphere, true);
           gluQuadricNormals(sphere, GLU_SMOOTH);
           //Making a display list 
+          // sun
           glNewList(1, GL_COMPILE);
           glBindTexture(GL_TEXTURE_2D, 1);
           gluSphere(sphere, 10.0, 50, 50);
           glEndList();
           
-          //
+          //earth
           glNewList(2, GL_COMPILE);
           glBindTexture(GL_TEXTURE_2D, 2);
           gluSphere(sphere, 0.2, 20, 20);
           glEndList();
           
-          //
+          // moon
           glNewList(3, GL_COMPILE);
           glBindTexture(GL_TEXTURE_2D, 3);
-          gluSphere(sphere, 0.025, 20, 20);
+          gluSphere(sphere, 0.1, 20, 20);
+          glEndList();
+         
+          // mars
+          glNewList(4, GL_COMPILE);
+          glBindTexture(GL_TEXTURE_2D, 4);
+          gluSphere(sphere, 0.15, 20, 20);
           glEndList();
           
           gluDeleteQuadric(sphere);

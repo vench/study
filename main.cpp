@@ -6,7 +6,7 @@
 #include "BmpLoader.h"
 #include "func.h"
  
-float sun, year, day, moon;		// Углы вращения
+float sun, year, day, moon, mars;		// Углы вращения
 float
         speedX, speedY,
         rotMatrix[16] = { 
@@ -15,7 +15,7 @@ float
                 0, 0, 1, 0, 
                 0, 0, 0, 1 
                 },  
-	dx=0.1f, dy=.0, dz = -40.0f, 
+	dx=0.1f, dy=.0, dz = -60.0f, 
 	spec[] = {0.6f,0.6f,0.6f},
 	specPos1[] = {0.1f,0.1f,0.1f},
 	colorSun[] = {1,1,0,1},
@@ -98,7 +98,7 @@ void displayMe(void) {
 	glPushMatrix();
 	 
 	glRotatef(year, 0, 1, 0);
-	glTranslatef(14, 0, 0); 
+	glTranslatef(20, 0, 0); 
 	glPushMatrix(); 
 	 
 	glRotatef(day, 0, 1, 0);
@@ -114,12 +114,30 @@ void displayMe(void) {
 	glTranslatef(1, 0,  0); 
 	
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, colorMoon);
-	glutSolidSphere(0.08,20,20);
+	//glutSolidSphere(0.08,20,20);
+	glCallList(3);
 	glPopMatrix();
 	// end moon
 	
+	
+	// mars
+	glPushMatrix();
+	glRotatef(mars, 0, 1, 0);
+	glTranslatef(30, 0, 0); 
+	glPushMatrix();  
+	glRotatef(day, 0, 1, 0); 
+       // glMaterialfv(GL_FRONT, GL_DIFFUSE, colorEarth);  
+	glCallList(4);
+	glPopMatrix();
+	glPopMatrix();
+	// end mars
+	/**/
+	
+	
 	glPopMatrix();
 	// earth end  
+	
+	
 	
 	glutSwapBuffers(); 
 }
@@ -168,6 +186,7 @@ void initOpenGl() {
         LoadTexture(1, "/home/vench/dev/opengl/tx/sun.bmp");
         LoadTexture(2, "/home/vench/dev/opengl/tx/earth.bmp") ;
         LoadTexture(3, "/home/vench/dev/opengl/tx/moon.bmp") ;
+        LoadTexture(4, "/home/vench/dev/opengl/tx/mars.bmp") ;
         DrawScene();         
 }
  
@@ -179,10 +198,10 @@ void onIdle() {
         //addRotation(speedY * .1, 0, 1, 0);
         //addRotation(speedX * .1, 1, 0, 0);
         
-        if(sunRun) sun += 0.1; 
-        if(moonRun) moon += 1;
-        if(dayRun) day += 0.3;
-        if(yaerRun) year += 0.5;
+        if(sunRun) sun += 0.7; 
+        if(moonRun) moon += 3;
+        if(dayRun) day += 0.5;
+        if(yaerRun) { year += 0.6; mars += 0.5; }
         glutPostRedisplay(); 
 }
 
@@ -190,6 +209,7 @@ void onIdle() {
 //
 void onKeyboardFunc(byte key, int x, int y )
 {       
+   std::cout << key << std::endl;
 
         switch(key){
                 case 's':
@@ -205,11 +225,13 @@ void onKeyboardFunc(byte key, int x, int y )
                         yaerRun = !yaerRun;
                 break;
                 case 'z':
+                case '-':
                         dz -= speed;
                 break;
                 case 'x':
+                case '+':
                         dz += speed;
-                break;
+                break; 
         }
         
         if(sunRun || dayRun || moonRun || yaerRun) {
@@ -224,6 +246,7 @@ void onKeyboardFunc(byte key, int x, int y )
 
 //
 void onSpecialKey(int key, int x, int y ){
+     
         switch(key) {
 	        case 102:
 	                dx += speed;
