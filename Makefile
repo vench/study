@@ -4,10 +4,10 @@ mdir:
 	mkdir -p build
 
 func: func.cpp 
-	g++ -c -Wall func.cpp -o build/func.o
+	g++ -std=c++11 -c -Wall func.cpp -o build/func.o
 	
 main:   mdir func 
-	g++ main.cpp build/func.o -o build/$(BINARY) -lglut -lGLU -lGL
+	g++ -std=c++11 main.cpp build/func.o -o build/$(BINARY)
 	 
         
 clean:
