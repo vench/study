@@ -15,7 +15,13 @@ void test(void);
 void printSq(float *A, int n);  
  
 // 
-int det(float *A, int n); 
+float det(float *A, int n); 
+
+//
+float det1(float *A, int n);
+
+//
+int rang(float *A, int n);
 
 //
 class M {
@@ -75,18 +81,20 @@ public:
                 }   
         }
         
-        M& operator *(int a) { 
+        M operator *(int a) { 
+                M C(*this);
                 for(int i = 0; i < cols * rows; i ++) {
-                        m[i] *= a; 
+                        C.m[i] *= a; 
                 }
-                return *this;
+                return C;
         }
         
-        M& operator +(int a) { 
+        M operator +(int a) { 
+                M C(*this);
                 for(int i = 0; i < cols * rows; i ++) {
-                        m[i] += a; 
+                        C.m[i] += a; 
                 }
-                return *this;
+                return C;
         }
         
         M& operator =(const M& a) { 
@@ -118,6 +126,32 @@ public:
                 r.m = m;
                 r.offset = index * cols;
                 return r;
+        }
+        
+        // methods
+        bool isSqure() {
+                return cols == rows;
+        }
+        
+        float det() {
+                if(!isSqure()) {
+                        return 0.0;
+                }
+                
+                return ::det(m, cols);
+        }
+        
+        int rang() {
+                if(!isSqure()) {
+                        return 0.0;
+                }
+                
+                return ::rang(m, cols);
+        }
+        
+        M& T() {
+                // TODO
+                return *this;
         }
 };
 

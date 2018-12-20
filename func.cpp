@@ -15,15 +15,20 @@ void test(void) {
 		0,0,0,0,0,7,3,1,5,
 		0,0,0,0,0,7,2,1,6,
 		0,0,0,7,0,0,7,1,7
-                };
+                }; 
+        /*float A[] = {
+                3,3,-1,
+		4,1,3,
+		1,-2,-2,
+                };*/
         
-    
-       std::cout << det(A, 9) << " ok: "  << std::endl;
+    int s= 9;
+       std::cout << det(A, s) << " ok: "  << std::endl;
        
-       int s= 9;
+       
        M a(A, s,s);
-      // M z = a+1;
-       std::cout << a[1][0]  << std::endl;
+       M z = a+2;
+       std::cout << a[1][1] << " - "  << z.det()  <<  " " << det1(A, s) << std::endl;
 }
 
 //
@@ -39,9 +44,47 @@ void printSq(float *A, int n) {
 }
 
 
+//
+int rang(float *A, int n, int m) {
+        for(int i = 0; i < n; i ++) {
+                for(int j = 0; j < m; j ++) {
+                        int index = i * m + j;
+                        
+                }
+        }
+        return 0;
+}
 
 //
-int det(float *A, int n) {
+float det1(float *A, int n) {
+        if(n != 3) {
+                return 0.0;
+        }
+        float p=0.0,m = 0.0, pa,pm;
+        int ia,im;
+        for(int i = 0; i < n; i ++) {
+                pa = 0.0;
+                pm = 0.0;
+                for(int j = 0; j < n; j ++) {
+                        ia = j * n + ((j+i)%n);
+                        im = j * n + ((n-1-j-i+n)%n); 
+                        if(j == 0) {
+                                pa = A[ia];
+                                pm = -A[im];
+                        } else {
+                                pa *= A[ia];
+                                pm *= A[im];
+                        }                           
+                }
+                p += pa;
+                m -= pm;
+        }
+        
+        return p - m;
+}
+
+//
+float det(float *A, int n) {
       //printSq(A, n)  ;
       if( n < 1) {
                 return 0;
