@@ -4,7 +4,7 @@
 void test(void) {
        
         std::cout << "Test..." << std::endl;
-        
+        /*
         float A[] = {
                 2,0,0,0,0,0,0,1,3,
 		9,2,1,0,0,0,0,1,3,
@@ -15,20 +15,28 @@ void test(void) {
 		0,0,0,0,0,7,3,1,5,
 		0,0,0,0,0,7,2,1,6,
 		0,0,0,7,0,0,7,1,7
-                }; 
+                }; */
         /*float A[] = {
-                3,3,-1,
-		4,1,3,
-		1,-2,-2,
-                };*/
-        
-    int s= 9;
+                3,      3,      -1, 2,
+		4,      1,       3, 0,
+		1,     -2,      -2, 5,
+		1,     -2,      -1, 5
+                };
+        */
+        float A[] = { 
+                1,1,3,
+                1,1,3,
+                1,1,3,
+                };
+        int s= 3;
        std::cout << det(A, s) << " ok: "  << std::endl;
        
        
        M a(A, s,s);
        M z = a+2;
-       std::cout << a[1][1] << " - "  << z.det()  <<  " " << det1(A, s) << std::endl;
+       std::cout << a[1][1] << " - "  << z.det()  <<  " " << std::endl;
+       std::cout << "" << std::endl;
+       rang(A, s, s);
 }
 
 //
@@ -46,25 +54,54 @@ void printSq(float *A, int n) {
 
 //
 int rang(float *A, int n, int m) {
-        for(int i = 0; i < n; i ++) {
-                for(int j = 0; j < m; j ++) {
+        int r = n < m ? m : n;
+        for(int i = 1; i < n; i ++) {
+                for(int j = 0; j < i; j ++) {
                         int index = i * m + j;
-                        
+                        if(A [index] == 0) { // TODO ?
+                                continue;
+                        } 
+                        float x = ZERO;
+                        int z;
+                        for(z = j; z < n; z ++) {
+                                int ind = z * m + j;
+                                if(z == i || A[ind] == 0) {
+                                        continue;
+                                }
+                                x = - A[index] / A[ind];
+                                break;
+                        }
+                        if (x != ZERO) {
+                              for(int w = 0; w < m; w ++) {
+                                        int ind = z * m + w;
+                                        int ind1 = i * m + w;
+                                        A[ind1] += x * A[ind];
+                              }  
+                             // std::cout  << "X: " << x  << std::endl;
+                             // printSq(A, n);
+                             r --;   
+                        }
                 }
+              // 
+              
         }
-        return 0;
+        
+        
+        
+        
+        return r;
 }
 
 //
 float det1(float *A, int n) {
         if(n != 3) {
-                return 0.0;
+                return ZERO;
         }
-        float p=0.0,m = 0.0, pa,pm;
+        float p=ZERO,m = ZERO, pa,pm;
         int ia,im;
         for(int i = 0; i < n; i ++) {
-                pa = 0.0;
-                pm = 0.0;
+                pa = ZERO;
+                pm = ZERO;
                 for(int j = 0; j < n; j ++) {
                         ia = j * n + ((j+i)%n);
                         im = j * n + ((n-1-j-i+n)%n); 

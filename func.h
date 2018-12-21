@@ -9,6 +9,9 @@
 
 
 //
+const float ZERO = 0.0;
+
+//
 void test(void);
  
 //
@@ -21,7 +24,7 @@ float det(float *A, int n);
 float det1(float *A, int n);
 
 //
-int rang(float *A, int n);
+int rang(float *A, int n, int m);
 
 //
 class M {
@@ -146,7 +149,7 @@ public:
                         return 0.0;
                 }
                 
-                return ::rang(m, cols);
+                return ::rang(m, rows, cols);
         }
         
         M& T() {
