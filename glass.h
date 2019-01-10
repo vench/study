@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include <QThread>
 #include "figure.h"
+#include "snake.h"
 
 
 
@@ -33,6 +34,7 @@ class Glass : public QWidget
 
     Figure *cur;
     Figure *next;
+    Snake *snake;
 
 public:
     explicit Glass(QWidget *parent = 0);
@@ -50,6 +52,7 @@ public:
     uint minLeft(uint i, uint j);
     uint maxRight(uint i, uint j);
     void gameOver();
+    bool isGameOver();
     void scoreCount();
 
 signals:

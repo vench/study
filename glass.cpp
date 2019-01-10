@@ -5,6 +5,7 @@ Glass::Glass(QWidget *parent) : QWidget(parent)
     glassArray = nullptr;
     cur = nullptr;
     next = nullptr;
+    snake = nullptr;
     this->timerInterval = 550;
 
     connect(this, SIGNAL(signalGlassInit()), this, SLOT(slotGlassInit()), Qt::QueuedConnection);
@@ -17,6 +18,10 @@ Glass::~Glass() {
         delete glassArray;
     }
     glassArray = nullptr;
+    if(snake) {
+        delete snake;
+        snake = nullptr;
+    }
 }
 
 //
@@ -59,6 +64,7 @@ void Glass::slotNewGame() {
     glassArray->fill(emptyCell);
     this->setFocus();
     this->score = 0;
+    snake = new Snake();
     timerId = this->startTimer(this->timerInterval);
 
     qDebug() << "slotNewGame";
@@ -66,39 +72,20 @@ void Glass::slotNewGame() {
 
 //
 void Glass::keyPressEvent(QKeyEvent*event) {
-    if(!gameOn) {
-        return;
-    }
-
-    //
-    if(!cur) {
+    if(!gameOn || !snake) {
         return;
     }
 
     switch(event->key()) {
         case Qt::Key_Left:
-            if( cur->posj() > minLeft(cur->posi()+2, cur->posj())) {
-                cur->newPos(cur->posi(), cur->posj()-1);
-            }
-        break;
         case Qt::Key_Right:
-            if(cur->posj() < maxRight(cur->posi()+2, cur->posj())) {
-                cur->newPos(cur->posi(), cur->posj() +1);
-            }
-        break;
         case Qt::Key_Up:
-            cur->changeUp();
-        break;
         case Qt::Key_Down:
-            cur->changeDown();
+            snake->setDirection((Qt::Key)event->key());
         break;
         case Qt::Key_Space:
 
-            if(minRow(cur->posj()) < 4) {
-                this->gameOver();
-            } else {
-                cur->newPos(minRow(cur->posj())-3, cur->posj());
-            }
+
         break;
         default:
             QWidget::keyPressEvent(event);
@@ -144,73 +131,39 @@ void Glass::timerEvent(QTimerEvent *) {
         return;
     }
 
-    if(!next) {
-        next = new Figure(0, v_cols / 2);
-        emit signalNewFigure(*next);
-    }
-
     if (tickScore) {
         scoreCount();
         return;
     }
 
-    if(!cur) {
-        cur = new Figure(0, v_cols / 2);
-    } else {
+    if(isGameOver()) {
 
-        uint mtmp = minRow(cur->posj());
-        if(mtmp < 4) {
-            this->gameOver();
-            return;
-        }
-        if(cur->posi() + 3 >= mtmp) {
-
-            if(cur->posi() == 0) {
-                 gameOver();
-                 return;
-            }
-
-            // copy
-            for(int i = 0; i < 3; i ++) {
-                int index = indexOf(cur->posi()+i, cur->posj());
-                glassArray->replace(index, cur->colorAt(i));
-            }
-
-            // check score
-            this->scoreCount();
-
-
-            // swap
-            //delete cur;
-            //cur = next;
-            //next = nullptr;
-            Figure* tmp = cur;
-            cur = next;
-            next = tmp;
-            next->instanceNew(0, v_cols / 2);
-            emit signalNewFigure(*next);
-
-
-            if(tickScore) {
-              //  return;
-            }
+            gameOver();
 
         } else {
-            cur->newPos(cur->posi()+1, cur->posj());
+            this->scoreCount();
+            snake->updatePosition();
         }
-    }
+
 
     repaint();
 }
 
 //
+bool Glass::isGameOver() {
+    if(this->v_cols < snake->posj() || this->v_rows < snake->posi()) {
+        return true;
+    }
+    return false;
+}
+
+//
 void Glass::paintEvent(QPaintEvent*) {
 
-    qDebug() << "Glass::paintEvent";
+
 
     QPainter painter(this);
 
-    qDebug() << "Glass::paintEvent 1";
 
     for(uint i = 0; i < v_rows; i ++) {
         for(uint j = 0; j < v_cols; j ++) {
@@ -221,15 +174,13 @@ void Glass::paintEvent(QPaintEvent*) {
         }
     }
 
-    qDebug() << "Glass::paintEvent 2";
 
     if(gameOn) {
-        if(cur) {
-            cur->drawFigure(&painter);
+        if(snake) {
+            snake->drawFigure(&painter);
         }
     }
 
-    qDebug() << "Glass::paintEvent 3";
 }
 
 //
