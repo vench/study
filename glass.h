@@ -56,6 +56,7 @@ signals:
     void signalGlassInit();
     void signalUpdateScore(int);
     void signalNewFigure(Figure);
+    void signalGameOver();
 
 public slots:
     void slotGlassInit();

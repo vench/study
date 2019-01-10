@@ -33,6 +33,7 @@ public:
     void changeUp();
     void changeDown();
     QColor colorAt(int);
+    inline void instanceNew(uint i, uint j);
 };
 
 #endif // FIGURE_H

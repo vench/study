@@ -10,7 +10,7 @@ class FigureNew : public QWidget
 {
     Q_OBJECT
 
-    Figure* figure;
+    Figure figure;
 
 public:
     explicit FigureNew(QWidget *parent = 0);

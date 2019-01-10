@@ -12,6 +12,7 @@ Glass::Glass(QWidget *parent) : QWidget(parent)
 }
 
 Glass::~Glass() {
+    qDebug() << "Glass::~Glass";
     if(glassArray) {
         delete glassArray;
     }
@@ -92,7 +93,12 @@ void Glass::keyPressEvent(QKeyEvent*event) {
             cur->changeDown();
         break;
         case Qt::Key_Space:
-            cur->newPos(minRow(cur->posj())-3, cur->posj());
+
+            if(minRow(cur->posj()) < 4) {
+                this->gameOver();
+            } else {
+                cur->newPos(minRow(cur->posj())-3, cur->posj());
+            }
         break;
         default:
             QWidget::keyPressEvent(event);
@@ -152,7 +158,12 @@ void Glass::timerEvent(QTimerEvent *) {
         cur = new Figure(0, v_cols / 2);
     } else {
 
-        if(cur->posi() + 3 >= minRow(cur->posj())) {
+        uint mtmp = minRow(cur->posj());
+        if(mtmp < 4) {
+            this->gameOver();
+            return;
+        }
+        if(cur->posi() + 3 >= mtmp) {
 
             if(cur->posi() == 0) {
                  gameOver();
@@ -168,10 +179,22 @@ void Glass::timerEvent(QTimerEvent *) {
             // check score
             this->scoreCount();
 
-            //
-            delete cur;
+
+            // swap
+            //delete cur;
+            //cur = next;
+            //next = nullptr;
+            Figure* tmp = cur;
             cur = next;
-            next = nullptr;
+            next = tmp;
+            next->instanceNew(0, v_cols / 2);
+            emit signalNewFigure(*next);
+
+
+            if(tickScore) {
+              //  return;
+            }
+
         } else {
             cur->newPos(cur->posi()+1, cur->posj());
         }
@@ -182,7 +205,12 @@ void Glass::timerEvent(QTimerEvent *) {
 
 //
 void Glass::paintEvent(QPaintEvent*) {
+
+    qDebug() << "Glass::paintEvent";
+
     QPainter painter(this);
+
+    qDebug() << "Glass::paintEvent 1";
 
     for(uint i = 0; i < v_rows; i ++) {
         for(uint j = 0; j < v_cols; j ++) {
@@ -193,11 +221,15 @@ void Glass::paintEvent(QPaintEvent*) {
         }
     }
 
+    qDebug() << "Glass::paintEvent 2";
+
     if(gameOn) {
         if(cur) {
             cur->drawFigure(&painter);
         }
     }
+
+    qDebug() << "Glass::paintEvent 3";
 }
 
 //
@@ -301,5 +333,18 @@ void Glass::scoreCount() {
 
 //
 void Glass::gameOver() {
+    qDebug() << "Glass::gameOver";
+    gameOn = false;
     this->killTimer(timerId);
+
+    if(cur){
+        delete cur;
+        cur = nullptr;
+    }
+    if(next) {
+        delete next;
+        next = nullptr;
+    }
+
+    emit signalGameOver();
 }

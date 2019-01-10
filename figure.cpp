@@ -2,16 +2,8 @@
 
 Figure::Figure()
 {
+     this->instanceNew(0, 0);
 
-    int size = 3;
-    colors.resize(size);
-
-    int s =  sizeof(M_COLORS) / sizeof(QColor);
-    int start = rand() % s + 1;
-    for(int i = 0; i < size; i ++) {
-        int n = (i + start) % s;
-        colors.insert(i, M_COLORS[n]);
-    }
 }
 
 Figure::Figure(uint i, uint j) : Figure(){
@@ -66,4 +58,21 @@ void Figure::changeDown() {
 //
 QColor Figure::colorAt(int i) {
     return colors.at(i);
+}
+
+//
+inline void Figure::instanceNew(uint i, uint j) {
+    pos_i = i;
+    pos_j = j;
+
+    int size = 3;
+    colors.resize(size);
+
+
+    int s =  sizeof(M_COLORS) / sizeof(QColor);
+    int start = rand() % s + 1;
+    for(int i = 0; i < size; i ++) {
+        int n = (i + start) % s;
+        colors.insert(i, M_COLORS[n]);
+    }
 }

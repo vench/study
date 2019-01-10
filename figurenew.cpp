@@ -2,13 +2,13 @@
 
 FigureNew::FigureNew(QWidget *parent) : QWidget(parent)
 {
-    figure = nullptr;
+    //figure = nullptr;
 
 }
 
 //
 void FigureNew::slotUpdateFigure(Figure f) {
-    figure = &f;
+    figure = f;
     repaint();
 }
 
@@ -16,7 +16,5 @@ void FigureNew::slotUpdateFigure(Figure f) {
 void FigureNew::paintEvent(QPaintEvent*) {
     QPainter painter(this);
 
-    if(figure) {
-        figure->drawFigure(&painter, 0, 0);
-    }
+    figure.drawFigure(&painter, 0, 0);
 }

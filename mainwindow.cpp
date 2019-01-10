@@ -13,3 +13,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//
+void MainWindow::slotGameOver() {
+    QMessageBox::information(this, tr("Game over"), tr("Your game is over!!!"));
+}
+
