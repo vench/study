@@ -27,7 +27,6 @@ class Glass : public QWidget
     uint v_cols;
     uint v_rows;
     bool gameOn;
-    bool tickScore;
     uint score;
     QVector<QColor> *glassArray;
     int timerId;
