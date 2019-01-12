@@ -15,6 +15,6 @@ MainWindow::~MainWindow()
 
 //
 void MainWindow::slotGameOver() {
-    QMessageBox::information(this, tr("Game over"), tr("Your game is over!!!"));
+   // QMessageBox::information(this, tr("Game over"), tr("Your game is over!!!"));
 }
 

@@ -14,7 +14,7 @@ void FigureNew::slotUpdateFigure(Figure f) {
 
 //
 void FigureNew::paintEvent(QPaintEvent*) {
-    QPainter painter(this);
+   // QPainter painter(this);
 
-    figure.drawFigure(&painter, 0, 0);
+   // figure.drawFigure(&painter, 0, 0);
 }

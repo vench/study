@@ -17,14 +17,16 @@ SOURCES += main.cpp \
     glass.cpp \
     figure.cpp \
     figurenew.cpp \
-    snake.cpp
+    snake.cpp \
+    pointeat.cpp
 
 HEADERS  += \
     mainwindow.h \
     glass.h \
     figure.h \
     figurenew.h \
-    snake.h
+    snake.h \
+    pointeat.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -std=c++11

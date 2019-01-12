@@ -4,7 +4,7 @@
 Snake::Snake()
 {
     newPos(0, 0);
-    _size = 5;
+    _size = 1;
 
     setDirection( Qt::Key_Right);
     color = QColor(255,0,0);
@@ -17,6 +17,20 @@ Snake::Snake(uint i, uint j) : Snake(){
 }
 
 //
+void Snake::addSize() {
+    _size ++;
+}
+
+//
+bool Snake::inPos(uint i, uint j) {
+    for(int n = 0; n<states.count(); n ++) {
+        s_state s = states.at(n);
+        if(s.pos_i == i && s.pos_j == j) {
+            return true;
+        }
+    }
+    return false;
+}
 
 //
 void Snake::newPos(uint i, uint j) {
@@ -49,8 +63,6 @@ void Snake::drawFigure(QPainter*p) {
    }
 }
 
-
-
 //
 Qt::Key Snake::direction() const {
     return _direction;
@@ -59,6 +71,18 @@ Qt::Key Snake::direction() const {
 //
 void Snake::setDirection(Qt::Key d) {
     if(d != _direction) {
+        if(d == Qt::Key_Right && _direction == Qt::Key_Left) {
+            return;
+        }
+        if(d == Qt::Key_Left && _direction == Qt::Key_Right) {
+            return;
+        }
+        if(d == Qt::Key_Up && _direction == Qt::Key_Down) {
+            return;
+        }
+        if(d == Qt::Key_Down && _direction == Qt::Key_Up) {
+            return;
+        }
         _direction = d;
     }
 }
@@ -68,27 +92,4 @@ uint Snake::size() const {
     return _size;
 }
 
-//
-void Snake::updatePosition() {
-    uint pj = pos_j;
-    uint pi = pos_i;
-    switch(_direction) {
-    case Qt::Key_Left:
-        pj --;
-        break;
-    case Qt::Key_Right:
-        pj ++;
-        break;
-    case Qt::Key_Up:
-        pi --;
-        break;
-    case Qt::Key_Down:
-        pi ++;
-        break;
-    default:
-        break;
-    }
 
-    //qDebug() << "Add to state";
-    newPos(pi, pj);
-}

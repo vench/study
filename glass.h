@@ -8,8 +8,10 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QThread>
+#include <math.h>
 #include "figure.h"
 #include "snake.h"
+#include "pointeat.h"
 
 
 
@@ -31,6 +33,7 @@ class Glass : public QWidget
     QVector<QColor> *glassArray;
     int timerId;
 
+    Pointeat *pointEat;
     Figure *cur;
     Figure *next;
     Snake *snake;
@@ -51,8 +54,9 @@ public:
     uint minLeft(uint i, uint j);
     uint maxRight(uint i, uint j);
     void gameOver();
-    bool isGameOver();
+    bool isGameOver(uint, uint);
     void scoreCount();
+    void updatePosPointEat();
 
 signals:
     void signalGlassInit();

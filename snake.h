@@ -42,12 +42,12 @@ public:
     uint posi();
     uint posj();
     uint size() const;
+    void addSize();
+    bool inPos(uint i, uint j);
     void drawFigure(QPainter*);
 
     Qt::Key direction() const;
     void setDirection(Qt::Key);
-
-    void updatePosition();
 
 };
 

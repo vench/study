@@ -6,6 +6,7 @@ Glass::Glass(QWidget *parent) : QWidget(parent)
     cur = nullptr;
     next = nullptr;
     snake = nullptr;
+    pointEat = nullptr;
     this->timerInterval = 250;
 
     connect(this, SIGNAL(signalGlassInit()), this, SLOT(slotGlassInit()), Qt::QueuedConnection);
@@ -21,6 +22,10 @@ Glass::~Glass() {
     if(snake) {
         delete snake;
         snake = nullptr;
+    }
+    if(pointEat) {
+        delete pointEat;
+        pointEat = nullptr;
     }
 }
 
@@ -65,6 +70,8 @@ void Glass::slotNewGame() {
     this->setFocus();
     this->score = 0;
     snake = new Snake();
+    pointEat = new Pointeat();
+    updatePosPointEat();
     timerId = this->startTimer(this->timerInterval);
 
     qDebug() << "slotNewGame";
@@ -85,7 +92,6 @@ void Glass::keyPressEvent(QKeyEvent*event) {
         break;
         case Qt::Key_Space:
 
-
         break;
         default:
             QWidget::keyPressEvent(event);
@@ -96,32 +102,13 @@ void Glass::keyPressEvent(QKeyEvent*event) {
 }
 
 //
-uint Glass::minLeft(uint i, uint j) {
-    if(j == 0) {
-        return 0;
-    }
-    int x = j;
-    for(; x > 0; x --) {
-        int index =  indexOf(i, x-1);
-        if(glassArray->at(index) != emptyCell) {
-            break;
-        }
-    }
-    return x;
+uint Glass::minLeft(uint, uint) {
+    return 0;
 }
 
 //
-uint Glass::maxRight(uint i, uint j) {
-    if(j + 1 == v_cols) {
-        return j;
-    }
-    for(; j < v_cols; j ++) {
-        int index =  indexOf(i, j+1);
-        if(glassArray->at(index) != emptyCell) {
-            break;
-        }
-    }
-    return j;
+uint Glass::maxRight(uint, uint) {
+    return 0;
 }
 
 //
@@ -131,26 +118,42 @@ void Glass::timerEvent(QTimerEvent *) {
         return;
     }
 
-    if(isGameOver()) {
-
-            gameOver();
-
-     } else {
-            this->scoreCount();
-            snake->updatePosition();
+    uint pj = snake->posj();
+    uint pi = snake->posi();
+    switch(snake->direction()) {
+    case Qt::Key_Left:
+        pj --;
+        break;
+    case Qt::Key_Right:
+        pj ++;
+        break;
+    case Qt::Key_Up:
+        pi --;
+        break;
+    case Qt::Key_Down:
+        pi ++;
+        break;
+    default:
+        break;
     }
 
+    if(isGameOver(pi, pj)) {
+            gameOver();
+     } else {            
+            snake->newPos(pi, pj);
+            this->scoreCount();
+    }
 
     repaint();
 }
 
 //
-bool Glass::isGameOver() {
-    if(this->v_cols < snake->posj() || this->v_rows < snake->posi()) {
+bool Glass::isGameOver(uint pi, uint pj) {
+    if(this->v_cols <= pj || this->v_rows <= pi) {
         return true;
     }
-    // TODO
-    return false;
+
+    return snake->inPos(pi,pj);
 }
 
 //
@@ -164,12 +167,13 @@ void Glass::paintEvent(QPaintEvent*) {
         }
     }
 
-    if(gameOn) {
-        if(snake) {
-            snake->drawFigure(&painter);
-        }
+    if(pointEat) {
+        pointEat->drawFigure(&painter);
     }
 
+    if(snake) {
+        snake->drawFigure(&painter);
+    }
 }
 
 //
@@ -178,21 +182,36 @@ int Glass::indexOf(uint i, uint j) {
 }
 
 //
-uint Glass::minRow(uint j) {
-    for(uint i = 0; i < v_rows; i ++) {
-        int index = indexOf(i, j);
-        if(glassArray->at(index) != emptyCell) {
-            return i;
-        }
-    }
-    return v_rows;
+uint Glass::minRow(uint ) {
+    return 0;
 }
 
 //
 void Glass::scoreCount() {
 
+   if(pointEat->posi() == snake->posi() && pointEat->posj() == snake->posj()) {
+       updatePosPointEat();
+       snake->addSize();
+   }
    this->score = snake->size() - 1;
    emit signalUpdateScore(this->score);
+}
+
+//
+void Glass::updatePosPointEat() {
+
+
+    while(true) {
+        uint i = rand() % v_rows;
+        uint j = rand() % v_cols;
+
+        if(snake->inPos(i,j)) {
+            continue;
+        }
+
+        pointEat->newPos(i,j);
+        break;
+    }
 }
 
 
