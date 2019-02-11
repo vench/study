@@ -19,6 +19,20 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+// class 
+var HistoryGame = {
+    Data:{},
+    SetState: function(stateGame, typeWin){
+
+    },
+    GetByState: function(stateGame){
+
+    }
+};
+
+
+
+
 // class Player
 function Player(type) {
     this.type = type || 0;
@@ -31,24 +45,36 @@ Player.prototype.GetType = function() {
 // class StateCeil
 function StateCeil(type) {
     this.type = type || 0;
+    this.color = undefined;
 };
 
 StateCeil.prototype.Draw = function(ctx, x, y, w, h) {
     if( this.type == 0) {
         return;
-    }
-  //  var char =  this.type == 1 ? 'X' : 'O'; 
-  //  ctx.fillText(char + ' ' + x + 'x' + y, x * w + w/2, y * h + h/2);
-   if(this.type == 2) {
-    ctx.beginPath();
-    ctx.arc(x * w + w/2, y * h + h/2, h/3, 0, 2 * Math.PI);
-    ctx.stroke();
-   } else {
-    ctx.beginPath();
-    ctx.moveTo(x * w + w/3, y * h + h/3);
-    ctx.lineTo(x * w + w/2*2, y * h + h/2*2);
-    ctx.stroke();
+    } 
+
+   var lineWidth =  ctx.lineWidth;
+   var strokeStyle = ctx.strokeStyle; 
+   if(!!this.color) {
+    ctx.strokeStyle = this.color;
    }
+   ctx.lineWidth = 3;
+   if(this.type == 2) {
+        ctx.beginPath();   
+        ctx.arc(x * w + w/2, y * h + h/2, h/3, 0, 2 * Math.PI);
+        ctx.stroke();
+
+   } else {
+        ctx.beginPath();  
+        ctx.moveTo(x * w + w/4, y * h + h/4);
+        ctx.lineTo(x * w + w-w/4, y * h + h-h/4);
+
+        ctx.moveTo(x * w + w-w/4, y * h +h/4);
+        ctx.lineTo(x * w + w/4, y * h + h-h/4);
+        ctx.stroke();    
+   }
+   ctx.lineWidth = lineWidth;
+   ctx.strokeStyle = strokeStyle;
 };
 
 //
@@ -107,15 +133,26 @@ function Game(parent) {
     CreateElement('h1', {
         'text': 'Крестики нолики', 
     }, parent);
+    var btnNewGame = CreateElement('button', {'text':'Новая игра'}, CreateElement('div', {}, parent)); 
+    btnNewGame.addEventListener('click', this.NewGame.bind(this));
+
     this.canvas = CreateElement('canvas', {
         'id': 'canvasdummy', 'width': this.grid.width, 'height': this.grid.height, 
-    }, parent);  
-    this.canvas.addEventListener('click', this.OnHandlerClickCanvas.bind(this), false);
+    }, parent); 
 
-    this.player1 = new Player(1)
-    this.player2 = new Player(2)
+    this.canvas.addEventListener('click', this.OnHandlerClickCanvas.bind(this), false);
+    
+    this.log = CreateElement('div', {}, parent);
+
+    this.player1 = new Player(1);
+    this.player2 = new Player(2);
+   
     this.state = new StateGame();
 }
+
+Game.prototype.Info = function(text) {
+    this.log.innerHTML = text;
+};
 
 //
 Game.prototype.OnHandlerClickCanvas = function(e){
@@ -151,7 +188,7 @@ Game.prototype.Player1Move = function(posCeil){
         }
         
     } else {
-        alert("Ход недоступен");
+        this.Info("Ход недоступен");
     }
 }
 
@@ -173,30 +210,49 @@ Game.prototype.Player2Move = function(){
 }
 
 Game.prototype.CheckGameOver = function() {
-    var p = this.state.positions;
+    var p = this.state.positions,
+        colorWin = '#f00'
+    ;
+     
     for(var i = 0; i < 3; i ++) {
-        if(p[i*3+0].type == p[i*3+1].type && 
-            p[i*3+1].type && p[i*3+2].type && p[i*3+0].type != 0) {
+        if(p[i*3].type == p[i*3+1].type && 
+            p[i*3+1].type == p[i*3+2].type && p[i*3].type != 0) {
+                p[i*3+0].color = p[i*3+1].color = p[i*3+2].color = colorWin;
+                this.typeWin = p[i*3].type;
                 return true;
         }
-        if(p[i+0].type == p[3+i].type && 
-            p[3+i].type == p[6+i].type && p[i*3+0].type != 0) {
+        if(p[i].type == p[3+i].type && 
+            p[3+i].type == p[6+i].type && p[i+3].type != 0) {
+                p[i+3].color = p[i+6].color = p[i].color = colorWin;
+                this.typeWin = p[i+3].type;
                 return true;
         }
     }
 
     if(p[0].type == p[4].type && p[4].type == p[8].type && p[0].type != 0) {
+        p[0].color = p[8].color = p[4].color = colorWin;
+        this.typeWin = p[0].type;
         return true;
     }
     if(p[2].type == p[4].type && p[4].type == p[6].type && p[2].type != 0) {
+        p[6].color = p[2].color = p[4].color = colorWin;
+        this.typeWin = p[2].type;
         return true;
     }
     
     return false;
 };    
 
+Game.prototype.NewGame = function() {
+    this.state = new StateGame();
+    this.Init();
+}    
+
 Game.prototype.GameOver = function() {
-    alert("Игра закончена!!!");
+    this.Draw();
+    this.Info("Игра закончена!!!" + "\nПобеда: " + 
+     (this.typeWin == 1 ? 'X' : 'O') + '!!!');
+     HistoryGame.SetState(this.state, this.typeWin);
 };
 
 //
@@ -224,7 +280,7 @@ Game.prototype.Draw = function() {
 };
 
 Game.prototype.Init = function() {
-
+    this.typeWin = -1;
     this.Draw();
 };
 
