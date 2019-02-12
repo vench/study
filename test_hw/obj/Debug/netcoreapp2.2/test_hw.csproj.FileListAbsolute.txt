@@ -28,3 +28,11 @@
 /home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/test_hw.dll
 /home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/test_hw.pdb
 /home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/test_hw.csproj.CopyComplete
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ByHand.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Db/Index.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ByArgs.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ByProp.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ByRoute.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ByColl.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ByObj.g.cshtml.cs
+/home/vench/Projects/test_hw/test_hw/obj/Debug/netcoreapp2.2/Razor/Pages/Bind/ImgList.g.cshtml.cs

@@ -1,0 +1,18 @@
+﻿@page
+@model ImgListModel
+@{
+    ViewData["Title"] = "Testing MVC service";
+    var dt = DateTime.Now.ToShortDateString();
+    var list = Model.ListUrl;
+}
+
+Today is: @dt<br>
+<span class="red">Request Method: @Request.Method<br>@Model.Msg</span>
+<a asp-page-handler="ShowImg">Show Images</a><br><br>
+@if (list != null && Model.ImgFlag)
+{
+    @foreach (var u in list)
+    {
+        <img src=@u style="width:40px;">
+    }
+}

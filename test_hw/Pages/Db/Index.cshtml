@@ -1,0 +1,33 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Manage Messages";
+    var messages = Model.Messages;
+    var count = messages.Count;
+}
+
+<form method="post">
+    @if (count > 0)
+    {
+        <table>
+            <thead><tr><th>Id</th><th>Message</th><th>Actions</th></tr></thead>
+            <tbody>
+                @foreach (var m in messages)
+                {
+                    <tr>
+                        <td>@m.Id</td>
+                        <td>@m.Text</td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@m.Id" class="button greenBk">Edit</a>
+                            <button asp-page-handler="Delete" asp-route-id="@m.Id" type="submit" class="button redBk">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table><br>
+    }
+    New Message: <input id="msg" asp-for="Message.Text" autofocus>
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Add</button>
+    <br><br>
+    <div class="big green">@Model.Result</div><br><br>
+</form>

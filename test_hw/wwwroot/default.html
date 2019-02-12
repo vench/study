@@ -1,0 +1,18 @@
+﻿<html>
+    <head>
+        <title>Default</title>
+        <script>
+            onload = () =>
+            {
+                spDay.innerHTML=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+            }
+        </script>
+        
+        <link href="css/site_2.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Using File Server</h1>
+        Today is <span id="spDay"></span><br>
+        <a href="/Index" class="link">Go to MVC</a>
+    </body>
+</html>

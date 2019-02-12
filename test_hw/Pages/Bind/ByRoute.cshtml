@@ -1,0 +1,11 @@
+﻿@page "{txt}"
+@model ByRouteModel
+@{
+    ViewData["Title"] = "Getting Request.Form Data by using Route";
+}
+
+<h3 class="green">Check the last value of the Route: @ViewData["key"]</h3>
+
+<form method="post">
+<input type="submit" value="Submit" class="button greenBk w6"></form>
+

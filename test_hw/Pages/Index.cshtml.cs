@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+// Контроллер для index.cshtml
 namespace test_hw.Pages
 {
     public class IndexModel : PageModel

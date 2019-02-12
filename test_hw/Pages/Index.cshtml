@@ -1,10 +1,24 @@
-﻿@page
+﻿@page 
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
-}
+    // View 
+    var dt = DateTime.Now.ToShortDateString();
+    ViewData["Title"] = "Starting Page";
+} 
+    Today is: @dt<br>
+    <span class="red">Request Method: @Request.Method</span>
+    <p>
+        This is a Net Core 2.2 example to show you how to use Entity Framework Core in an ASP.NET Core Razor Pages web app.<br>
+        You should build the application by following the steps shown in a tutorial document.<br>
+        Also you can read the Microsoft tutorials referenced below.<br>
+        Use the above links to start Razor Pages handling requests to different pages.
+    </p>
+    <p><a href="https://docs.microsoft.com/aspnet/core/data/ef-rp/intro">Microsoft tutorials</a></p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome Welcome Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  <p>The following data are taken from IConfiguration object (appsettings.json)</p>
+<div class="biege">
+    @Config["Reminder"]<br>
+    @Config["MySettings:Message"]<br>
+    Recommended Tutorial: <a href="@Config["Tutorial"]" class="link">ASP.NET Core for Beginners</a>;<br>
+    Page Size: @Config["MySettings:PageSize"] <br>
 </div>

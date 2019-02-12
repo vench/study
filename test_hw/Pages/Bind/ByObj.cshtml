@@ -1,0 +1,22 @@
+﻿@page
+@model ByObjModel
+@{
+    ViewData["Title"] = "Getting Request.Form Data by class object";
+    var contacts = Model.Contacts;
+}
+<form method="post">
+    <table class="table">
+        <tr><th>Id</th><th>Name</th><th>Email</th></tr>
+        @foreach (var c in contacts)
+        {
+            var id = c.Id - 1;
+            <tr>
+                <td><input type="hidden" asp-for="Contacts[id].Id">@c.Id</td>
+                <td><input asp-for="Contacts[id].Name" class="w6"></td>
+                <td><input asp-for="Contacts[id].Email" type="email" class="w9"></td>
+            </tr>
+        }
+    </table><br>
+    <button type="submit" class="button greenBk w6">Submit</button><br><br>
+    <span class="green">@Model.Msg</span>
+</form>

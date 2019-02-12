@@ -1,0 +1,12 @@
+﻿@page
+@model ByHandModel
+@{
+    ViewData["Title"] = "Getting Request.Form Data by hand";
+}
+
+<form method="post" class="biege">
+    <span class="w6">Verb:</span><input type="text" id="verb" name="verb" autofocus  placeholder="Enter a verb..."><br>
+    <span class="w6">Noun:</span><input type="text" id="noun" name="noun" placeholder="Enter a noun..."><br>
+    <button type="submit" class="button greenBk w6">Submit</button>
+</form>
+<h3 class="green">@ViewData["all"]</h3>

@@ -1,0 +1,19 @@
+﻿@page
+@model ByCollModel
+@{
+    ViewData["Title"] = "Getting Request.Form Data using array of strings";
+    var ch = Model.Ch;
+}
+<form method="post">
+    <fieldset class="biege">
+        <legend>Select server technologies?</legend>
+        <input class="w6" type="checkbox" name="Ch" value="ASP.NET MVC">ASP.NET MVC<br>
+        <input class="w6" type="checkbox" name="Ch" value="Django (Python)">Django (Python)<br>
+        <input class="w6" type="checkbox" name="Ch" value="Ruby on Rails">Ruby on Rails<br>
+    </fieldset><br>
+    <button type="submit" class="button greenBk w6">Submit</button>
+</form>
+@if (ch.Any(x=>x!=null))
+{
+    <h3 class="green">You selected: @string.Join(", ", ch)</h3>
+}

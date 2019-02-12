@@ -1,0 +1,14 @@
+﻿@page
+@model ByPropModel
+@{
+    ViewData["Title"] = "Getting Request.Form Data by using BindProperty and asp-for";
+}
+
+<form method="post" class="biege">
+    <span class="w6">Verb:</span>
+    <input type="text" asp-for="@Model.Verb" autofocus placeholder="a Verb..."><br>
+    <span class="w6">Noun:</span>
+    <input type="text" asp-for="@Model.Noun" placeholder="a Noun..."><br>
+    <button type="submit" class="button greenBk w6">Submit</button>
+</form>
+<h3 class="green">@ViewData["all"]</h3>
