@@ -1,0 +1,68 @@
+﻿@page
+@model Books.IndexModel
+@{
+    ViewData["Title"] = "List of Books";
+    var books = Model.Books; 
+   
+    var keySortId = Model.Sort == "id" ? "idDesc" : "id";
+    var keySortTitle = Model.Sort == "title" ? "titleDesc" : "title";
+    var keySortAuthor = Model.Sort == "author" ? "authorDesc" : "author";
+    var prev = books.HasPreviousPage ? "" : "disable";
+    var next = books.HasNextPage ? "" : "disable";
+}
+ 
+<form asp-page="./Index" method="get">
+    <a asp-page="Create">Add a book</a>
+    
+    <input type="text" name="search" id="search" value="@Model.Filter" class="leftShift w6">
+    
+    
+    
+    <select style="width:200px;" asp-for="Filter_author" asp-items="@(new SelectList(Model.Authors, "Id", "FullName"))">
+        <option value="">Pick one</option>
+    </select>
+    
+    <select style="width:200px;" asp-for="Filter_categorie" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+        <option value="">Pick one</option>
+    </select>  
+    
+    
+    
+    <input type="submit" value="Search" class="button greenBk w6">
+</form><br>
+
+<p>
+    Total books: @books.Total , Page: @books.PageID out of 5
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-sort="@keySortId">Id</a></th>
+            <th><a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-sort="@keySortTitle">Title</a></th>
+            <th><a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-sort="@keySortAuthor">Author</a></th>
+            <th>Actions</th>
+            </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in books)
+        {
+            <tr>
+                <td class="center">@x.Id</td>
+                <td>@x.Title</td>
+                <td>@if(@x.Author != null) { @x.Author.FullName }</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@x.Id">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@x.Id">Details</a>
+                    <a asp-page="./Delete" asp-route-id="@x.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table><br><br> 
+<a asp-page="./Index" 
+   asp-route-filter_author="@Model.Filter_author"
+   asp-route-filter_categorie="@Model.Filter_categorie" asp-route-filter="@Model.Filter" asp-route-pageID="@(books.PageID - 1)" class="button @prev">Previous</a>
+<a asp-page="./Index" 
+   asp-route-filter_author="@Model.Filter_author"
+   asp-route-filter_categorie="@Model.Filter_categorie" asp-route-filter="@Model.Filter" asp-route-pageID="@(books.PageID + 1)" class="button @next">Next</a>

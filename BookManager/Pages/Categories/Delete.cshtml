@@ -1,0 +1,13 @@
+﻿@page
+@model DeleteModel
+@{
+        ViewData["Title"] = "Delete a Category";
+        var id = Model.Entry.Id;
+        var title = Model.Entry.Name;
+}
+ 
+    <form method="post"> 
+        <p>Confirm delete Category:<b> @title </b></p>
+        <button type="submit" asp-route-id="@id" class="button greenBk">Delete</button>
+        <a asp-page="./Index" class="button redBk">Cancel</a>
+    </form>

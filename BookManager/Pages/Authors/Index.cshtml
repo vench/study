@@ -1,0 +1,50 @@
+﻿@page
+@model Authors.IndexModel
+@{
+    ViewData["Title"] = "List of Authors";
+    var authors = Model.Authors;
+   
+    var keySortId = Model.Sort == "id" ? "idDesc" : "id";
+    var keySortName = Model.Sort == "name" ? "nameDesc" : "name"; 
+    var keySortEmail = Model.Sort == "email" ? "emailDesc" : "email";
+    var prev = authors.HasPreviousPage ? "" : "disable";
+    var next = authors.HasNextPage ? "" : "disable";
+}
+ 
+<form asp-page="./Index" method="get">
+    <a asp-page="Create">Add a author</a>
+    
+    <input type="text" name="search" id="search" value="@Model.Filter" class="leftShift w6">
+        <input type="submit" value="Search Title" class="button greenBk w6">
+</form><br>
+
+<p>
+    Total authors: @authors.Total , Page: @authors.PageID out of 5
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-sort="@keySortId">Id</a></th>
+            <th><a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-sort="@keySortName">Full name</a></th>
+            <th><a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-sort="@keySortEmail">Email</a></th>
+            <th>Actions</th>
+            </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in authors)
+        {
+            <tr>
+                <td class="center">@x.Id</td>
+                <td>@x.FullName</td>
+                <td>@x.Email</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@x.Id">Edit</a> 
+                    <a asp-page="./Delete" asp-route-id="@x.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table><br><br>
+<a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-pageID="@(authors.PageID - 1)" class="button @prev">Previous</a>
+<a asp-page="./Index" asp-route-filter="@Model.Filter" asp-route-pageID="@(authors.PageID + 1)" class="button @next">Next</a>

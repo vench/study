@@ -1,0 +1,18 @@
+﻿@page
+@model EditModel
+@{
+    ViewData["Title"] = "Edit category";
+}
+
+
+<form method="post">
+    
+    <input id="Entry_Id" type="hidden"  asp-for="Entry.Id" />
+    
+    <p>Name: <input id="Name" asp-for="Entry.Name" autofocus />
+        </p>
+     <p>RowVersion: <input id="RowVersion" asp-for="Entry.RowVersion" />
+        </p> 
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Save</button>
+    <div class="big green">@Model.Result</div><br><br>
+</form>    

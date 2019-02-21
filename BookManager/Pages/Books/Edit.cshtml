@@ -1,0 +1,31 @@
+﻿@page
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+
+<form method="post">
+    
+    <input id="Entry_Id" type="hidden"  asp-for="Entry.Id" />
+    
+    <p>Title: <input id="Title" asp-for="Entry.Title" autofocus />
+        </p>
+     <p>Uri: <input id="Uri" asp-for="Entry.Uri" />
+        </p>
+    <p>CategoryId: 
+         <select style="width:200px;" id="CategoryId"
+                 asp-for="Entry.CategoryId" 
+                 asp-items="@(new SelectList(Model.Categories, "Id", "Name"))"> 
+    </select> 
+        </p>
+    <p>AuthorId:
+        <select style="width:200px;" id="AuthorId"
+                 asp-for="Entry.AuthorId" 
+                 asp-items="@(new SelectList(Model.Authors, "Id", "FullName"))"> 
+    </select> 
+        
+        </p>
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Save</button>
+    <div class="big green">@Model.Result</div><br><br>
+</form>    

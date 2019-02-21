@@ -1,0 +1,9 @@
+﻿@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error...";
+}
+<form method="post" class="biege">
+    <span class="red">@Model.Err<br>Resource not found.</span><br><br>
+    <input type="submit" class="button greenBk w34" value="Go back">
+</form>

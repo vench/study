@@ -1,0 +1,18 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+
+<form method="post">
+    
+   <p> New ForeName: <input id="ForeName" asp-for="Entry.ForeName" autofocus />
+        </p>
+     <p> New LastName: <input id="LastName" asp-for="Entry.LastName" />
+        </p>
+    <p> New Email: <input id="Email" asp-for="Entry.Email" />
+        </p> 
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Create</button>
+    <div class="big green">@Model.Result</div><br><br>
+</form>    

@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <title>Book Manager</title>
+</head>
+<body>
+    <nav>
+        <div>
+            <a asp-page="/Index">Home</a>
+            <a asp-page="/Categories/Index">Categories</a>
+            <a asp-page="/Authors/Index">Authors</a>
+            <a asp-page="/Books/Index">Books</a>
+            <a asp-page="/Index" asp-page-handler="TryDropDb">Drop DB</a>
+        </div>
+    </nav>
+    <h2>@ViewData["Title"]</h2>
+    <div>
+        @RenderBody()
+        <hr><footer><p>&copy; 2019 - Books Manager</p></footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+﻿@page
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Author";
+}
+
+
+<form method="post">
+    
+    <input id="Entry_Id" type="hidden"  asp-for="Entry.Id" />
+    
+    <p>ForeName: <input id="ForeName" asp-for="Entry.ForeName" autofocus />
+        </p>
+     <p>LastName: <input id="LastName" asp-for="Entry.LastName" />
+        </p>
+    <p>Email: <input id="Email" asp-for="Entry.Email" />
+        </p> 
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Save</button>
+    <div class="big green">@Model.Result</div><br><br>
+</form>    

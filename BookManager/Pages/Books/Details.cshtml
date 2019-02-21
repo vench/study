@@ -1,0 +1,19 @@
+﻿@page
+@model DetailsModel
+@{
+        ViewData["Title"] = "Details a book";
+        var id = Model.Entry.Id;
+        var entry = Model.Entry;
+}
+ 
+
+ <div>
+    <dl>
+     
+        <dt>Id:</dt> <dd>@entry.Id  </dd>
+        <dt>Title:</dt> <dd>@entry.Title  </dd>
+        <dt>Uri:</dt> <dd><a href="@entry.Uri">@entry.Uri</a>  </dd>
+         <dt>Category:</dt> <dd>@entry.Category.Name  </dd>
+         <dt>Author:</dt> <dd>@entry.Author.FullName  </dd>
+    </dl>
+ </div>   

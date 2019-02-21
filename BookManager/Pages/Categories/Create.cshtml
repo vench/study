@@ -1,0 +1,16 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+
+<form method="post">
+    
+   <p>Name: <input id="Name" asp-for="Entry.Name" autofocus />
+        </p>
+     <p>RowVersion: <input id="RowVersion" asp-for="Entry.RowVersion" />
+        </p> 
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Create</button>
+    <div class="big green">@Model.Result</div><br><br>
+</form>    

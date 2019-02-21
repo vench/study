@@ -1,0 +1,29 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+
+<form method="post">
+    
+    <p> New Title: <input id="Title" asp-for="Entry.Title" autofocus />
+        </p>
+     <p> New Uri: <input id="Uri" asp-for="Entry.Uri" />
+        </p>
+     <p>CategoryId: 
+         <select style="width:200px;" id="CategoryId"
+                 asp-for="Entry.CategoryId" 
+                 asp-items="@(new SelectList(Model.Categories, "Id", "Name"))"> 
+    </select> 
+        </p>
+    <p>AuthorId:
+        <select style="width:200px;" id="AuthorId"
+                 asp-for="Entry.AuthorId" 
+                 asp-items="@(new SelectList(Model.Authors, "Id", "FullName"))"> 
+    </select> 
+        
+        </p>
+    <button asp-page-handler="Add" type="submit" class="button greenBk">Create</button>
+    <div class="big green">@Model.Result</div><br><br>
+</form>    

@@ -1,0 +1,22 @@
+﻿<Properties StartupConfiguration="{6C810384-74F0-4B93-BF45-1E9DB9219993}|Default">
+  <MonoDevelop.Ide.ItemProperties.BookManager PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="BookManager/Pages/Books/Create.cshtml">
+    <Files>
+      <File FileName="BookManager/Pages/Authors/Delete.cshtml.cs" Line="37" Column="10" />
+      <File FileName="BookManager/Pages/Authors/Delete.cshtml" Line="13" Column="12" />
+      <File FileName="BookManager/Pages/Books/Index.cshtml.cs" Line="84" Column="13" />
+      <File FileName="BookManager/Pages/Books/Index.cshtml" Line="21" Column="99" />
+      <File FileName="BookManager/Pages/Books/Edit.cshtml.cs" Line="28" Column="1" />
+      <File FileName="BookManager/Pages/Books/Edit.cshtml" Line="16" Column="4" />
+      <File FileName="BookManager/Pages/Books/Create.cshtml.cs" Line="30" Column="10" />
+      <File FileName="BookManager/Pages/Books/Details.cshtml.cs" Line="9" Column="1" />
+      <File FileName="BookManager/Pages/Books/Create.cshtml" Line="26" Column="13" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
