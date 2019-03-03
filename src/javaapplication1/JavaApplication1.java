@@ -6,6 +6,8 @@
 package javaapplication1;
  
 
+ 
+
 /**
  *
  * @author vench
@@ -17,15 +19,17 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) {
         
-        DataBase db = new DataBase();
-        
-        for(int i = 0; i < 2; i ++) { 
-            (new Writer( "Writer " + i, db)).start(); 
+        Task1 t = new Task1("https://yandex.ru/");
+        t.parse();
+        /*
+        if(args.length < 2) {
+            System.out.println("Вы должны передать URL страницы");
+            return;
         }
-        for(int i = 0; i < 10; i ++) {
-            (new Reader( "Reader " + i, db)).start();
-        }
+         new Task1(args[1]); */
     }
+    
+    
     
     
     
