@@ -5,13 +5,14 @@
  */
 package javaapplication1;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author vench
  */
-public class Demo {
+public class Demo implements Serializable {
     public static int last;
     private int id;
     private String name;
@@ -29,6 +30,23 @@ public class Demo {
         this.message = message;
         this.date = date;
         this.temp = temp;
+    }
+    
+    public Demo(String name, String message, Date date, int temp) {
+        this.id = last ++;
+        this.name = name;
+        this.message = message;
+        this.date = date;
+        this.temp = temp;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    
+    public String toString() {
+        return "Demo #id " + id;
     }
     
     

@@ -19,8 +19,11 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) {
         
-        Task1 t = new Task1("https://yandex.ru/");
-        t.parse();
+        //Task1 t = new Task1("https://yandex.ru/");
+       // t.parse();
+        Task2 t = new Task2();
+        t.exec();
+        
         /*
         if(args.length < 2) {
             System.out.println("Вы должны передать URL страницы");
