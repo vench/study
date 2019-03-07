@@ -9,37 +9,70 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  *
  * @author vench
  * 
- * На основе класса URL написать и отладить приложение, выводящее на консоль
-текст страницы, адрес которой передается в качестве параметра вызова
-приложения. Выводимый текст не должен содержать тегов, в частности не должен
-включать заголовок страницы, ограниченный тегами <head...>…</head> и
-<script....>...</script>.
+ * Написать пример приложения, производящего обмен данными по протоколу
+TCP/IP. Клиент приложения должен реализовать следующий алгоритм
+работы:
+установить соединение с сервером приложения;
+последовательно послать серверу приложения строки «date» и «time».
+Сервер в ответ на первый запрос должен вернуть текущую дату в виде
+строки, например, «29.11.2012». На второй запрос сервер должен
+вернуть текущее время в виде строки, например, «11:46».(Для
+получения числа, месяца, года, часа и минут можно воспользоваться
+классом java.util.GregorianCalendar);
+разорвать соединение с сервером.
  */
 public class Task1 {
+     
+    final public static int PORT = 9999; 
+    private Task1Server server;
     
-    private final String url;
-    
-    public Task1(String url) {
-            this.url = url;        
+    public Task1() {
+                   
     }
     
-    public void parse() {
+    public void exec() {
+        runServer();
+        runClient(); 
+        runClient(); 
+        runClient(); 
+        server.end();
+    }
+    
+    private void runServer()  {
+        server = new Task1Server(PORT);
+        server.start();
+    }
+    
+    private void runClient() {
+        
         try {
-            URL u = new URL(url);
-            //String initialString = "<html><head><title>Title</title></head><body><p>Test</p><script>Ball</script><p>tttt</p></body></html>";
-            //InputStream targetStream = new ByteArrayInputStream(initialString.getBytes());
-            BufferedReader in = new BufferedReader(new InputStreamReader(u.openStream()));
-           // BufferedReader in = new BufferedReader(new InputStreamReader(targetStream));
-            HtmlReader hr = new HtmlReader(in);
-            System.out.println(hr.getText());
+            Socket s = new Socket("localhost", PORT);
+            for(String str : new String[]{"date", "time"}) {
+                s.getOutputStream().write(str.getBytes());
+                
+                
+                
+                byte[] buf = new byte[2048];
+                int r = s.getInputStream().read(buf);
+                String data = new String(buf, 0, r);
+                System.out.println("Result: " + str + " => " + data);
+                
+                
+            } 
             
         } catch (IOException ex) {
             Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        } 
+
+            
+    } 
 }
