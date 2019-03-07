@@ -5,8 +5,15 @@
  */
 package javaapplication1;
 
+import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,9 +31,7 @@ public class Task2 {
     
     
     public void exec() {
-        try {
-            //https://www.baeldung.com/udp-in-java
-
+        try { 
             initServer();
             sendClient();
         } catch (SocketException | UnknownHostException ex) {
@@ -34,24 +39,59 @@ public class Task2 {
         }
     }
     
-    private void initServer() throws SocketException {
-        DemoServer server =  new DemoServer();
-        server.start();
-        System.out.println("Server has been started...");
+    private void initServer() throws SocketException { 
+        try {
+             DemoServerImpl s = new DemoServerImpl();  
+             System.out.println("Initializing " + s.getServiceName()); 
+             Registry registry = LocateRegistry.createRegistry(1099);
+             registry.rebind(s.getServiceName(), s);
+             
+             // TODO loop stop
+             new Thread(new Runnable() {
+                 @Override 
+                 public void run() {
+                     while(s.isDoShutdown()) {
+                         try {
+                             Thread.sleep(1000);
+                         } catch (InterruptedException ex) {
+                             Logger.getLogger(Task2.class.getName()).log(Level.SEVERE, null, ex);
+                         }
+                     }
+                     try {
+                         registry.unbind(s.getServiceName());
+                         UnicastRemoteObject.unexportObject(registry, true);
+                         System.exit(0);
+                     } catch (RemoteException | NotBoundException ex) {
+                         Logger.getLogger(Task2.class.getName()).log(Level.SEVERE, null, ex);
+                     }
+                 }
+             }).start();  
+             
+        } catch (RemoteException ex) {
+            Logger.getLogger(Task2.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+       
+       System.out.println("Server has been started...");
     }
     
     private void sendClient() throws SocketException, UnknownHostException{
-        DemoClient client = new DemoClient();
-        
-        for(int i = 0; i < 10; i ++) {
-            Demo res = client.sendDemo(new Demo("Test " + i, "Test", new Date(), 1));
-            System.out.println("Client: " + res); 
+         RMIDateTime bs;
+         String objectName = "rmi://localhost/DemoServerImpl";
+        try {
+            System.setProperty("java.rmi.server.hostname", "127.0.0.1");
+            bs = (RMIDateTime) Naming.lookup(objectName);
+            String date = bs.getDate();
+            System.out.println("Get date: " + date);
+            
+            String time = bs.getTime();
+            System.out.println("Get time: " + time);
+            
+            if(bs.stop()) {
+                System.out.println("Server has been stopped...");
+            }
+            
+        } catch (NotBoundException | MalformedURLException | RemoteException ex) {
+            Logger.getLogger(Task2.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
-        System.out.println("Client has been started...");
-        Demo res = client.sendDemo(new Demo("end", "Test", new Date(), 1));
-        System.out.println("Client: " + res);
     } 
 }

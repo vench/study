@@ -19,8 +19,8 @@ public class JavaApplication1 {
      */
     public static void main(String[] args) {
         
-        Task1 t = new Task1(); 
-       // Task2 t = new Task2();
+       // Task1 t = new Task1(); 
+        Task2 t = new Task2();
         t.exec(); 
     }
     
