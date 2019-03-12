@@ -11,8 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
-import java.util.logging.Logger; 
-import static javaapplication1.Task1.PORT;
+import java.util.logging.Logger;  
 
 /**
  *

@@ -13,6 +13,8 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -89,5 +91,42 @@ public class DemoHint {
                 
         Demo dem =  (Demo)is.readObject();
         return dem;
+    }
+    
+    public static String getStrTime() {
+        GregorianCalendar c = new GregorianCalendar();
+        return  calendarGet(c, GregorianCalendar.HOUR) + ":" + 
+                                  calendarGet(c,  GregorianCalendar.MINUTE);
+    }
+    
+    
+    public static String getStrDate() {
+        GregorianCalendar c = new GregorianCalendar();
+        return  calendarGet(c, GregorianCalendar.YEAR) + "." + 
+                                  calendarGet(c, GregorianCalendar.MONTH, 1) + "." + 
+                                  calendarGet(c, GregorianCalendar.DATE)
+                                ;
+    }
+    
+         /**
+      * 
+      * @param c
+      * @param type
+      * @return 
+      */
+    private static String  calendarGet(Calendar c, int type) { 
+        return calendarGet(c, type, 0);
+    }
+         
+    /**
+     * 
+     * @param c
+     * @param type
+     * @param append
+     * @return 
+     */
+    private static String  calendarGet(Calendar c, int type, int append) {
+        int i =  c.get(type) + append;
+        return i <= 9 ? "0" + i : i + "";
     }
 }

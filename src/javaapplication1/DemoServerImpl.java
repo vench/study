@@ -32,12 +32,12 @@ public class DemoServerImpl extends UnicastRemoteObject  implements RMIDateTime 
 
     @Override
     public String getDate() throws RemoteException {
-        return "w";
+        return DemoHint.getStrDate();
     }
 
     @Override
     public String getTime() throws RemoteException {
-        return "x";
+        return DemoHint.getStrTime();
     }
 
     @Override

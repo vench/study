@@ -45,19 +45,14 @@ public class Task1ServerHandler extends Thread {
                 
                 String command = new String(buf, 0, r);
                 System.out.println("command : " + command);
-                String result = "";
-                GregorianCalendar c = new GregorianCalendar();
+                String result = ""; 
                 switch(command) {
                     case "date":  
-                        result =  calendarGet(c, GregorianCalendar.YEAR) + "." + 
-                                  calendarGet(c, GregorianCalendar.MONTH, 1) + "." + 
-                                  calendarGet(c, GregorianCalendar.DATE)
-                                ;
+                        result =   DemoHint.getStrDate();
                         break;
 
                     case "time": 
-                        result =  calendarGet(c, GregorianCalendar.HOUR) + ":" + 
-                                  calendarGet(c,  GregorianCalendar.MINUTE);
+                        result = DemoHint.getStrTime();
                         break;
                 }
                 os.write(result.getBytes()); 
@@ -69,25 +64,5 @@ public class Task1ServerHandler extends Thread {
         } 
     }
      
-     /**
-      * 
-      * @param c
-      * @param type
-      * @return 
-      */
-    private String  calendarGet(Calendar c, int type) { 
-        return calendarGet(c, type, 0);
-    }
-         
-    /**
-     * 
-     * @param c
-     * @param type
-     * @param append
-     * @return 
-     */
-    private String  calendarGet(Calendar c, int type, int append) {
-        int i =  c.get(type) + append;
-        return i <= 9 ? "0" + i : i + "";
-    }
+      
 }
