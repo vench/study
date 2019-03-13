@@ -16,13 +16,13 @@ public class JavaApplication1 {
 
     /**
      * @param args the command line arguments
-     */
+     
     public static void main(String[] args) {
         
        // Task1 t = new Task1(); 
         Task2 t = new Task2();
         t.exec(); 
-    }
+    }*/
     
     
     
