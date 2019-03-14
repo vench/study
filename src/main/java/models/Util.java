@@ -2,6 +2,7 @@ package models;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Util {
@@ -38,6 +39,24 @@ public class Util {
             conn.rollback();
         } catch (Exception e) {
         }
+    }
+
+
+    public static List<Date> loadMoreDate(Connection conn) {
+        List<Date> list = new ArrayList<Date>();
+        try {
+            String sqlUser = "SELECT date_format(r.date, '%Y-%m-%d') as r_date " +
+                    "FROM  registration r  " +
+                    "GROUP BY date_format(r.date, '%Y-%m-%d') " +
+                    "HAVING count(*) > 1";
+            PreparedStatement statement = conn.prepareStatement(sqlUser);
+            ResultSet rs = statement.executeQuery();
+            int i = 0;
+            while(rs.next()) {
+                list.add( i ++, rs.getDate("r_date"));
+            }
+        } catch(Exception e) { }
+        return list;
     }
 
     public static List<User> loadMoreRoleRegistration(Connection conn) {
