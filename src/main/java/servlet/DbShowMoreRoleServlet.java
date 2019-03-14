@@ -1,5 +1,7 @@
 package servlet;
 
+import models.Registration;
+import models.User;
 import models.Util;
 
 import javax.servlet.ServletException;
@@ -8,12 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
+import java.util.List;
 
-
-@WebServlet("/db/create")
-public class DbCreateServlet  extends HttpServlet {
+@WebServlet("/db/more-role")
+public class DbShowMoreRoleServlet extends HttpServlet {
 
     private static final long serialVersionUID = 10L;
 
@@ -22,14 +22,16 @@ public class DbCreateServlet  extends HttpServlet {
             throws IOException, ServletException {
 
         try {
-            Util.createDataBase(Util.getConnection());
+            List<User> users = Util.loadMoreRoleRegistration(Util.getConnection());
+            req.setAttribute("users", users);
+
         } catch (Exception  e) {
             resp.getWriter().println(e.toString());
             return;
         }
 
-
-        resp.sendRedirect("/SimpleServlet/");
+        req.setAttribute("title", "List all");
+        req.getRequestDispatcher("/list_more_role.jsp").forward(req, resp);
 
     }
 }

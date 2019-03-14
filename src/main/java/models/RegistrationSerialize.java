@@ -1,5 +1,7 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -36,7 +38,20 @@ public class RegistrationSerialize {
         return "";
     }
 
+    /**
+     * 16.09.2012 10:31:46
+     * @param date
+     * @param time
+     * @return
+     */
     public static Date stringDateAndTimeToDate(String date, String time) {
+        SimpleDateFormat mdyFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        try {
+            String sdate = date.trim() + " " + time.trim();
+            return mdyFormat.parse(sdate);
+        } catch (ParseException e) {
+
+        }
         return new Date();
     }
 }

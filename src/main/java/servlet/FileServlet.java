@@ -51,7 +51,7 @@ public class FileServlet extends HttpServlet {
                         Registration r = RegistrationSerialize.stringToRegistration(str);
                         if (r != null) {
                             Util.persists(conn, r);
-                            resp.getWriter().println(r);
+                            // resp.getWriter().println(r);
                         }
                     }
                 } catch (Exception e) {
@@ -61,8 +61,8 @@ public class FileServlet extends HttpServlet {
         } finally {
             try { is.close(); } catch (Throwable ignore) {}
 
-            resp.getWriter().println("DONE");
-            // TODO redirect
+            //resp.getWriter().println("DONE");
+            resp.sendRedirect("/SimpleServlet/");
         }
 
     }

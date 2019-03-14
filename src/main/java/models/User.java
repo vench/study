@@ -4,6 +4,7 @@ public class User {
 
     private int id;
     private String login;
+    private int countRegistrations;
 
     public User() {}
     public User(int id) {
@@ -33,4 +34,12 @@ public class User {
         this.login = login;
     }
 
+
+    public int getCountRegistrations() {
+        return countRegistrations;
+    }
+
+    public void setCountRegistrations(int countRegistrations) {
+        this.countRegistrations = countRegistrations;
+    }
 }

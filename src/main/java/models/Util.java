@@ -1,6 +1,8 @@
 package models;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
 
@@ -38,6 +40,56 @@ public class Util {
         }
     }
 
+    public static List<User> loadMoreRoleRegistration(Connection conn) {
+        List<User> list = new ArrayList<User>();
+        try {
+            String sqlUser = "SELECT u.id as u_id, u.login as u_login, count(*) as u_count FROM  registration r  INNER JOIN user u ON (r.user_id = u.id) GROUP BY u.id, u.login HAVING count(*) > 1  ORDER BY u.login";
+            PreparedStatement statement = conn.prepareStatement(sqlUser);
+            ResultSet rs = statement.executeQuery();
+            int i = 0;
+            while(rs.next()) {
+                User u = new User();
+                u.setId( rs.getInt("u_id")  );
+                u.setLogin( rs.getString("u_login")  );
+                u.setCountRegistrations( rs.getInt("u_count") );
+                list.add( i ++, u);
+            }
+        } catch(Exception e) {
+
+        }
+        return list;
+    }
+
+    public static List<Registration> loadAllRegistration(Connection conn) {
+        List<Registration> list = new ArrayList<Registration>();
+
+        try {
+                String sqlUser = "SELECT u.id as u_id, u.login as u_login, r.role as r_role," +
+                        " r.date as r_date, r.id as r_id  " +
+                        "FROM  registration r  " +
+                        "INNER JOIN user u ON (r.user_id = u.id)" +
+                        "ORDER BY r.id";
+                PreparedStatement statement = conn.prepareStatement(sqlUser);
+                ResultSet rs = statement.executeQuery();
+                int i = 0;
+                while(rs.next()) {
+                    User u = new User();
+                    u.setId( rs.getInt("u_id")  );
+                    u.setLogin( rs.getString("u_login")  );
+                    Registration r = new Registration();
+                    r.setUser(u);
+                    r.setDate(rs.getTimestamp("r_date"));
+                    r.setRole(rs.getString("r_role"));
+                    r.setId(rs.getInt("r_id"));
+                    list.add( i ++, r);
+                }
+            } catch(Exception e) {
+
+            }
+
+        return list;
+    }
+
 
     public static void persists(Connection conn, Registration model) throws Exception  {
         insert(conn, model);
@@ -51,7 +103,7 @@ public class Util {
             autoCommit = conn.getAutoCommit();
             conn.setAutoCommit(false);
 
-            insert(conn, model.getUser());
+            persists(conn, model.getUser());
 
             //
 
@@ -60,7 +112,7 @@ public class Util {
                     Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, model.getUser().getId());
             statement.setString(2, model.getRole());
-            statement.setDate(3, new java.sql.Date(model.getDate().getTime()));
+            statement.setTimestamp(3, new java.sql.Timestamp(model.getDate().getTime()));
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
@@ -82,6 +134,30 @@ public class Util {
             try {
                 conn.setAutoCommit(autoCommit);
             } catch (SQLException e) {}
+        }
+    }
+
+
+    /**
+     * Load or create user
+     * @param conn
+     * @param model
+     * @throws Exception
+     */
+    public static void persists(Connection conn, User model) throws Exception  {
+        try {
+            String sqlUser = "SELECT id, login FROM user WHERE login = ?";
+            PreparedStatement statement = conn.prepareStatement(sqlUser);
+            statement.setString(1, model.getLogin());
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) {
+                model.setId( rs.getInt("id")  );
+                model.setLogin( rs.getString("login")  );
+            } else {
+                insert(conn, model);
+            }
+        } catch(Exception e) {
+            throw  e;
         }
     }
 

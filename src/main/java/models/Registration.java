@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Registration {
@@ -60,8 +61,16 @@ public class Registration {
     }
 
 
+    public String getStringDate() {
+        return new SimpleDateFormat("dd.MM.yyyy").format(getDate());
+    }
+
+    public String getStringTime() {
+        return new SimpleDateFormat("HH.mm.ss").format(getDate());
+    }
+
     @Override
     public String toString() {
-        return user.getLogin() + " " + getRole();
+        return user.getLogin() + " " + getRole() + " " + getDate();
     }
 }
