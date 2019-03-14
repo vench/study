@@ -18,14 +18,8 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
-        resp.setContentType("text/html");
-        PrintWriter out = resp.getWriter();
-        String title = "Title value";
-        out.println(Util.headWithTitle(title) +
-                "<body>\n" +
-                "<h1>" + title + "</h1>\n" +
-                "<p><a href='test'>Go to form</a></p>\n" +
-                "</body></html>");
+        req.setAttribute("title", "Title");
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
 
     }
 }
