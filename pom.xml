@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.javatutorial.tutorials</groupId>
+	<artifactId>SimpleServlet</artifactId>
+	<version>2.1</version>
+	<packaging>war</packaging>
+	<name>SimpleServlet</name> 
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+    <dependency>
+           <groupId>javax.servlet</groupId>
+           <artifactId>javax.servlet-api</artifactId>
+           <version>3.1.0</version>
+           <scope>provided</scope>
+       </dependency>
+       <dependency>
+           <groupId>junit</groupId>
+           <artifactId>junit</artifactId>
+           <version>3.8.1</version>
+           <scope>test</scope>
+       </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+            <scope>provided</scope>
+        </dependency>
+    
+</dependencies>
+	
+	
+	
+	
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<finalName>hello</finalName>
+		<plugins>
+		
+		
+		<plugin>
+        <!-- Deploy to Tomcat using: mvn clean package antrun:run
+             Follow the instructions in build.properties.example to make it work!-->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <configuration>
+          <tasks>
+            <ant antfile="${basedir}/build.xml">
+              <target name="copy.war.into.tomcat" />
+            </ant>
+          </tasks>
+        </configuration>
+      </plugin>
+      <!-- Tomcat Maven Plugin
+
+      Deploy to Tomcat using:
+      mvn clean tomcat7:deploy
+
+      Redeploy:
+      mvn clean tomcat7:redeploy
+
+      Undeploy:
+      mvn tomcat7:undeploy
+
+           To use this plugin, add these lines to your tomcat-users.xml: (inside the <tomcat-users>-tag)
+           <role rolename="manager-script"/>
+           <user username="admin" password="admin" roles="manager-script"/>
+
+       --> 
+		
+       
+         <plugin>
+               <groupId>org.apache.tomcat.maven</groupId>
+               <artifactId>tomcat7-maven-plugin</artifactId>
+               <version>2.2</version>
+               <!-- Config: contextPath and Port (Default - /SimpleMavenWebApp : 8080) -->
+               <configuration>
+          <url>http://localhost:8080/manager/text</url>
+          <username>tomcat</username>
+          <password>tomcat</password>
+        </configuration>
+               <!--
+               <configuration>
+                   <path>/</path>
+                   <port>8899</port>
+               </configuration>
+               --> 
+           </plugin> 
+      <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-war-plugin</artifactId>
+    <version>2.1.1</version>
+    <configuration>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </configuration>
+</plugin>
+ 
+
+    </plugins>
+	</build>
+</project>
