@@ -62,7 +62,9 @@ public class Util {
     public static List<User> loadMoreRoleRegistration(Connection conn) {
         List<User> list = new ArrayList<User>();
         try {
-            String sqlUser = "SELECT u.id as u_id, u.login as u_login, count(*) as u_count FROM  registration r  INNER JOIN user u ON (r.user_id = u.id) GROUP BY u.id, u.login HAVING count(*) > 1  ORDER BY u.login";
+            String sqlUser = "SELECT u.id as u_id, u.login as u_login, count(distinct r.role) as u_count \n" +
+                    "FROM  registration r  INNER JOIN user u ON (r.user_id = u.id) \n" +
+                    "GROUP BY u.id, u.login HAVING count(distinct r.role) > 1  ORDER BY u.login";
             PreparedStatement statement = conn.prepareStatement(sqlUser);
             ResultSet rs = statement.executeQuery();
             int i = 0;
@@ -79,16 +81,30 @@ public class Util {
         return list;
     }
 
-    public static List<Registration> loadAllRegistration(Connection conn) {
+    public static List<Registration> loadAllRegistration(Connection conn, Date start) {
         List<Registration> list = new ArrayList<Registration>();
 
         try {
-                String sqlUser = "SELECT u.id as u_id, u.login as u_login, r.role as r_role," +
-                        " r.date as r_date, r.id as r_id  " +
-                        "FROM  registration r  " +
-                        "INNER JOIN user u ON (r.user_id = u.id)" +
-                        "ORDER BY r.id";
-                PreparedStatement statement = conn.prepareStatement(sqlUser);
+            PreparedStatement statement;
+
+                if(start == null) {
+                    String sqlUser = "SELECT u.id as u_id, u.login as u_login, r.role as r_role," +
+                            " r.date as r_date, r.id as r_id  " +
+                            "FROM  registration r  " +
+                            "INNER JOIN user u ON (r.user_id = u.id)" +
+                            "ORDER BY r.id";
+                    statement = conn.prepareStatement(sqlUser);
+                } else {
+                    String sqlUser = "SELECT u.id as u_id, u.login as u_login, r.role as r_role," +
+                            " r.date as r_date, r.id as r_id  " +
+                            "FROM  registration r  " +
+                            "INNER JOIN user u ON (r.user_id = u.id) " +
+                            "WHERE r.date >= ?" +
+                            "ORDER BY r.id";
+                    statement = conn.prepareStatement(sqlUser);
+                    statement.setTimestamp(1, new java.sql.Timestamp(start.getTime()));
+                }
+
                 ResultSet rs = statement.executeQuery();
                 int i = 0;
                 while(rs.next()) {
@@ -213,6 +229,8 @@ public class Util {
 
             autoCommit = conn.getAutoCommit();
             conn.setAutoCommit(false);
+
+
             String sqlTable1 = "CREATE TABLE IF NOT EXISTS `user` ( " +
                 "`id` int(11) unsigned NOT NULL AUTO_INCREMENT, " +
                 "`login` varchar(8) NOT NULL, " +

@@ -3,6 +3,10 @@
 <%
 String title = (String) request.getAttribute("title");
 List<Registration> registrations = (List<Registration>)request.getAttribute("registrations");
+String start_date = (String) request.getParameter("start_date");
+if(start_date == null) {
+    start_date = "";
+}
 %>
 <html>
 <head>
@@ -14,7 +18,8 @@ List<Registration> registrations = (List<Registration>)request.getAttribute("reg
     <div>
 
     <form>
-    <!-- TODO date range -->
+    <input type="text" name="start_date" value="<%=start_date%>" >
+    <button type="submit">Submit</button>
     </form>
 
 

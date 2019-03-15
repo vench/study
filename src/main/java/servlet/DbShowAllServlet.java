@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet("/db/all")
@@ -22,7 +25,15 @@ public class DbShowAllServlet  extends HttpServlet {
             throws IOException, ServletException {
 
         try {
-            List<Registration> registrations = Util.loadAllRegistration(Util.getConnection());
+            Date startDate = null;
+            String value = req.getParameter("start_date");
+            if(value != null) {
+                try {
+                    SimpleDateFormat mdyFormat = new SimpleDateFormat("dd.MM.yyyy");
+                    startDate = mdyFormat.parse(value.trim());
+                } catch (ParseException e) { }
+            }
+            List<Registration> registrations = Util.loadAllRegistration(Util.getConnection(), startDate);
             req.setAttribute("registrations", registrations);
 
         } catch (Exception  e) {
