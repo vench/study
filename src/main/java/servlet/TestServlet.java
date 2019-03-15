@@ -8,17 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
+import modules.IHelloWorld;
 
 @WebServlet("/test")
 public class TestServlet extends HttpServlet {
 
     private static final long serialVersionUID = 10L;
+    
+    @EJB 
+    private IHelloWorld hello; 
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws  IOException,ServletException {
-        req.setAttribute("title", "Title");
+        req.setAttribute("title", hello.sayHello("Title"));
         req.getRequestDispatcher("/common.jsp").forward(req, resp);
     }
 
@@ -41,7 +46,7 @@ public class TestServlet extends HttpServlet {
         }
 
         req.setAttribute("result", result);
-        req.setAttribute("title", "Title");
+        req.setAttribute("title", hello.sayHello("Title"));
         req.getRequestDispatcher("/common.jsp").forward(req, resp);
     }
 }

@@ -35,8 +35,16 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.6</version>
         </dependency>
-    
-</dependencies>
+        <!-- https://mvnrepository.com/artifact/javax.ejb/javax.ejb-api -->
+        <dependency>
+            <groupId>javax.ejb</groupId>
+            <artifactId>javax.ejb-api</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+
+
+    </dependencies>
 	
 	
 	
@@ -45,7 +53,14 @@
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<finalName>hello</finalName>
 		<plugins>
-		
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <filterDeploymentDescriptor>true</filterDeploymentDescriptor>
+                </configuration>
+            </plugin>
 		
 		<plugin>
         <!-- Deploy to Tomcat using: mvn clean package antrun:run
