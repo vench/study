@@ -23,7 +23,8 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         req.setAttribute("title", "Login");
-        req.setAttribute("message", loginServ.getMessage("x"));
+        String login =  (String)req.getSession().getAttribute("login");
+        req.setAttribute("message", loginServ.getMessage(login));
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 
@@ -36,6 +37,7 @@ public class LoginServlet extends HttpServlet {
         String result = "";
         if(loginServ.login(login, password)) {
             result = "The session has been successfully opened.";
+            req.getSession().setAttribute("login", login);
         } else {
             result = "Login failed.";
         }
