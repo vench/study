@@ -15,6 +15,7 @@ public class EJBDemoBean implements EJBDemo {
             sessionAttempts = 3;
             return true;
         }
+        sessionAttempts = 0;
         return false;
     }
 
