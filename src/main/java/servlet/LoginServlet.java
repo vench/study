@@ -1,6 +1,7 @@
 package servlet;
 
 import modules.EJBDemo;
+import modules.EJBHistory;
 import modules.IHelloWorld;
 
 import javax.servlet.ServletException;
@@ -19,12 +20,20 @@ public class LoginServlet extends HttpServlet {
     @EJB
     private EJBDemo loginServ;
 
+    @EJB
+    private EJBHistory history;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        req.setAttribute("title", "Login");
+
         String login =  (String)req.getSession().getAttribute("login");
-        req.setAttribute("message", loginServ.getMessage(login));
+        if(login != null) {
+            resp.sendRedirect("/SimpleServlet/");
+            return;
+        }
+
+        req.setAttribute("title", "Login");
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 
@@ -35,16 +44,17 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         String result = "";
-        if(loginServ.login(login, password)) {
+        if(history.login(login, password)) {
             result = "The session has been successfully opened.";
             req.getSession().setAttribute("login", login);
+            resp.sendRedirect("/SimpleServlet/");
+            return;
         } else {
             result = "Login failed.";
         }
 
         req.setAttribute("title", "Login");
         req.setAttribute("result", result);
-        req.setAttribute("message", loginServ.getMessage("x"));
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 }

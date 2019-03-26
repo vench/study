@@ -1,5 +1,7 @@
+<%@ page import="java.util.List"%>
 <%
 String title = (String) request.getAttribute("title");
+List<String> result = (List<String>)request.getAttribute("result");
 %>
 <html>
 <head>
@@ -14,7 +16,10 @@ String title = (String) request.getAttribute("title");
         </form>
     </div>
     <div>
-    <pre>${result}</pre>
+     <% for (String item : result) { %>
+        <p>- <%=item%></p>
+    <% } %>
+
     </div>
 
     <p><a href="/SimpleServlet/">To index</a></p>
