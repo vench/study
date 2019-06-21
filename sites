@@ -24,3 +24,6 @@ https://radimrehurek.com/gensim/
 # Подробная заметка про улучшение контраста с помощью эквилизации гистограммы: http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/histogram_equalization/histogram_equalization.html
 
 # Отличная книга про "низкоуровневое" компьютерное зрение и обработку изображений: Вудс Р., Гонсалес Р. Цифровая обработка изображений
+
+# Партирование sklernt to cpp 
+https://github.com/nok/sklearn-porter/blob/stable/examples/estimator/classifier/AdaBoostClassifier/c/basics_embedded.pct.ipynb
