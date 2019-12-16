@@ -1,0 +1,148 @@
+## Fetch 20 news groups
+K-means 
+============
+Homogeneity: 0.462
+Completeness: 0.547
+V-measure: 0.500
+Adjusted Rand Index: 0.276
+Adjusted Mutual Information: 0.499
+Silhouette Coefficient: 0.140
+labels num: 8.000
+
+AgglomerativeClustering
+==========
+Homogeneity: 0.305
+Completeness: 0.406
+V-measure: 0.348
+Adjusted Rand Index: 0.150
+Adjusted Mutual Information: 0.346
+Silhouette Coefficient: 0.118
+labels num: 8.000
+
+DBSCAN
+==========
+Homogeneity: 0.014
+Completeness: 0.266
+V-measure: 0.028
+Adjusted Rand Index: 0.001
+Adjusted Mutual Information: 0.022
+Silhouette Coefficient: 0.642
+labels num: 8.000
+
+GaussianMixture
+==============
+Homogeneity: 0.252
+Completeness: 0.297
+V-measure: 0.273
+Adjusted Rand Index: 0.149
+Adjusted Mutual Information: 0.271
+Silhouette Coefficient: -0.014
+labels num: 8.000
+
+Exp
+==============
+Homogeneity: 0.003
+Completeness: 0.258
+V-measure: 0.006
+Adjusted Rand Index: 0.000
+Adjusted Mutual Information: 0.003
+Silhouette Coefficient: 0.507
+labels num: 8.000
+
+
+## Test RU
+K-means 
+============
+Homogeneity: 0.158
+Completeness: 0.182
+V-measure: 0.169
+Adjusted Rand Index: 0.045
+Adjusted Mutual Information: 0.160
+Silhouette Coefficient: 0.089
+labels num: 10.000
+
+AgglomerativeClustering
+==========
+Homogeneity: 0.127
+Completeness: 0.184
+V-measure: 0.150
+Adjusted Rand Index: 0.012
+Adjusted Mutual Information: 0.139
+Silhouette Coefficient: 0.108
+labels num: 10.000
+
+DBSCAN
+==========
+Homogeneity: 0.168
+Completeness: 0.186
+V-measure: 0.176
+Adjusted Rand Index: -0.009
+Adjusted Mutual Information: 0.085
+Silhouette Coefficient: -0.177
+labels num: 106.000
+
+
+GaussianMixture
+==============
+Homogeneity: 0.130
+Completeness: 0.162
+V-measure: 0.144
+Adjusted Rand Index: 0.055
+Adjusted Mutual Information: 0.134
+Silhouette Coefficient: 0.068
+labels num: 10.000
+
+
+
+
+Exp
+==============
+Homogeneity: 0.009
+Completeness: 0.210
+V-measure: 0.017
+Adjusted Rand Index: -0.003
+Adjusted Mutual Information: 0.006
+Silhouette Coefficient: 0.223
+labels num: 8.000
+
+
+EXT vs DBSCAN 2
+================ 
+Homogeneity: important: True, alg1: 24.0188, alg2: 0.6927 > 0.0127
+Completeness: important: True, alg1: 7.2026, alg2: 0.9353 > 0.6290
+V-measure: important: True, alg1: 28.7923, alg2: 0.7699 > 0.0223
+Adjusted Rand Index: important: True, alg1: 23.5407, alg2: 0.6814 > 0.0004
+Adjusted Mutual Information: important: True, alg1: 28.7507, alg2: 0.7656 > 0.0096
+Silhouette Coefficient: important: True, alg1: 23.7058, alg2: 0.7131 > -0.1681
+len: important: True, alg1: 11.0744, alg2: 2.6900 > 1.6300
+
+EXP vs Hier 2
+================
+Homogeneity: important: True, alg1: 5.6646, alg2: 0.7406 > 0.5733
+Completeness: important: True, alg1: -3.4053, alg2: 0.9169 < 0.9908
+V-measure: important: True, alg1: 2.8553, alg2: 0.8025 > 0.7263
+Adjusted Rand Index: important: True, alg1: 5.5904, alg2: 0.7308 > 0.5614
+Adjusted Mutual Information: important: True, alg1: 2.7406, alg2: 0.7980 > 0.7230
+Silhouette Coefficient: important: True, alg1: -2.1552, alg2: 0.7381 < 0.7990
+len: important: True, alg1: 19.2984, alg2: 2.7900 > 2.0000
+
+
+EXT vs DBSCAN 10
+================
+omogeneity: important: True, alg1: 25.5204, alg2: 0.8206 > 0.0000
+Completeness: important: True, alg1: -162.8476, alg2: 0.4822 < 1.0000
+V-measure: important: True, alg1: 35.7442, alg2: 0.5794 > 0.0000
+Adjusted Rand Index: important: True, alg1: 4.8142, alg2: 0.0017 > 0.0000
+Adjusted Mutual Information: important: True, alg1: 5.6536, alg2: 0.0057 > 0.0000
+Silhouette Coefficient: important: True, alg1: -3.2735, alg2: -0.0357 < 0.0000 
+
+
+EXP vs Hier 10
+================ 
+
+Homogeneity: important: True, alg1: 14.6037, alg2: 0.7853 > 0.2775
+Completeness: important: True, alg1: 38.9236, alg2: 0.4791 > 0.2966
+V-measure: important: True, alg1: 15.5259, alg2: 0.5614 > 0.2867
+Adjusted Rand Index: important: True, alg1: -20.3995, alg2: 0.0013 < 0.0477
+Adjusted Mutual Information: important: True, alg1: -22.8522, alg2: 0.0057 < 0.1002
+Silhouette Coefficient: important: True, alg1: -22.5680, alg2: -0.0428 < 0.1619 
